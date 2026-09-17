@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Alejandro Espinoza López — Marketing &amp; Diseño Gráfico</title>
+<meta name="description" content="Portafolio de Alejandro Espinoza López: marketing digital, diseño gráfico, contenido y herramientas de pixel art. Brand safety en tiempo real, dirección de arte generativa y activaciones de marca.">
+<meta name="theme-color" content="#0A0705">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="Alejandro Espinoza López — Marketing &amp; Diseño Gráfico">
+<meta property="og:description" content="Llevo años protegiendo marcas en tiempo real y produciendo piezas visuales. Ahora lo formalizo: Marketing + Diseño.">
+<meta property="og:image" content="assets/img/og-cover.svg">
+
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<!-- Sin JS el contenido debe verse completo: solo ocultamos para animar si hay JS -->
+<script>document.documentElement.className += " js";</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;700;800;900&family=Inter:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+
+<body>
+
+<!-- ░░ Capas de ambiente ░░ -->
+<div class="progress-bar" aria-hidden="true"><span id="progressFill"></span></div>
+<div class="ember-field" id="emberField" aria-hidden="true"></div>
+
+<div class="memphis" aria-hidden="true">
+  <svg class="mm mm-arc"   viewBox="0 0 200 200"><path d="M10 190 A90 90 0 0 1 190 190" fill="none" stroke="currentColor" stroke-width="10" stroke-linecap="round"/></svg>
+  <svg class="mm mm-ring"  viewBox="0 0 200 200"><circle cx="100" cy="100" r="78" fill="none" stroke="currentColor" stroke-width="12"/></svg>
+  <svg class="mm mm-dots"  viewBox="0 0 120 120"><defs><pattern id="dg" width="24" height="24" patternUnits="userSpaceOnUse"><circle cx="4" cy="4" r="3.2" fill="currentColor"/></pattern></defs><rect width="120" height="120" fill="url(#dg)"/></svg>
+  <svg class="mm mm-squig" viewBox="0 0 240 80"><path d="M5 40 Q35 5 65 40 T125 40 T185 40 T235 40" fill="none" stroke="currentColor" stroke-width="9" stroke-linecap="round"/></svg>
+  <svg class="mm mm-lozen" viewBox="0 0 160 160"><rect x="18" y="18" width="124" height="124" rx="34" transform="rotate(45 80 80)" fill="none" stroke="currentColor" stroke-width="10"/></svg>
+  <svg class="mm mm-zig"   viewBox="0 0 200 90"><path d="M8 70 L48 20 L88 70 L128 20 L168 70 L192 45" fill="none" stroke="currentColor" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  <svg class="mm mm-blob"  viewBox="0 0 300 260"><path d="M258 46c34 44 12 108-24 145s-84 51-133 36S28 172 24 122 62 32 116 15s108-13 142 31Z" fill="currentColor"/></svg>
+  <svg class="mm mm-half"  viewBox="0 0 200 110"><path d="M100 100 A95 95 0 0 1 195 5 Z" fill="currentColor"/></svg>
+  <svg class="mm mm-cross" viewBox="0 0 100 100"><path d="M50 6v88M6 50h88" stroke="currentColor" stroke-width="10" stroke-linecap="round"/></svg>
+</div>
+
+<!-- ░░ Navegación ░░ -->
+<header class="nav" id="nav">
+  <div class="nav-inner">
+    <a href="#inicio" class="brand" aria-label="Ir al inicio">
+      <span class="brand-mark">AE</span>
+      <span class="brand-text">Alejandro<em>Espinoza</em></span>
+    </a>
+
+    <nav class="nav-links" aria-label="Navegación principal">
+      <a href="#perfil">Perfil</a>
+      <a href="#trayectoria">Trayectoria</a>
+      <a href="#competencias">Competencias</a>
+      <a href="#proyectos">Proyectos</a>
+      <a href="#contacto">Contacto</a>
+    </nav>
+
+    <a href="#contacto" class="btn btn-flame nav-cta">Hablemos</a>
+
+    <button class="burger" id="burger" aria-label="Abrir menú" aria-expanded="false" aria-controls="menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+  <div class="nav-hair" aria-hidden="true"></div>
+</header>
+
+<div class="menu" id="menu" aria-hidden="true">
+  <a href="#perfil">Perfil</a>
+  <a href="#trayectoria">Trayectoria</a>
+  <a href="#competencias">Competencias</a>
+  <a href="#proyectos">Proyectos</a>
+  <a href="#formacion">Formación</a>
+  <a href="#contacto">Contacto</a>
+</div>
+
+<main>
+
+<!-- ░░ HERO ░░ -->
+<section id="inicio" class="hero">
+  <div class="wrap hero-wrap">
+    <p class="eyebrow hero-eyebrow">Lima, Perú · Estudiante de Marketing · 1<sup>er</sup> ciclo</p>
+
+    <h1 class="hero-title">
+      <span class="line"><span class="ch">Alejandro</span></span>
+      <span class="line"><span class="ch">Espinoza López</span></span>
+    </h1>
+
+    <p class="hero-rotator">
+      <span class="rot-static">Me muevo entre</span>
+      <span class="rot-word" id="rotWord">marketing digital</span>
+    </p>
+
+    <p class="hero-lead">
+      No llego a marketing desde cero. Llevo años sosteniendo la reputación de marcas
+      gigantes en tiempo real, produciendo piezas visuales que la gente decide mirar,
+      activando productos en la calle y construyendo mis propias herramientas de diseño
+      cuando ninguna me servía. Ahora le pongo nombre y método a todo eso.
+    </p>
+
+    <div class="hero-actions">
+      <a href="#proyectos" class="btn btn-flame">Ver proyectos</a>
+      <a href="#trayectoria" class="btn btn-ghost">Ver trayectoria</a>
+    </div>
+
+    <div class="hero-meta">
+      <a href="https://github.com/AlexandreInking" target="_blank" rel="noopener" class="hero-meta-link">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M12 .5C5.73.5.5 5.73.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.56v-2c-3.2.7-3.88-1.54-3.88-1.54-.53-1.34-1.29-1.7-1.29-1.7-1.05-.72.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.46.11-3.05 0 0 .96-.3 3.15 1.18a10.9 10.9 0 0 1 5.74 0c2.18-1.49 3.14-1.18 3.14-1.18.63 1.59.23 2.76.12 3.05.74.81 1.19 1.84 1.19 3.1 0 4.42-2.7 5.39-5.26 5.68.41.36.78 1.06.78 2.14v3.17c0 .31.21.68.8.56A11.51 11.51 0 0 0 23.5 12C23.5 5.73 18.27.5 12 .5Z"/></svg>
+        GitHub
+      </a>
+      <a href="mailto:esplopale@gmail.com" class="hero-meta-link">esplopale@gmail.com</a>
+      <a href="tel:+51986660556" class="hero-meta-link">(+51) 986 660 556</a>
+    </div>
+  </div>
+
+  <a href="#perfil" class="scroll-cue" aria-label="Bajar al perfil">
+    <span class="cue-mouse"><i></i></span>
+    <span class="cue-text">Desliza</span>
+  </a>
+</section>
+
+<!-- ░░ MÉTRICAS ░░ -->
+<section class="metrics" aria-label="Cifras clave">
+  <div class="wrap metrics-grid">
+    <div class="metric"><span class="metric-num" data-count="11">0</span><span class="metric-label">Años de trayectoria</span></div>
+    <div class="metric"><span class="metric-num" data-count="2">0</span><span class="metric-label">Videojuegos publicados</span></div>
+    <div class="metric"><span class="metric-num" data-count="2">0</span><span class="metric-label">Game jams</span></div>
+    <div class="metric"><span class="metric-num" data-count="6">0</span><span class="metric-label">Industrias</span></div>
+  </div>
+  <div class="wrap">
+    <p class="metrics-note">BPO y Trust&nbsp;&amp;&nbsp;Safety · IA generativa · Publicidad y eventos · Certificaciones técnicas · Arquitectura · Retail farmacéutico</p>
+  </div>
+</section>
+
+<!-- ░░ PERFIL ░░ -->
+<section id="perfil" class="section">
+  <div class="wrap split">
+    <div class="split-side">
+      <p class="eyebrow">01 — Perfil</p>
+      <h2 class="h2">El trabajo ya lo hacía.<br>Ahora lo llamo marketing.</h2>
+    </div>
+
+    <div class="split-main">
+      <p class="lead">
+        Durante años mi trabajo consistió en que marcas enormes no se incendiaran — y en que
+        se vieran bien mientras pasaba. Moderar transmisiones en vivo para una plataforma global
+        de ByteDance es, en la práctica, <strong>brand safety en tiempo real</strong>. Supervisar
+        una activación de Eucerin es <strong>experiencia de marca en campo</strong>. Escribir prompts
+        para OpenArt.ai es <strong>dirección de arte generativa</strong>.
+      </p>
+      <p class="body">
+        Lo que traigo no es potencial: es criterio ya probado. Sé aplicar una política sin
+        romper la experiencia, decidir en segundos con métricas encima, documentar para que otro
+        pueda continuar, y sostener la calidad cuando el volumen aprieta. Todo eso es exactamente
+        lo que necesita un equipo de marketing que publica todos los días.
+      </p>
+      <p class="body">
+        Hoy estoy en el primer ciclo de la carrera de Marketing para ponerle marco teórico a una
+        intuición que ya viene entrenada: entender a una audiencia, darle una razón para mirar,
+        y convertir esa atención en algo medible.
+      </p>
+
+      <div class="twist-block">
+        <span class="twist-tag">En corto</span>
+        <p>Comunicación + criterio + herramientas de diseño + obsesión por el detalle.
+           Con inglés intermedio y costumbre de trabajar remoto.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ░░ TRAYECTORIA ░░ -->
+<section id="trayectoria" class="section">
+  <div class="wrap">
+    <p class="eyebrow">02 — Trayectoria</p>
+    <h2 class="h2 section-head">Lo que hice, leído<br>en clave de marketing.</h2>
+    <p class="section-sub">Cada puesto incluye la lectura que le doy hoy: qué problema de marca resolvía, aunque el cargo dijera otra cosa.</p>
+
+    <div class="timeline" id="timeline">
+
+      <article class="tl-item">
+        <span class="tl-node" aria-hidden="true"></span>
+        <div class="tl-body">
+          <span class="tl-period">05/2025 — 07/2026</span>
+          <h3 class="tl-role">Moderador de contenido LIVE</h3>
+          <p class="tl-org">Teleperformance <span class="tl-client">· plataforma global de ByteDance</span></p>
+          <p class="tl-twist"><span class="twist-arrow">↳</span> Brand safety en tiempo real</p>
+          <ul class="tl-points">
+            <li>Revisión y moderación de transmisiones en vivo aplicando políticas y estándares comunitarios: <em>governance de marca a escala global</em>.</li>
+            <li>Identificación de infracciones y documentación de decisiones — <em>trazabilidad para auditoría</em>.</li>
+            <li>Escalamiento de casos sensibles con precisión y confidencialidad, bajo métricas de calidad y productividad.</li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="tl-item">
+        <span class="tl-node" aria-hidden="true"></span>
+        <div class="tl-body">
+          <span class="tl-period">10/2024 — 11/2024</span>
+          <h3 class="tl-role">Moderador de contenido LIVE</h3>
+          <p class="tl-org">Majorel <span class="tl-client">· plataforma global de ByteDance</span></p>
+          <p class="tl-twist"><span class="twist-arrow">↳</span> Criterio editorial bajo presión</p>
+          <ul class="tl-points">
+            <li>Evaluación de contenido LIVE con criterios de moderación consistentes: <em>mismo estándar, miles de casos distintos</em>.</li>
+            <li>Toma de decisiones en tiempo real y reporte de casos que requerían revisión adicional.</li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="tl-item">
+        <span class="tl-node" aria-hidden="true"></span>
+        <div class="tl-body">
+          <span class="tl-period">02/2024 — 04/2024</span>
+          <h3 class="tl-role">Soporte Técnico Administrativo</h3>
+          <p class="tl-org">Inspecciones, Ensayos, Supervisión y Certificaciones Operativas SAC</p>
+          <p class="tl-twist"><span class="twist-arrow">↳</span> Operaciones que sostienen la promesa</p>
+          <ul class="tl-points">
+            <li>Gestión de documentación y registros para múltiples proyectos simultáneos.</li>
+            <li>Organización de información y soporte oportuno a los equipos: <em>el backstage que permite que lo visible funcione</em>.</li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="tl-item">
+        <span class="tl-node" aria-hidden="true"></span>
+        <div class="tl-body">
+          <span class="tl-period">11/2023</span>
+          <h3 class="tl-role">Apoyo a eventos — MiBanco</h3>
+          <p class="tl-org">Mayo Publicidad</p>
+          <p class="tl-twist"><span class="twist-arrow">↳</span> Atención al público como primer touchpoint</p>
+          <ul class="tl-points">
+            <li>Orientación y soporte a asistentes en un evento corporativo.</li>
+            <li>Colaboración en logística y atención: <em>cada interacción era la marca hablando en primera persona</em>.</li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="tl-item">
+        <span class="tl-node" aria-hidden="true"></span>
+        <div class="tl-body">
+          <span class="tl-period">12/2022 — 02/2023</span>
+          <h3 class="tl-role">Supervisor de Activación de Eventos — Eucerin</h3>
+          <p class="tl-org">Mayo Publicidad</p>
+          <p class="tl-twist"><span class="twist-arrow">↳</span> BTL y experiencia de marca en campo</p>
+          <ul class="tl-points">
+            <li>Supervisión de activaciones promocionales para Eucerin: <em>la campaña ejecutándose frente al consumidor real</em>.</li>
+            <li>Coordinación de actividades y verificación de cumplimiento de tareas durante los eventos.</li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="tl-item tl-highlight">
+        <span class="tl-node" aria-hidden="true"></span>
+        <div class="tl-body">
+          <span class="tl-period">12/2022 — 12/2023</span>
+          <h3 class="tl-role">Ingeniero de prompts</h3>
+          <p class="tl-org">OpenArt.ai</p>
+          <p class="tl-twist"><span class="twist-arrow">↳</span> Dirección de arte generativa</p>
+          <ul class="tl-points">
+            <li>Diseño y ajuste de prompts para generar piezas visuales orientadas a ventas y comunicación comercial.</li>
+            <li>Traducción de un objetivo de negocio a un resultado visual concreto: <em>brief → prompt → pieza que convierte</em>.</li>
+            <li>Adecuación de cada resultado al objetivo específico de la solicitud — <em>iteración creativa con intención</em>.</li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="tl-item">
+        <span class="tl-node" aria-hidden="true"></span>
+        <div class="tl-body">
+          <span class="tl-period">06/2016 — 05/2023</span>
+          <h3 class="tl-role">Auxiliar de oficina</h3>
+          <p class="tl-org">Luis Espinoza Arce</p>
+          <p class="tl-twist"><span class="twist-arrow">↳</span> Continuidad operativa</p>
+          <ul class="tl-points">
+            <li>Apoyo general de oficina, organización documental y atención de requerimientos administrativos.</li>
+            <li>Mantenimiento de orden y continuidad en las tareas diarias durante siete años.</li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="tl-item">
+        <span class="tl-node" aria-hidden="true"></span>
+        <div class="tl-body">
+          <span class="tl-period">12/2016 — 01/2017</span>
+          <h3 class="tl-role">Asistente de inventario</h3>
+          <p class="tl-org">Farmacia Kellertas</p>
+          <p class="tl-twist"><span class="twist-arrow">↳</span> Retail: el producto disponible también es marketing</p>
+          <ul class="tl-points">
+            <li>Control de inventario, actualización de registros y verificación de disponibilidad en base de datos.</li>
+            <li>Seguimiento de stock y reposición: <em>quiebre de stock es una venta perdida</em>.</li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="tl-item">
+        <span class="tl-node" aria-hidden="true"></span>
+        <div class="tl-body">
+          <span class="tl-period">08/2015 — 06/2016</span>
+          <h3 class="tl-role">Auxiliar de oficina</h3>
+          <p class="tl-org">E&amp;M Arquitectos Asociados SRL</p>
+          <p class="tl-twist"><span class="twist-arrow">↳</span> Orden documental en entorno de proyecto</p>
+          <ul class="tl-points">
+            <li>Apoyo general de oficina, organización de documentación y tareas administrativas.</li>
+            <li>Soporte al funcionamiento diario del equipo de arquitectura.</li>
+          </ul>
+        </div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- ░░ COMPETENCIAS ░░ -->
+<section id="competencias" class="section">
+  <div class="wrap">
+    <p class="eyebrow">03 — Competencias</p>
+    <h2 class="h2 section-head">Herramientas que ya<br>usan mis manos.</h2>
+
+    <div class="skills">
+
+      <div class="skill-cluster">
+        <h3 class="cluster-title">Marketing y contenido digital</h3>
+        <div class="chips">
+          <span class="chip">Comunicación visual</span>
+          <span class="chip">Contenido digital</span>
+          <span class="chip">Materiales promocionales</span>
+          <span class="chip">Redacción de prompts comerciales</span>
+          <span class="chip">Brand safety</span>
+          <span class="chip">Moderación &amp; Trust &amp; Safety</span>
+        </div>
+      </div>
+
+      <div class="skill-cluster">
+        <h3 class="cluster-title">Diseño y comunicación visual</h3>
+        <div class="chips">
+          <span class="chip">Adobe Suite <em>(intermedio)</em></span>
+          <span class="chip">Diseño gráfico</span>
+          <span class="chip">Dirección de arte</span>
+          <span class="chip">Piezas visuales</span>
+          <span class="chip">Contenido para ventas</span>
+        </div>
+      </div>
+
+      <div class="skill-cluster">
+        <h3 class="cluster-title">Datos, reportes y operación</h3>
+        <div class="chips">
+          <span class="chip">Microsoft Office <em>(avanzado)</em></span>
+          <span class="chip">Excel</span>
+          <span class="chip">PowerPoint</span>
+          <span class="chip">Word</span>
+          <span class="chip">Bases de datos</span>
+          <span class="chip">Elaboración de reportes</span>
+          <span class="chip">Control de inventario</span>
+        </div>
+      </div>
+
+      <div class="skill-cluster">
+        <h3 class="cluster-title">Producto y tecnología</h3>
+        <div class="chips">
+          <span class="chip">Unity 3D <em>(intermedio)</em></span>
+          <span class="chip">Diseño y desarrollo web</span>
+          <span class="chip">Game design</span>
+          <span class="chip">Trabajo remoto</span>
+        </div>
+      </div>
+
+      <div class="skill-cluster">
+        <h3 class="cluster-title">Idiomas</h3>
+        <div class="chips">
+          <span class="chip">Español <em>nativo</em></span>
+          <span class="chip">Inglés <em>intermedio</em></span>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="softs">
+      <p class="softs-kicker">Lo que se nota al trabajar conmigo</p>
+      <h3 class="softs-head">No lo pongo en una lista de chips<br>porque se nota haciendo el trabajo.</h3>
+
+      <div class="softs-grid">
+        <div class="soft">
+          <span class="soft-num">01</span>
+          <h4>Atención al detalle</h4>
+          <p>Detectar una infracción en un vivo no da segundos de margen: el estándar se
+             sostiene en el detalle, no en la buena intención.</p>
+        </div>
+
+        <div class="soft">
+          <span class="soft-num">02</span>
+          <h4>Criterio bajo presión</h4>
+          <p>Decidir en tiempo real con métricas de calidad y productividad encima, sin
+             romperle la experiencia a quien está del otro lado.</p>
+        </div>
+
+        <div class="soft">
+          <span class="soft-num">03</span>
+          <h4>Confidencialidad</h4>
+          <p>Escalamiento de casos sensibles en una plataforma global: discreción,
+             trazabilidad y criterio sobre qué se documenta y cómo.</p>
+        </div>
+
+        <div class="soft">
+          <span class="soft-num">04</span>
+          <h4>Resiliencia</h4>
+          <p>Moderar transmisiones en vivo durante meses con volumen alto y el mismo
+             estándar todos los días. No es un sprint: es consistencia.</p>
+        </div>
+
+        <div class="soft">
+          <span class="soft-num">05</span>
+          <h4>Adaptabilidad</h4>
+          <p>Del retail farmacéutico a la IA generativa: seis industrias distintas y la
+             misma capacidad de ordenarme rápido en cada una.</p>
+        </div>
+
+        <div class="soft">
+          <span class="soft-num">06</span>
+          <h4>Orientación a resultados</h4>
+          <p>Cada registro, reporte o pieza visual se mide por lo que habilita después,
+             no por quedar bonita.</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ░░ PROYECTOS ░░ -->
+<section id="proyectos" class="section">
+  <div class="wrap">
+    <p class="eyebrow">04 — Proyectos</p>
+    <h2 class="h2 section-head">Cosas que construí<br>y salieron al mundo.</h2>
+    <p class="section-sub">
+      Esta sección se alimenta sola desde <code>Proyectos.xlsx</code>: agregas una fila, subes el
+      archivo y aparece aquí. Sin tocar el código.
+    </p>
+
+    <div class="projects" id="projects" aria-live="polite">
+      <p class="projects-loading">Cargando proyectos…</p>
+    </div>
+
+    <p class="projects-source" id="projectsSource"></p>
+  </div>
+</section>
+
+<!-- ░░ FORMACIÓN ░░ -->
+<section id="formacion" class="section">
+  <div class="wrap split">
+    <div class="split-side">
+      <p class="eyebrow">05 — Formación</p>
+      <h2 class="h2">Estudiando<br>para ponerle nombre<br>a lo que ya sé.</h2>
+    </div>
+
+    <div class="split-main">
+      <div class="edu-item edu-current">
+        <span class="tl-period">2026 — en curso</span>
+        <h3 class="tl-role">Carrera de Marketing</h3>
+        <p class="tl-org">Primer ciclo</p>
+        <p class="body">El marco teórico que faltaba: investigación de mercados, comportamiento
+          del consumidor, estrategia de marca. Llego con la ventaja de haber visto el problema
+          desde adentro antes de estudiarlo.</p>
+      </div>
+
+      <div class="edu-item">
+        <span class="tl-period">Enero 2021</span>
+        <h3 class="tl-role">Diseño y Desarrollo Web</h3>
+        <p class="tl-org">IDAT</p>
+      </div>
+
+      <div class="edu-item">
+        <span class="tl-period">Junio 2021</span>
+        <h3 class="tl-role">Diseño Gráfico</h3>
+        <p class="tl-org">LinkedIn Learning</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ░░ CONTACTO ░░ -->
+<section id="contacto" class="section contact">
+  <div class="wrap contact-wrap">
+    <p class="eyebrow">06 — Contacto</p>
+    <h2 class="h2 contact-title">¿Buscas a alguien que<br><em>ya haya estado ahí?</em></h2>
+    <p class="lead contact-lead">
+      Estoy abierto a prácticas, posiciones junior y colaboraciones en marketing digital,
+      contenido, diseño gráfico y producto interactivo. Escríbeme y te respondo rápido.
+    </p>
+
+    <div class="contact-actions">
+      <a href="mailto:esplopale@gmail.com" class="btn btn-flame btn-lg">esplopale@gmail.com</a>
+      <a href="tel:+51986660556" class="btn btn-ghost btn-lg">(+51) 986 660 556</a>
+    </div>
+
+    <div class="contact-links">
+      <a href="https://github.com/AlexandreInking" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://inking.itch.io" target="_blank" rel="noopener">itch.io</a>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="footer">
+  <div class="wrap footer-inner">
+    <p class="footer-brand">Alejandro Espinoza López</p>
+    <p class="footer-note">Marketing · Diseño gráfico · Contenido · Lima, Perú</p>
+    <p class="footer-year mono">2026</p>
+  </div>
+  <div class="footer-flame" aria-hidden="true"></div>
+</footer>
+
+<!-- ░░ Scripts ░░ -->
+<script src="assets/vendor/gsap/gsap.min.js"></script>
+<script src="assets/vendor/gsap/ScrollTrigger.min.js"></script>
+<script src="assets/vendor/gsap/ScrollToPlugin.min.js"></script>
+<script src="assets/vendor/xlsx/xlsx.full.min.js"></script>
+<script src="assets/js/projects.js"></script>
+<script src="assets/js/main.js"></script>
+
+</body>
+</html>

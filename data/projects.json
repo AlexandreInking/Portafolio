@@ -1,0 +1,113 @@
+{
+  "projects": [
+    {
+      "name": "Mosaico",
+      "role": "Producto, dirección de arte y desarrollo",
+      "description": "Herramienta propia para crear pixel art, diseñar tilemaps y estructurar sprites de forma procedural. Resuelve el cuello de botella clásico del arte para videojuegos: producir assets coherentes y reutilizables en minutos, listos para comercializar.",
+      "category": "Herramienta de diseño",
+      "status": "Publicado",
+      "year": "2024",
+      "github": "https://github.com/AlexandreInking/Proyecto-Mosaico",
+      "demo": "https://inking.itch.io/mosaico",
+      "demoLabel": "Ver la herramienta",
+      "tags": [
+        "Pixel art",
+        "Tilemaps",
+        "Sprites procedurales",
+        "Herramienta",
+        "Comercialización"
+      ],
+      "featured": true,
+      "color": "#FF8A1F"
+    },
+    {
+      "name": "Space Vector",
+      "role": "Desarrollo & publicación",
+      "description": "Videojuego publicado para PC. Acompañé el desarrollo y la publicación: arte, interfaz y los materiales visuales con los que se presentó el título.",
+      "category": "Videojuego · PC",
+      "status": "Publicado",
+      "year": "2023",
+      "github": "",
+      "demo": "https://tls.itch.io/space-vector",
+      "demoLabel": "Jugar",
+      "tags": [
+        "Unity 3D",
+        "PC",
+        "Publicación"
+      ],
+      "featured": false,
+      "color": "#E0231A"
+    },
+    {
+      "name": "Yin Yang Dodge",
+      "role": "Desarrollo & publicación",
+      "description": "Videojuego publicado en Google Play, disponible hasta 2022. Participación de punta a punta: iteración de mecánicas, arte del título y assets de tienda para su salida al mercado.",
+      "category": "Videojuego · Android",
+      "status": "Publicado",
+      "year": "2022",
+      "github": "",
+      "demo": "",
+      "demoLabel": "",
+      "tags": [
+        "Unity 3D",
+        "Android",
+        "Google Play"
+      ],
+      "featured": false,
+      "color": "#FF5B1F"
+    },
+    {
+      "name": "Loading... The Game",
+      "role": "Participación en game jam",
+      "description": "Game jam: diseño y desarrollo contrarreloj, con una entrega jugable publicada al cierre del evento.",
+      "category": "Game jam",
+      "status": "Publicado",
+      "year": "—",
+      "github": "",
+      "demo": "https://oswingames.itch.io/loadingthe-game",
+      "demoLabel": "Jugar",
+      "tags": [
+        "Game jam",
+        "Unity 3D",
+        "Desarrollo rápido"
+      ],
+      "featured": false,
+      "color": "#FFD447"
+    },
+    {
+      "name": "Demon Cat",
+      "role": "Participación en game jam",
+      "description": "Game jam: prototipado rápido de mecánicas y arte, con una entrega jugable publicada al cierre del evento.",
+      "category": "Game jam",
+      "status": "Publicado",
+      "year": "—",
+      "github": "",
+      "demo": "https://jesua90.itch.io/demon-cat",
+      "demoLabel": "Jugar",
+      "tags": [
+        "Game jam",
+        "Unity 3D",
+        "Prototipado"
+      ],
+      "featured": false,
+      "color": "#FF8A1F"
+    },
+    {
+      "name": "Spark",
+      "role": "Producto digital en desarrollo",
+      "description": "Nuevo proyecto en fase de diseño de producto e identidad visual. Los botones de repositorio y demo aparecerán solos aquí en cuanto agregue los enlaces en este Excel y suba el archivo.",
+      "category": "Videojuego",
+      "status": "En desarrollo",
+      "year": "2026",
+      "github": "",
+      "demo": "",
+      "demoLabel": "",
+      "tags": [
+        "En desarrollo",
+        "Diseño de producto"
+      ],
+      "featured": false,
+      "color": "#FFD447"
+    }
+  ]
+}

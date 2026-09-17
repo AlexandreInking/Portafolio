@@ -1,0 +1,3 @@
+# GitHub Pages: no procesar con Jekyll.
+# Sin este archivo, Jekyll ignora las carpetas que empiezan con _ y puede
+# romper rutas de assets.

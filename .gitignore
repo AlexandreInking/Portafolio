@@ -1,0 +1,11 @@
+# Datos locales de trabajo (no forman parte del sitio)
+.workbuddy-ai/
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Respaldos temporales del Excel
+~$*.xlsx
+*.bak

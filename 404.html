@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>404 — Alejandro Espinoza López</title>
+<meta name="robots" content="noindex">
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --void:#0A0705; --white:#FFF6EC; --amber:#FFD447; --flame:#FF8A1F;
+    --smoke:#A9907C; --dim:#6E5B4C;
+    --spark:linear-gradient(92deg,#FFF6EC 0%,#FFD447 45%,#FF8A1F 100%);
+  }
+  body{
+    background:var(--void); color:var(--smoke); min-height:100vh;
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    text-align:center; padding:2rem; overflow:hidden;
+    font-family:'Inter',-apple-system,'Segoe UI',system-ui,sans-serif;
+  }
+  body::before{
+    content:''; position:fixed; inset:0; pointer-events:none;
+    background:radial-gradient(circle at 50% 30%,rgba(255,138,31,.22) 0%,rgba(255,91,31,.07) 45%,transparent 70%);
+  }
+  .code{
+    font-family:'Archivo','Segoe UI',sans-serif; font-weight:900;
+    font-size:clamp(6rem,22vw,14rem); line-height:.85; letter-spacing:-.05em;
+    background:var(--spark); -webkit-background-clip:text; background-clip:text; color:transparent;
+  }
+  h1{
+    font-family:'Archivo','Segoe UI',sans-serif; font-weight:800;
+    font-size:clamp(1.5rem,4vw,2.4rem); letter-spacing:-.03em; color:var(--white);
+    margin-top:1.5rem;
+  }
+  p{ margin-top:1rem; max-width:46ch; line-height:1.7; font-size:1.05rem; }
+  .btn{
+    display:inline-flex; align-items:center; margin-top:2.5rem;
+    padding:1rem 2.2rem; border-radius:100px;
+    background:linear-gradient(100deg,#FFD447 0%,#FF8A1F 38%,#FF5B1F 68%,#E0231A 100%);
+    color:var(--void); font-weight:600; text-decoration:none;
+    box-shadow:0 10px 30px -10px rgba(255,138,31,.65);
+    transition:transform .3s cubic-bezier(.4,0,.2,1),box-shadow .3s ease;
+  }
+  .btn:hover{ transform:translateY(-3px); box-shadow:0 14px 44px rgba(255,138,31,.45) }
+  .hint{
+    margin-top:3rem; font-family:'Space Mono',ui-monospace,monospace;
+    font-size:.7rem; letter-spacing:.18em; text-transform:uppercase; color:var(--dim);
+  }
+  svg.flame{ width:64px; height:64px; margin-bottom:.5rem }
+  svg.flame path{ fill:url(#fg) }
+</style>
+</head>
+<body>
+
+<svg class="flame" viewBox="0 0 64 64" aria-hidden="true">
+  <defs>
+    <linearGradient id="fg" x1="0" y1="1" x2="1" y2="0">
+      <stop offset="0" stop-color="#FFD447"/>
+      <stop offset=".38" stop-color="#FF8A1F"/>
+      <stop offset=".68" stop-color="#FF5B1F"/>
+      <stop offset="1" stop-color="#E0231A"/>
+    </linearGradient>
+  </defs>
+  <path d="M32 4c4.5 10-4.5 13.5-4.5 21a8.5 8.5 0 0 0 17 0c0-6.5-3.2-9.7-3.2-9.7S48 20 48 30a18 18 0 1 1-36 0C12 15 26 12 32 4Z"/>
+</svg>
+
+<p class="code">404</p>
+<h1>Esta página se apagó</h1>
+<p>El enlace que seguiste no existe o se movió. Nada se perdió: el portafolio sigue encendido.</p>
+
+<a class="btn" href="./">Volver al inicio</a>
+<p class="hint">Alejandro Espinoza López · Marketing &amp; Diseño</p>
+
+</body>
+</html>
