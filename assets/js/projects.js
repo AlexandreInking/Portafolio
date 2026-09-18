@@ -60,16 +60,17 @@
 
   function card(p) {
     var links = "";
-    if (p.github) {
-      links += '<a class="proj-btn" href="' + esc(p.github) + '" target="_blank" rel="noopener">' + SVG_GITHUB + 'Repositorio</a>';
-    }
     if (p.demo) {
       var demoLabel = p.demoLabel || "Ver / jugar";
       links += '<a class="proj-btn" href="' + esc(p.demo) + '" target="_blank" rel="noopener">' + SVG_LINK + esc(demoLabel) + "</a>";
     }
 
-    var tags = p.tags.length
-      ? '<div class="proj-tags">' + p.tags.map(function (t) { return '<span class="chip">' + esc(t) + "</span>"; }).join("") + "</div>"
+    var chips = p.tags.map(function (t) { return '<span class="chip">' + esc(t) + "</span>"; });
+    if (p.github) {
+      chips.push('<a class="chip chip-link" href="' + esc(p.github) + '" target="_blank" rel="noopener">' + SVG_GITHUB + "Repositorio</a>");
+    }
+    var tags = chips.length
+      ? '<div class="proj-tags">' + chips.join("") + "</div>"
       : "";
 
     var yearHtml = p.year

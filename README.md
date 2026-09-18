@@ -36,7 +36,7 @@ los cambios aparecen solos. No hay que tocar código ni ejecutar nada.
 | `category` | Etiqueta corta, ej. `Videojuego · PC` |
 | `status` | `Publicado` / `En desarrollo` / `Concepto` |
 | `year` | `2026` |
-| `github` | URL del repo. **Vacío = el botón no aparece** |
+| `github` | URL del repo. Aparece como chip "Repositorio". **Vacío = no aparece** |
 | `demo` | itch.io, web o descarga. **Vacío = el botón no aparece** |
 | `demoLabel` | *(opcional)* rótulo del botón de demo. Por defecto `Ver / jugar`. Ej: `Ver la herramienta`, `Jugar` |
 | `tags` | Lista de etiquetas: `["Unity 3D", "Dirección de arte"]` |
@@ -44,7 +44,7 @@ los cambios aparecen solos. No hay que tocar código ni ejecutar nada.
 | `color` | Hex de la paleta: `#FFD447` · `#FF8A1F` · `#FF5B1F` · `#E0231A` |
 | `order` | Número; el menor aparece primero |
 
-> Cuando le pongas link a **Spark**, solo agrégalo en su objeto: el botón se activa solo.
+> Cuando le pongas link a **Spark**, solo agrégalo en su objeto: el acceso se activa solo.
 
 ---
 
