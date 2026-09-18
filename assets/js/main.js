@@ -311,7 +311,7 @@
   }
 
   /* =========================================================
-     7. PROYECTOS — revelado tras renderizar (viene del Excel)
+      7. PROYECTOS — revelado tras renderizar (viene de data/projects.json)
      ========================================================= */
   function projectsReveal() {
     document.addEventListener("projects:rendered", function () {

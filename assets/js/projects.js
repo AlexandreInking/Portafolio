@@ -1,53 +1,16 @@
 /* ============================================================
-   projects.js — Proyectos.xlsx  ->  sección de proyectos
+   projects.js — data/projects.json  ->  sección de proyectos
    ------------------------------------------------------------
-   La landing lee DIRECTAMENTE el Excel con SheetJS. Agregas una
-   fila en "Proyectos.xlsx", subes el archivo a GitHub y aparece
-   sola. Sin build, sin tocar código.
-
-   Si el navegador no puede leer el .xlsx (p. ej. abriste el
-   index.html con doble clic en file://), cae al snapshot
-   data/projects.json generado por  python tools/xlsx_to_json.py
+   La landing lee los proyectos del snapshot JSON.
+   Para actualizar: edita "data/projects.json", súbelo a GitHub
+   y aparece solo. Sin build, sin tocar código.
    ============================================================ */
 
 (function () {
   "use strict";
 
-  var XLSX_URL = "Proyectos.xlsx";
   var JSON_URL = "data/projects.json";
   var DEFAULT_COLOR = "#FF8A1F";
-  var TRUTHY = ["si", "sí", "yes", "true", "1", "x", "verdadero", "destacado"];
-
-  var FIELDS = {
-    proyecto: "name", nombre: "name",
-    rol: "role",
-    descripcion: "description", descripción: "description",
-    categoria: "category", categoría: "category",
-    estado: "status",
-    año: "year", ano: "year",
-    "link github": "github", github: "github", repositorio: "github", repo: "github",
-    "link demo": "demo", demo: "demo", link: "demo", web: "demo", itch: "demo",
-    "texto demo": "demoLabel", "texto boton demo": "demoLabel", "boton demo": "demoLabel",
-    tags: "tags", tecnologias: "tags", tecnologías: "tags", etiquetas: "tags",
-    destacado: "featured",
-    color: "color",
-    orden: "order", order: "order"
-  };
-
-  var BLANK = {
-    name: "", role: "", description: "", category: "", status: "",
-    year: "", github: "", demo: "", demoLabel: "", tags: "",
-    featured: "", color: "", order: ""
-  };
-
-  function norm(v) {
-    return String(v == null ? "" : v)
-      .trim().toLowerCase()
-      .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
-      .replace(/\s+/g, " ");
-  }
-
-  function isTruthy(v) { return TRUTHY.indexOf(norm(v)) !== -1; }
 
   function toList(v) {
     if (Array.isArray(v)) return v.map(String).map(function (s) { return s.trim(); }).filter(Boolean);
@@ -57,52 +20,6 @@
   function safeColor(v) {
     var c = String(v || "").trim();
     return /^#[0-9a-fA-F]{6}$/.test(c) ? c : DEFAULT_COLOR;
-  }
-
-  /** Convierte una matriz (filas x columnas) en objetos de proyecto. */
-  function fromMatrix(matrix) {
-    if (!matrix || matrix.length < 2) return [];
-
-    var header = matrix[0].map(function (raw) {
-      return FIELDS[norm(raw)] || norm(raw);
-    });
-
-    var out = [];
-    for (var r = 1; r < matrix.length; r++) {
-      var row = matrix[r] || [];
-
-      // Primera fila totalmente vacía = fin de la tabla
-      if (row.every(function (c) { return String(c == null ? "" : c).trim() === ""; })) break;
-
-      var item = {};
-      for (var k in BLANK) item[k] = "";
-
-      for (var c = 0; c < header.length; c++) {
-        if (header[c] in item) item[header[c]] = row[c] == null ? "" : String(row[c]).trim();
-      }
-
-      if (!item.name) continue;
-
-      out.push({
-        name: item.name,
-        role: item.role,
-        description: item.description,
-        category: item.category,
-        status: item.status || "—",
-        year: item.year || "—",
-        github: item.github,
-        demo: item.demo,
-        demoLabel: item.demoLabel,
-        tags: toList(item.tags),
-        featured: isTruthy(item.featured),
-        color: safeColor(item.color),
-        order: parseFloat(item.order) || 999
-      });
-    }
-
-    return out.sort(function (a, b) {
-      return a.order - b.order || a.name.localeCompare(b.name);
-    });
   }
 
   function fromJson(data) {
@@ -150,9 +67,6 @@
       var demoLabel = p.demoLabel || "Ver / jugar";
       links += '<a class="proj-btn" href="' + esc(p.demo) + '" target="_blank" rel="noopener">' + SVG_LINK + esc(demoLabel) + "</a>";
     }
-    if (!links) {
-      links = '<p class="proj-pending">Enlaces pendientes: agrégalos en Proyectos.xlsx</p>';
-    }
 
     var tags = p.tags.length
       ? '<div class="proj-tags">' + p.tags.map(function (t) { return '<span class="chip">' + esc(t) + "</span>"; }).join("") + "</div>"
@@ -169,7 +83,7 @@
         (p.role ? '<p class="proj-role">' + esc(p.role) + "</p>" : "") +
         (p.description ? '<p class="proj-desc">' + esc(p.description) + "</p>" : "") +
         tags +
-        '<div class="proj-links">' + links + "</div>" +
+        (links ? '<div class="proj-links">' + links + "</div>" : "") +
       "</article>";
   }
 
@@ -178,7 +92,7 @@
     if (!host) return;
 
     if (!list.length) {
-      host.innerHTML = '<p class="projects-empty">Aún no hay proyectos. Agrega una fila en Proyectos.xlsx.</p>';
+      host.innerHTML = '<p class="projects-empty">Aún no hay proyectos publicados.</p>';
     } else {
       host.innerHTML = list.map(card).join("");
     }
@@ -190,21 +104,6 @@
   }
 
   /* ---------- Carga ---------- */
-  function loadXlsx() {
-    if (typeof XLSX === "undefined") return Promise.reject(new Error("SheetJS no disponible"));
-    return fetch(XLSX_URL).then(function (res) {
-      if (!res.ok) throw new Error("HTTP " + res.status);
-      return res.arrayBuffer();
-    }).then(function (buf) {
-      var wb = XLSX.read(new Uint8Array(buf), { type: "array" });
-      var ws = wb.Sheets[wb.SheetNames[0]];
-      var matrix = XLSX.utils.sheet_to_json(ws, { header: 1, blankrows: false, defval: "" });
-      var list = fromMatrix(matrix);
-      if (!list.length) throw new Error("Excel sin filas válidas");
-      return list;
-    });
-  }
-
   function loadJson() {
     return fetch(JSON_URL).then(function (res) {
       if (!res.ok) throw new Error("HTTP " + res.status);
@@ -213,14 +112,10 @@
   }
 
   function boot() {
-    loadXlsx()
-      .then(function (list) { render(list, "Proyectos.xlsx"); })
+    loadJson()
+      .then(function (list) { render(list, "data/projects.json"); })
       .catch(function () {
-        loadJson()
-          .then(function (list) { render(list, "data/projects.json"); })
-          .catch(function () {
-            render([], "sin datos — ejecuta: python tools/xlsx_to_json.py");
-          });
+        render([], "sin datos");
       });
   }
 

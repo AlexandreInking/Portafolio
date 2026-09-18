@@ -7,15 +7,11 @@ lista para **GitHub Pages**.
 ```
 index.html                  La landing completa
 DESIGN.md                   Sistema de diseño (IGNIS) — leer antes de tocar estilos
-Proyectos.xlsx              ← TU ARCHIVO: agrega filas y la web se actualiza sola
-data/projects.json          Respaldo para abrir la web en local (file://)
+data/projects.json          ← TU ARCHIVO: edita los proyectos y la web se actualiza sola
 assets/css/style.css        Estilos
 assets/js/main.js           Animaciones GSAP + interacción
-assets/js/projects.js       Lector del Excel (SheetJS) + render de proyectos
+assets/js/projects.js       Render de proyectos desde el JSON
 assets/vendor/gsap/         GSAP 3 (core, ScrollTrigger, ScrollTo, SplitText, CustomEase)
-assets/vendor/xlsx/         SheetJS — lee Proyectos.xlsx en el navegador
-tools/xlsx_to_json.py       Excel -> JSON (solo para preview local)
-tools/_make_xlsx.py         Regenera la plantilla Proyectos.xlsx
 .nojekyll                   Imprescindible para GitHub Pages
 ```
 
@@ -23,32 +19,32 @@ tools/_make_xlsx.py         Regenera la plantilla Proyectos.xlsx
 
 ## Cómo actualizar los proyectos
 
-1. Abre **`Proyectos.xlsx`**.
-2. Agrega **una fila por proyecto** (o rellena los links de _Spark_).
+1. Abre **`data/projects.json`**.
+2. Agrega o edita **un objeto por proyecto** (o rellena los links de _Spark_).
 3. Guarda y sube el archivo a GitHub.
 
-**Eso es todo.** La página lee el Excel directamente en el navegador, así que
+**Eso es todo.** La página lee el JSON directamente, así que
 los cambios aparecen solos. No hay que tocar código ni ejecutar nada.
 
-### Columnas
+### Campos
 
-| Columna | Qué va ahí |
+| Campo | Qué va ahí |
 |---|---|
-| `Proyecto` | Nombre que se muestra grande |
-| `Rol` | Tu cargo en el proyecto |
-| `Descripción` | Texto de la ficha (en clave marketing: qué hiciste y para qué) |
-| `Categoría` | Etiqueta corta, ej. `Videojuego · PC` |
-| `Estado` | `Publicado` / `En desarrollo` / `Concepto` |
-| `Año` | `2026` |
-| `Link GitHub` | URL del repo. **Vacío = el botón no aparece** |
-| `Link Demo` | itch.io, web o descarga. **Vacío = el botón no aparece** |
-| `Texto Demo` | *(opcional)* rótulo del botón de demo. Por defecto `Ver / jugar`. Ej: `Ver la herramienta`, `Jugar` |
-| `Tags` | Separados por coma: `Unity 3D,Dirección de arte` |
-| `Destacado` | `SI` aparece primero y más grande · `NO` tamaño normal |
-| `Color` | Hex de la paleta: `#FFD447` · `#FF8A1F` · `#FF5B1F` · `#E0231A` |
-| `Orden` | Número; el menor aparece primero |
+| `name` | Nombre que se muestra grande |
+| `role` | Tu cargo en el proyecto |
+| `description` | Texto de la ficha (en clave marketing: qué hiciste y para qué) |
+| `category` | Etiqueta corta, ej. `Videojuego · PC` |
+| `status` | `Publicado` / `En desarrollo` / `Concepto` |
+| `year` | `2026` |
+| `github` | URL del repo. **Vacío = el botón no aparece** |
+| `demo` | itch.io, web o descarga. **Vacío = el botón no aparece** |
+| `demoLabel` | *(opcional)* rótulo del botón de demo. Por defecto `Ver / jugar`. Ej: `Ver la herramienta`, `Jugar` |
+| `tags` | Lista de etiquetas: `["Unity 3D", "Dirección de arte"]` |
+| `featured` | `true` aparece primero y más grande · `false` tamaño normal |
+| `color` | Hex de la paleta: `#FFD447` · `#FF8A1F` · `#FF5B1F` · `#E0231A` |
+| `order` | Número; el menor aparece primero |
 
-> Cuando le pongas link a **Spark**, solo pégalo en su fila: el botón se activa solo.
+> Cuando le pongas link a **Spark**, solo agrégalo en su objeto: el botón se activa solo.
 
 ---
 
@@ -77,19 +73,11 @@ La web queda en `https://TU-USUARIO.github.io/TU-REPO/`.
 
 ## Ver en local
 
-Con servidor (recomendado — así funciona la lectura del Excel):
+Con servidor (recomendado):
 
 ```bash
 python -m http.server 8000
 # abrir http://localhost:8000
-```
-
-Si abres `index.html` con doble clic, el navegador bloquea leer el `.xlsx`.
-En ese caso la web usa `data/projects.json`. Para regenerarlo tras editar el Excel:
-
-```bash
-pip install openpyxl
-python tools/xlsx_to_json.py
 ```
 
 ---

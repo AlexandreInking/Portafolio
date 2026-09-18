@@ -124,7 +124,7 @@ doing the work*, just under a different job title. Confident, warm, not corporat
 - **Organic panel**: background `radial-gradient(120% 120% at 20% 0%, rgba(255,138,31,.10), transparent 60%)`
   over `--void-3`, radius `44px`, **no border**. Separation comes from the glow, not an outline.
 - **Project panel**: radius `48px`, `background: linear-gradient(160deg, #1F1811, #14100C)`,
-  an inner `::before` radial glow tinted by the project's `Color` column from `Proyectos.xlsx`,
+  an inner `::before` radial glow tinted by the project's `color` field from `data/projects.json`,
   a `2px` gradient top-edge bar (not a full border), and a large Memphis accent shape bleeding off-edge.
 - **Stat**: no container at all — number + mono label floating in whitespace.
 - **Hairline divider**: 1px, `Hairline` gradient, max-width 100%, no box.

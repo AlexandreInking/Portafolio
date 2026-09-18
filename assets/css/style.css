@@ -462,11 +462,6 @@ main,header,footer{position:relative;z-index:2}
 }
 .proj-btn:hover{background:rgba(255,138,31,.14);border-color:var(--pc,#FF8A1F);color:var(--fire-amber);transform:translateY(-2px)}
 .proj-btn svg{flex:0 0 auto}
-.proj-pending{
-  font-family:var(--mono);font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;
-  color:var(--smoke-dim);margin-top:1.5rem;display:flex;align-items:center;gap:.5rem;
-}
-.proj-pending::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--fire-blood)}
 .projects-source{
   margin-top:2.5rem;font-family:var(--mono);font-size:.68rem;letter-spacing:.1em;
   text-transform:uppercase;color:var(--smoke-dim);
