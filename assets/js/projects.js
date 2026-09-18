@@ -1,5 +1,5 @@
 /* ============================================================
-   projects.js — data/projects.json  ->  sección de proyectos
+   projects.js · data/projects.json  ->  sección de proyectos
    ------------------------------------------------------------
    La landing lee los proyectos del snapshot JSON.
    Para actualizar: edita "data/projects.json", súbelo a GitHub
@@ -30,8 +30,8 @@
         role: p.role || "",
         description: p.description || "",
         category: p.category || "",
-        status: p.status || "—",
-        year: p.year || "—",
+        status: p.status || "",
+        year: p.year || "",
         github: p.github || "",
         demo: p.demo || "",
         demoLabel: p.demoLabel || "",
@@ -72,11 +72,18 @@
       ? '<div class="proj-tags">' + p.tags.map(function (t) { return '<span class="chip">' + esc(t) + "</span>"; }).join("") + "</div>"
       : "";
 
+    var yearHtml = p.year
+      ? '<span class="proj-year">' + esc(p.year) + "</span>"
+      : "";
+    var statusHtml = p.status
+      ? '<span class="proj-status" data-status="' + esc(p.status) + '">' + esc(p.status) + "</span>"
+      : "";
+
     return '' +
       '<article class="proj' + (p.featured ? " is-featured" : "") + '" style="--pc:' + esc(p.color) + '">' +
         '<div class="proj-top">' +
-          '<span class="proj-year">' + esc(p.year) + "</span>" +
-          '<span class="proj-status" data-status="' + esc(p.status) + '">' + esc(p.status) + "</span>" +
+          yearHtml +
+          statusHtml +
           (p.category ? '<span class="proj-year">' + esc(p.category) + "</span>" : "") +
         "</div>" +
         '<h3 class="proj-name">' + esc(p.name) + "</h3>" +

@@ -1,5 +1,5 @@
 /* ============================================================
-   main.js — Capa de animación GSAP + interacción
+   main.js · Capa de animación GSAP + interacción
    Sigue las prácticas oficiales de GSAP (skills gsap-*):
    timelines en vez de delays, transform aliases, autoAlpha,
    gsap.matchMedia() para responsive y prefers-reduced-motion.
@@ -23,8 +23,55 @@
   var reduceQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
   var reduced = reduceQuery.matches;
 
+  var FIRE_EMBERS = ["#FFD447", "#FF8A1F", "#FF5B1F", "#E0231A", "#FFF6EC"];
+  var AQUA_EMBERS = ["#22D3EE", "#38BDF8", "#2563EB", "#0891B2", "#0B1520"];
+
+  function emberPalette() {
+    return document.documentElement.getAttribute("data-theme") === "light"
+      ? AQUA_EMBERS
+      : FIRE_EMBERS;
+  }
+
   /* =========================================================
-     1. CAMPO DE BRASAS — partículas subiendo
+     0. TEMA CLARO / OSCURO · conmuta data-theme, lo recuerda
+     y actualiza brasas + theme-color
+     ========================================================= */
+  function themeInit() {
+    var btn = document.getElementById("themeToggle");
+    var meta = document.querySelector('meta[name="theme-color"]');
+
+    function apply(t) {
+      document.documentElement.setAttribute("data-theme", t);
+      try { localStorage.setItem("portafolio-theme", t); } catch (e) {}
+      if (meta) meta.setAttribute("content", t === "light" ? "#FFFFFF" : "#0A0705");
+      if (btn) {
+        var light = t === "light";
+        btn.setAttribute("aria-pressed", light ? "true" : "false");
+        btn.setAttribute("aria-label", light ? "Cambiar a tema oscuro" : "Cambiar a tema claro");
+      }
+      var palette = t === "light" ? AQUA_EMBERS : FIRE_EMBERS;
+      document.querySelectorAll(".ember").forEach(function (el, i) {
+        el.style.background = palette[i % palette.length];
+      });
+    }
+
+    if (btn) {
+      btn.addEventListener("click", function () {
+        apply(document.documentElement.getAttribute("data-theme") === "light" ? "dark" : "light");
+      });
+      // Sincroniza el botón con el tema que dejó el script del <head>
+      var current = document.documentElement.getAttribute("data-theme") === "light" ? "light" : "dark";
+      var isLight = current === "light";
+      btn.setAttribute("aria-pressed", isLight ? "true" : "false");
+      btn.setAttribute("aria-label", isLight ? "Cambiar a tema oscuro" : "Cambiar a tema claro");
+    }
+    if (meta && document.documentElement.getAttribute("data-theme") === "light") {
+      meta.setAttribute("content", "#FFFFFF");
+    }
+  }
+
+  /* =========================================================
+     1. CAMPO DE BRASAS · partículas subiendo
      ========================================================= */
   function buildEmbers() {
     var field = document.getElementById("emberField");
@@ -33,7 +80,7 @@
     if (reduced) { field.style.display = "none"; return; }
 
     var count = window.innerWidth < 768 ? 14 : 30;
-    var palette = ["#FFD447", "#FF8A1F", "#FF5B1F", "#E0231A", "#FFF6EC"];
+    var palette = emberPalette();
     var frag = document.createDocumentFragment();
 
     for (var i = 0; i < count; i++) {
@@ -83,7 +130,7 @@
   }
 
   /* =========================================================
-     2. GEOMETRÍA MEMPHIS — deriva infinita + parallax
+     2. GEOMETRÍA MEMPHIS · deriva infinita + parallax
      ========================================================= */
   function memphisMotion() {
     var shapes = gsap.utils.toArray(".mm");
@@ -118,7 +165,7 @@
   }
 
   /* =========================================================
-     3. HERO — intro
+     3. HERO · intro
      ========================================================= */
   function heroIntro() {
     var tl = gsap.timeline({ defaults: { ease: "power3.out" } });
@@ -285,7 +332,7 @@
   }
 
   /* =========================================================
-     6. MÉTRICAS — contador
+     6. MÉTRICAS · contador
      ========================================================= */
   function counters() {
     gsap.utils.toArray(".metric").forEach(function (metric) {
@@ -311,7 +358,7 @@
   }
 
   /* =========================================================
-      7. PROYECTOS — revelado tras renderizar (viene de data/projects.json)
+      7. PROYECTOS · revelado tras renderizar (viene de data/projects.json)
      ========================================================= */
   function projectsReveal() {
     document.addEventListener("projects:rendered", function () {
@@ -332,7 +379,7 @@
   }
 
   /* =========================================================
-     8. NAV — estado al scroll, enlace activo, scroll suave
+     8. NAV · estado al scroll, enlace activo, scroll suave
      ========================================================= */
   function nav() {
     var navEl = document.getElementById("nav");
@@ -452,6 +499,7 @@
      ========================================================= */
   function init() {
     try {
+      themeInit();
       buildEmbers();
       memphisMotion();
       heroIntro();

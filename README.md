@@ -1,4 +1,4 @@
-# Portafolio — Alejandro Espinoza López
+# Portafolio · Alejandro Espinoza López
 
 Landing page personal optimizada para **marketing digital y diseño gráfico**.
 Tema oscuro cálido con paleta de fuego, animada con GSAP, sin cajas ni bordes,
@@ -6,7 +6,7 @@ lista para **GitHub Pages**.
 
 ```
 index.html                  La landing completa
-DESIGN.md                   Sistema de diseño (IGNIS) — leer antes de tocar estilos
+DESIGN.md                   Sistema de diseño (IGNIS) · leer antes de tocar estilos
 data/projects.json          ← TU ARCHIVO: edita los proyectos y la web se actualiza sola
 assets/css/style.css        Estilos
 assets/js/main.js           Animaciones GSAP + interacción
@@ -92,6 +92,8 @@ Ver **`DESIGN.md`** antes de modificar estilos. Reglas duras:
   Prohibido morado, violeta, cian, magenta, verde neón o azul eléctrico.
 - **Interactivos siempre redondos**: `border-radius: 100px`.
 - **Sin JS el contenido se ve igual**: los estados iniciales están bajo `.js`.
+- **Dos temas**: oscuro de fuego por defecto y claro Aqua (blanco, cian,
+  celeste, azul y negro). Botón en la nav, se recuerda en `localStorage`.
 
 ## Animación (GSAP)
 

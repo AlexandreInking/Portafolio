@@ -1,4 +1,4 @@
-# Design System: IGNIS — Fire-Dark Editorial Portfolio
+# Design System: IGNIS · Fire-Dark Editorial Portfolio
 
 > Author: Alejandro Espinoza López · Portfolio personal
 > Basis: **Framer** (pure void canvas, pill interactives, extreme negative tracking, motion-first)
@@ -9,27 +9,27 @@
 
 ## 1. Visual Theme & Atmosphere
 
-IGNIS is a cinematic void that glows from within. The canvas is a **warm near-black** (`#0A0705`) —
-not neutral gray, not cool charcoal — so the fire palette reads as heat against ember-darkness rather
+IGNIS is a cinematic void that glows from within. The canvas is a **warm near-black** (`#0A0705`):
+not neutral gray, not cool charcoal · so the fire palette reads as heat against ember-darkness rather
 than as neon against black. Every section is lit by **radial gradient auras** (embers), never by
 containers. There are **no boxes**: no bordered cards, no outlined panels, no sharp rectangles.
-Content is separated by typography, whitespace, and soft glow — not by edges.
+Content is separated by typography, whitespace, and soft glow · not by edges.
 
 Depth comes from light, not from borders. Interactive elements are **pills** (fully rounded).
 Section rhythm comes from gradient hairlines (`1px`, `linear-gradient` fading at both ends) and from
 drifting Memphis geometry: arcs, squiggles, lozenges, dots-grids and blobs in white / yellow /
 orange / red, animated continuously with GSAP (float, drift, rotate, parallax on scroll).
 
-The emotional register: **heat, momentum, craft**. A person in transition — operations and
-Trust & Safety background, now marketing + design — should feel like someone who has *already been
+The emotional register: **heat, momentum, craft**. A person in transition · operations and
+Trust & Safety background, now marketing + design · should feel like someone who has *already been
 doing the work*, just under a different job title. Confident, warm, not corporate-stiff, not childish.
 
 **Key Characteristics**
 - Warm void canvas `#0A0705` with ember radial glows (never flat black, never cool gray)
-- **Zero boxes** — no bordered containers; separation by whitespace + glow + gradient hairlines
-- Pill interactives (100px radius) — no squared or lightly-rounded buttons
+- **Zero boxes** · no bordered containers; separation by whitespace + glow + gradient hairlines
+- Pill interactives (100px radius) · no squared or lightly-rounded buttons
 - Fire palette only: white → yellow → orange → red. **No purple. No neon. No cyan/magenta/lime.**
-- Corporate Memphis geometry as drifting background decor (abstract only — no human figures)
+- Corporate Memphis geometry as drifting background decor (abstract only · no human figures)
 - Extreme negative tracking on display type (-0.04em and tighter at scale)
 - Motion-first: GSAP timelines, ScrollTrigger scrub, magnetic hover, ember particle field
 
@@ -41,16 +41,16 @@ doing the work*, just under a different job title. Confident, warm, not corporat
 | Token | Hex | Role |
 |-------|-----|------|
 | `--fire-white` | `#FFF6EC` | Primary text, headings, high-emphasis copy (warm white, never pure `#fff`) |
-| `--fire-amber` | `#FFD447` | Primary accent — highlights, active nav, eyebrow labels, spark |
-| `--fire-flame` | `#FF8A1F` | Secondary accent — gradients, links on dark, glow core |
-| `--fire-blaze` | `#FF5B1F` | Emphasis accent — gradient mid-stop, hover heat |
-| `--fire-blood` | `#E0231A` | Deep accent — gradient end, dramatic moments |
-| `--fire-coal` | `#8C1008` | Dark accent — gradient shadow stop, inactive embers |
+| `--fire-amber` | `#FFD447` | Primary accent · highlights, active nav, eyebrow labels, spark |
+| `--fire-flame` | `#FF8A1F` | Secondary accent · gradients, links on dark, glow core |
+| `--fire-blaze` | `#FF5B1F` | Emphasis accent · gradient mid-stop, hover heat |
+| `--fire-blood` | `#E0231A` | Deep accent · gradient end, dramatic moments |
+| `--fire-coal` | `#8C1008` | Dark accent · gradient shadow stop, inactive embers |
 
 ### Surfaces (warm neutrals)
 | Token | Hex | Role |
 |-------|-----|------|
-| `--void` | `#0A0705` | Page background — warm near-black |
+| `--void` | `#0A0705` | Page background · warm near-black |
 | `--void-2` | `#14100C` | Alternate section surface (subtle, no border) |
 | `--void-3` | `#1F1811` | Raised surface (organic panel fill, still borderless) |
 | `--ash` | `#3A2E24` | Hairlines, dividers, inactive tracks |
@@ -76,14 +76,36 @@ doing the work*, just under a different job title. Confident, warm, not corporat
 - ❌ Pure white `#ffffff` (use warm `--fire-white`)
 - ❌ Visible 1px borders around content containers
 
+### Aqua (light theme, `html[data-theme="light"]`)
+Mismo sistema, paleta invertida: fondo blanco, acentos cian + celeste + azul
+y negro azulado para el texto y el contraste. Vive en `style.css §1b` y se
+conmuta con el botón `.theme-toggle` de la nav (sol en oscuro, luna en claro).
+La elección se guarda en `localStorage` (`portafolio-theme`) y la primera visita
+respeta `prefers-color-scheme`. Sin JS o sin elección guardada, el tema es oscuro.
+| Token | Hex claro | Rol |
+|-------|-----------|-----|
+| `--fire-white` | `#0B1520` | Tinta principal (casi negro, con matiz azul) |
+| `--fire-amber` | `#0369A1` | Acento de texto (eyebrows, giros, roles) |
+| `--fire-flame` | `#0891B2` | Cian (links, selecciones, glows) |
+| `--fire-blaze` | `#2563EB` | Azul (énfasis, hovers) |
+| `--fire-blood` | `#0B1520` | Negro de balance (cierre del degradado) |
+| `--fire-coal` | `#BAE6FD` | Celeste pálido (detalles suaves) |
+| `--void` | `#FFFFFF` | Fondo de página |
+| `--void-2` / `--void-3` | `#F0F7FC` / `#E3F0F9` | Superficies claras |
+| `--smoke` / `--smoke-dim` | `#33475B` / `#64809A` | Texto secundario y terciario |
+- **Flame**: `linear-gradient(100deg, #22D3EE, #38BDF8 38%, #2563EB 68%, #0B1520 100%)`
+- **Spark (texto)**: `linear-gradient(92deg, #0B1520, #0369A1 48%, #0891B2 100%)`
+- Las brasas del hero usan la paleta Aqua (`main.js`: `AQUA_EMBERS`) y el
+  `meta theme-color` cambia a `#FFFFFF` en claro.
+
 ---
 
 ## 3. Typography Rules
 
 ### Fonts
-- **Display**: `Archivo` (variable, 700–900) — condensed-impact geometric sans; the marketing voice
-- **Body**: `Inter` (variable, 400–600) — readable, neutral, professional
-- **Label / metric**: `Space Mono` (400, 700) — data labels, years, tags, nav micro-labels
+- **Display**: `Archivo` (variable, 700–900) · condensed-impact geometric sans; the marketing voice
+- **Body**: `Inter` (variable, 400–600) · readable, neutral, professional
+- **Label / metric**: `Space Mono` (400, 700) · data labels, years, tags, nav micro-labels
 - Fallbacks: `-apple-system, "Segoe UI", system-ui, sans-serif`
 
 ### Hierarchy
@@ -126,7 +148,7 @@ doing the work*, just under a different job title. Confident, warm, not corporat
 - **Project panel**: radius `48px`, `background: linear-gradient(160deg, #1F1811, #14100C)`,
   an inner `::before` radial glow tinted by the project's `color` field from `data/projects.json`,
   a `2px` gradient top-edge bar (not a full border), and a large Memphis accent shape bleeding off-edge.
-- **Stat**: no container at all — number + mono label floating in whitespace.
+- **Stat**: no container at all · number + mono label floating in whitespace.
 - **Hairline divider**: 1px, `Hairline` gradient, max-width 100%, no box.
 
 ### Tags / chips
@@ -134,7 +156,7 @@ doing the work*, just under a different job title. Confident, warm, not corporat
   Space Mono 0.7rem uppercase, padding `.35rem .85rem`. No border.
 
 ### Navigation
-- Fixed, `backdrop-filter: blur(18px)`, background `rgba(10,7,5,.62)` — **no bottom border**;
+- Fixed, `backdrop-filter: blur(18px)`, background `rgba(10,7,5,.62)` · **no bottom border**;
   instead a hairline gradient that fades at both ends. Pill CTA on the right.
 - On scroll > 80px: background opacity increases to `.88`, nav shrinks slightly (GSAP).
 - Mobile: full-screen overlay menu, links at Archivo 800 / 2.2rem, staggered in with GSAP.
@@ -155,26 +177,26 @@ doing the work*, just under a different job title. Confident, warm, not corporat
 
 ### Spacing
 - Base unit **8px**. Scale: `8, 16, 24, 32, 48, 64, 96, 128, 160`.
-- Section vertical padding: `clamp(6rem, 12vh, 11rem)` — generous; the void is the breathing room.
+- Section vertical padding: `clamp(6rem, 12vh, 11rem)` · generous; the void is the breathing room.
 - Between-section separator: hairline + `96px` whitespace.
 
 ### Grid & Container
 - Max content width `1180px`, centered, `padding-inline: clamp(1.25rem, 5vw, 3rem)`.
 - Profile / trajectory: asymmetric `38% / 58%` split with `4%` gap on desktop, stacked on mobile.
 - Projects: auto-fit grid `minmax(320px, 1fr)`, gap `32px`.
-- Metrics: auto-fit `minmax(150px, 1fr)` — borderless, glow-separated.
+- Metrics: auto-fit `minmax(150px, 1fr)` · borderless, glow-separated.
 
 ### Whitespace Philosophy
 - **Breathe through darkness.** Space is void, not container.
 - **Dense within, spacious between.** Copy lines stay tight; sections stay far apart.
-- **Nothing is framed.** If an element needs definition, give it glow — never an outline.
+- **Nothing is framed.** If an element needs definition, give it glow · never an outline.
 
 ### Border Radius Scale
-- `100px` — all buttons, all pills, all chips (interactive = always fully round)
-- `48px` — project panels
-- `44px` — organic content panels
-- `24px` — inline media / logo marks
-- `0` — never used on a visible container
+- `100px` · all buttons, all pills, all chips (interactive = always fully round)
+- `48px` · project panels
+- `44px` · organic content panels
+- `24px` · inline media / logo marks
+- `0` · never used on a visible container
 
 ---
 
@@ -182,10 +204,10 @@ doing the work*, just under a different job title. Confident, warm, not corporat
 
 | Level | Treatment | Use |
 |-------|-----------|-----|
-| 0 — Void | no shadow, `--void` | page background |
-| 1 — Glow | `radial-gradient` ember behind content | section lighting |
-| 2 — Lift | `0 24px 70px -30px rgba(0,0,0,.9)` + inner top highlight `inset 0 1px 0 rgba(255,246,236,.06)` | organic panels, project panels |
-| 3 — Heat | `0 12px 44px rgba(255,138,31,.42)` | primary button hover, active card |
+| 0 · Void | no shadow, `--void` | page background |
+| 1 · Glow | `radial-gradient` ember behind content | section lighting |
+| 2 · Lift | `0 24px 70px -30px rgba(0,0,0,.9)` + inner top highlight `inset 0 1px 0 rgba(255,246,236,.06)` | organic panels, project panels |
+| 3 · Heat | `0 12px 44px rgba(255,138,31,.42)` | primary button hover, active card |
 | Focus | `0 0 0 2px #0A0705, 0 0 0 4px #FFD447` | keyboard focus |
 
 **Shadow philosophy (inverted, dark-theme)**: light is added, darkness is not. Elevation =
@@ -197,7 +219,7 @@ warm glow + a faint white top-edge inset. **Never** use a `1px solid` outline to
 
 ### Do
 - ✅ Keep the canvas warm near-black (`#0A0705`) at all times
-- ✅ Separate content with whitespace, glow, typography, and gradient hairlines — **never boxes**
+- ✅ Separate content with whitespace, glow, typography, and gradient hairlines · **never boxes**
 - ✅ Make every interactive element a full pill
 - ✅ Use the fire scale for *all* color; keep white warm (`#FFF6EC`)
 - ✅ Animate with GSAP: timelines, ScrollTrigger scrub, `gsap.matchMedia()` for reduced motion
@@ -209,9 +231,9 @@ warm glow + a faint white top-edge inset. **Never** use a `1px solid` outline to
 - ❌ Use sharp or lightly-rounded (`4–12px`) corners on interactive elements
 - ❌ Introduce purple, violet, indigo, cyan, magenta, lime, or electric blue
 - ❌ Use pure `#ffffff` text or cool-gray (`#1a1a1a`) backgrounds
-- ❌ Animate layout properties (`width`, `height`, `top`, `left`) — transforms only
+- ❌ Animate layout properties (`width`, `height`, `top`, `left`) · transforms only
 - ❌ Use Memphis human figures (dates the design and reads generic)
-- ❌ Let an ember particle or shape sit still — the page must always breathe
+- ❌ Let an ember particle or shape sit still · the page must always breathe
 
 ---
 
