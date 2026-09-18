@@ -112,7 +112,7 @@
 
   /* ---------- Carga ---------- */
   function loadJson() {
-    return fetch(JSON_URL).then(function (res) {
+    return fetch(JSON_URL, { cache: "no-store" }).then(function (res) {
       if (!res.ok) throw new Error("HTTP " + res.status);
       return res.json();
     }).then(fromJson);
