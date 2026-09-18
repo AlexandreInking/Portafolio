@@ -21,22 +21,24 @@
       "color": "#FF8A1F"
     },
     {
-      "name": "Space Vector",
-      "role": "Desarrollo & publicación",
-      "description": "Videojuego publicado para PC. Acompañé el desarrollo y la publicación: arte, interfaz y los materiales visuales con los que se presentó el título.",
-      "category": "Videojuego · PC",
-      "status": "Publicado",
-      "year": "2018",
+      "name": "Spark",
+      "role": "Diseño de producto y desarrollo",
+      "description": "Herramienta de productividad para personas que estudian y trabajan. Centraliza la actualización de cursos, la experiencia laboral y el CV, con temporizador Pomodoro para sostener el foco y avanzar sin fricción.",
+      "category": "Herramienta de productividad",
+      "status": "En desarrollo",
+      "year": "2026",
       "github": "",
-      "demo": "https://tls.itch.io/space-vector",
-      "demoLabel": "Jugar",
+      "demo": "",
+      "demoLabel": "",
       "tags": [
-        "Unity 3D",
-        "PC",
-        "Publicación"
+        "Productividad",
+        "Gestión de CV",
+        "Cursos",
+        "Pomodoro",
+        "En desarrollo"
       ],
       "featured": false,
-      "color": "#E0231A"
+      "color": "#FFD447"
     },
     {
       "name": "Yin Yang Dodge",
@@ -55,6 +57,24 @@
       ],
       "featured": false,
       "color": "#FF5B1F"
+    },
+    {
+      "name": "Space Vector",
+      "role": "Desarrollo & publicación",
+      "description": "Videojuego publicado para PC. Acompañé el desarrollo y la publicación: arte, interfaz y los materiales visuales con los que se presentó el título.",
+      "category": "Videojuego · PC",
+      "status": "Publicado",
+      "year": "2018",
+      "github": "",
+      "demo": "https://tls.itch.io/space-vector",
+      "demoLabel": "Jugar",
+      "tags": [
+        "Unity 3D",
+        "PC",
+        "Publicación"
+      ],
+      "featured": false,
+      "color": "#E0231A"
     },
     {
       "name": "Loading... The Game",
@@ -91,26 +111,6 @@
       ],
       "featured": false,
       "color": "#FF8A1F"
-    },
-    {
-      "name": "Spark",
-      "role": "Diseño de producto y desarrollo",
-      "description": "Herramienta de productividad para personas que estudian y trabajan. Centraliza la actualización de cursos, la experiencia laboral y el CV, con temporizador Pomodoro para sostener el foco y avanzar sin fricción.",
-      "category": "Herramienta de productividad",
-      "status": "En desarrollo",
-      "year": "2026",
-      "github": "",
-      "demo": "",
-      "demoLabel": "",
-      "tags": [
-        "Productividad",
-        "Gestión de CV",
-        "Cursos",
-        "Pomodoro",
-        "En desarrollo"
-      ],
-      "featured": false,
-      "color": "#FFD447"
     }
   ]
 }
