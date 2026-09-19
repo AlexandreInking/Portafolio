@@ -97,6 +97,8 @@ respeta `prefers-color-scheme`. Sin JS o sin elección guardada, el tema es oscu
 - **Spark (texto)**: `linear-gradient(92deg, #0B1520, #0369A1 48%, #0891B2 100%)`
 - Las brasas del hero usan la paleta Aqua (`main.js`: `AQUA_EMBERS`) y el
   `meta theme-color` cambia a `#FFFFFF` en claro.
+- Los acentos por proyecto (`--pc`: brillo interior y barra superior de la
+  tarjeta) se unifican a cian en claro para no mezclar fuego con Aqua.
 
 ---
 

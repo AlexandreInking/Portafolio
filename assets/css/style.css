@@ -90,12 +90,18 @@ html[data-theme="light"] .proj{
 html[data-theme="light"] .proj:hover{
   box-shadow:0 34px 80px -34px rgba(3,105,161,.45),inset 0 1px 0 rgba(255,255,255,.9);
 }
+html[data-theme="light"] .proj::before{
+  background:radial-gradient(120% 110% at 12% 0%,rgba(56,189,248,.38) 0%,transparent 62%);
+}
+html[data-theme="light"] .proj::after{
+  background:linear-gradient(90deg,transparent,#0891B2,transparent);
+}
 html[data-theme="light"] .proj-role{color:#0369A1}
 html[data-theme="light"] .proj-tags .chip{background:rgba(11,21,32,.05);color:var(--smoke)}
 html[data-theme="light"] .proj-tags a.chip-link{border-color:rgba(8,145,178,.45);background:rgba(8,145,178,.10)}
 html[data-theme="light"] .proj-tags a.chip-link:hover{color:#0B1520;background:rgba(8,145,178,.18)}
 html[data-theme="light"] .proj-btn{border-color:rgba(11,21,32,.20)}
-html[data-theme="light"] .proj-btn:hover{background:rgba(8,145,178,.10);border-color:var(--pc,#0891B2);color:#0369A1}
+html[data-theme="light"] .proj-btn:hover{background:rgba(8,145,178,.10);border-color:#0891B2;color:#0369A1}
 html[data-theme="light"] .proj-status{background:rgba(11,21,32,.06)}
 html[data-theme="light"] .proj-status[data-status="Publicado"]{background:rgba(8,145,178,.14);color:#0369A1}
 html[data-theme="light"] .proj-status[data-status="En desarrollo"]{background:rgba(11,21,32,.08);color:#0B1520}
