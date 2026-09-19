@@ -695,7 +695,7 @@
   ];
   var EGGS_MOBILE = [
     { id: "shake", name: "Terremoto", hint: "Sacude el celular..." },
-    { id: "holdlogo", name: "Paciencia", hint: "Mantén presionada una tarjeta de proyecto..." },
+    { id: "holdlogo", name: "Paciencia", hint: "Quédate 5 segundos con el dedo quieto en la pantalla..." },
     { id: "landscape", name: "Panorámica", hint: "Gira el celular a horizontal..." },
     { id: "tripletap", name: "Tercer dedo", hint: "Toca con tres dedos a la vez..." },
     { id: "holdmail", name: "Copiado", hint: "Mantén presionado mi correo..." },
@@ -819,22 +819,36 @@
     }
   }
 
-  function holdCardInit() {
+  function holdScreenInit() {
     if (reduced || !isTouch) return;
-    var zone = document.getElementById("projects");
-    if (!zone) return;
-    zone.addEventListener("contextmenu", function (e) { e.preventDefault(); });
-    function bind() {
-      zone.querySelectorAll('.proj:not([data-hold])').forEach(function (card) {
-        card.setAttribute("data-hold", "1");
-        longPress(card, 1500, function () {
-          markEgg("holdlogo");
-          showToast("La paciencia también es una skill.", 4000);
-        }, true);
-      });
+    var t = null, armT = null, sx = 0, sy = 0, longTouch = false;
+    function cancel() {
+      if (t) { clearTimeout(t); t = null; }
+      if (armT) { clearTimeout(armT); armT = null; }
     }
-    document.addEventListener("projects:rendered", bind);
-    bind();
+    document.addEventListener("pointerdown", function (e) {
+      if (e.pointerType && e.pointerType !== "touch") return;
+      cancel();
+      sx = e.clientX; sy = e.clientY;
+      longTouch = false;
+      armT = setTimeout(function () { longTouch = true; }, 500);
+      t = setTimeout(function () {
+        t = null;
+        markEgg("holdlogo");
+        showToast("La paciencia también es una skill.", 4000);
+      }, 5000);
+    }, { passive: true });
+    document.addEventListener("pointermove", function (e) {
+      if (!t) return;
+      if (Math.hypot(e.clientX - sx, e.clientY - sy) > 12) cancel();
+    }, { passive: true });
+    ["pointerup", "pointercancel"].forEach(function (ev) {
+      document.addEventListener(ev, cancel, { passive: true });
+    });
+    document.addEventListener("scroll", cancel, { passive: true });
+    document.addEventListener("contextmenu", function (e) {
+      if (longTouch) { e.preventDefault(); longTouch = false; }
+    });
   }
 
   function landscapeInit() {
@@ -1095,7 +1109,7 @@
       fireworksInit();
       eggPanelInit();
       shakeInit();
-      holdCardInit();
+      holdScreenInit();
       landscapeInit();
       tripleTapInit();
       holdMailInit();
