@@ -213,7 +213,7 @@
     var el = document.getElementById("rotWord");
     if (!el) return;
 
-    var words = ["marketing digital", "diseño gráfico", "contenido", "brand safety", "dirección de arte"];
+    var words = ["marketing digital", "diseño gráfico", "contenido", "brand safety"];
     var i = 0;
 
     if (reduced) {
