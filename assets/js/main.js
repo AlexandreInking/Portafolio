@@ -8,6 +8,15 @@
 (function () {
   "use strict";
 
+  /* Huevo de pascua: saludo en consola para curiosos */
+  try {
+    console.log(
+      "%c      /\\\n     /  \\\n    | () |\n     \\  /\n      \\/\n%cHola, curioso. Si abriste DevTools, ya tenemos algo en común: nos gusta ver cómo están hechas las cosas. Hablemos: esplopale@gmail.com",
+      "color:#FF8A1F;font-family:monospace;font-weight:bold",
+      "color:#A9907C;font-size:12px"
+    );
+  } catch (e) {}
+
   var revealAll = function () {
     var els = document.querySelectorAll(
       ".hero-eyebrow,.hero-lead,.hero-actions,.hero-meta,.scroll-cue,.hero-title .ch"
@@ -136,7 +145,9 @@
     b.el.style.height = b.size + "px";
     b.el.style.left = "0";
     b.el.style.top = "0";
-    b.el.style.background = palette[(Math.random() * palette.length) | 0];
+    b.el.style.background = (performance.now() < partyUntil)
+      ? "hsl(" + ((Math.random() * 360) | 0) + ",90%,60%)"
+      : palette[(Math.random() * palette.length) | 0];
   }
 
   function spawnEmber(randomY, extra) {
@@ -180,12 +191,18 @@
 
     // La energía del scroll pide brasas extra (bajar x2, subir x1.5)
     scrollEnergy *= Math.pow(0.95, dt);
+    var storm = now < stormUntil;
+    partyOn = now < partyUntil;
     var target = baseCount + Math.round((scrollEnergy / 100) * maxExtra);
-    while (embers.length < target && embers.length < baseCount + maxExtra) {
+    if (storm) target = baseCount + maxExtra * 2;
+    while (embers.length < target && embers.length < baseCount + maxExtra * 2) {
       spawnEmber(true, true);
     }
+    // En tormenta las brasas caen como lluvia en vez de subir
+    var driftY = storm ? 2.4 : -0.6;
 
     var W = window.innerWidth;
+    var H = window.innerHeight;
     var R = 150;
     var impact = Math.min(cursor.speed / 45, 2);
 
@@ -195,7 +212,7 @@
 
       var sway = Math.sin(now / 1600 + p.seed) * 0.35;
       p.vx += ((sway + wind.x) - p.vx) * Math.min(0.035 * dt, 1);
-      p.vy += ((-0.6 - wind.y * 0.5) - p.vy) * Math.min(0.025 * dt, 1);
+      p.vy += ((driftY - wind.y * 0.5) - p.vy) * Math.min(0.025 * dt, 1);
 
       // Repulsión: más fuerte y amplia según la velocidad del cursor
       if (cursor.active) {
@@ -212,7 +229,7 @@
       p.x += p.vx * dt;
       p.y += p.vy * dt;
 
-      if (p.y < -30 || p.x < -40 || p.x > W + 40 || p.life > p.maxLife) {
+      if (p.y < -30 || p.y > H + 30 || p.x < -40 || p.x > W + 40 || p.life > p.maxLife) {
         if (p.extra) {
           p.el.remove();
           embers.splice(j, 1);
@@ -268,7 +285,7 @@
         var qx = cursor.active ? cursor.x - (r.left + r.width / 2) : 9999;
         var qy = cursor.active ? cursor.y - (r.top + r.height / 2) : 9999;
         var dist = Math.sqrt(qx * qx + qy * qy);
-        var target = Math.max(0, 1 - dist / 520);
+        var target = partyOn ? 1 : Math.max(0, 1 - dist / 520);
         titleGlow += (target - titleGlow) * 0.08;
         heroTitleEl.style.setProperty("--title-glow", (titleGlow * 16).toFixed(1) + "px");
         heroTitleEl.style.setProperty("--title-bright", (1 + titleGlow * 0.07).toFixed(3));
@@ -642,6 +659,111 @@
   }
 
   /* =========================================================
+     11. EASTER EGGS · toast, konami, GG, fantasma, fuegos, logro
+     ========================================================= */
+  var stormUntil = 0;
+  var partyUntil = 0;
+  var partyOn = false;
+  var toastTimer = null;
+
+  function showToast(msg, ms) {
+    var t = document.getElementById("toast");
+    if (!t) return;
+    t.textContent = msg;
+    t.classList.add("show");
+    if (toastTimer) clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () { t.classList.remove("show"); }, ms || 4200);
+  }
+
+  function easterKeys() {
+    if (reduced) return;
+    var seq = ["ArrowUp", "ArrowUp", "ArrowDown", "ArrowDown", "ArrowLeft", "ArrowRight", "ArrowLeft", "ArrowRight", "b", "a"];
+    var pos = 0;
+    var lastG = 0;
+    document.addEventListener("keydown", function (e) {
+      var k = e.key.length === 1 ? e.key.toLowerCase() : e.key;
+      if (k === seq[pos]) {
+        pos++;
+        if (pos === seq.length) {
+          pos = 0;
+          stormUntil = performance.now() + 10000;
+          showToast("Ves, los videojuegos sí sirven para algo.", 5000);
+        }
+      } else {
+        pos = (k === seq[0]) ? 1 : 0;
+      }
+      if (k === "g") {
+        var now = performance.now();
+        if (now - lastG < 800) {
+          lastG = 0;
+          partyUntil = now + 15000;
+          document.documentElement.classList.add("party");
+          showToast("Modo fiesta: 15 segundos. GG.", 4000);
+          setTimeout(function () { document.documentElement.classList.remove("party"); }, 15100);
+        } else {
+          lastG = now;
+        }
+      }
+    });
+  }
+
+  function ghostInit() {
+    if (!finePointer || reduced) return;
+    var idleTimer = null;
+    function arm() {
+      if (idleTimer) clearTimeout(idleTimer);
+      idleTimer = setTimeout(function () {
+        wind.x = 8;
+        for (var i = 0; i < 24 && embers.length < baseCount + maxExtra; i++) spawnEmber(true, true);
+        showToast("¿Sigues ahí? Mueve el mouse para avivar las brasas.", 5000);
+      }, 30000);
+    }
+    ["pointermove", "keydown", "scroll", "click"].forEach(function (ev) {
+      window.addEventListener(ev, arm, { passive: true });
+    });
+    arm();
+  }
+
+  function fireworksInit() {
+    if (reduced) return;
+    var btn = document.querySelector('.contact-actions a[href^="mailto:"]');
+    if (!btn) return;
+    btn.addEventListener("click", function () {
+      var r = btn.getBoundingClientRect();
+      var cx = r.left + r.width / 2;
+      var cy = r.top + r.height / 2;
+      for (var i = 0; i < 16; i++) {
+        if (embers.length > baseCount + maxExtra * 2) break;
+        spawnEmber(false, true);
+        var p = embers[embers.length - 1];
+        var a = Math.random() * Math.PI * 2;
+        var sp = 2 + Math.random() * 4;
+        p.x = cx; p.y = cy;
+        p.vx = Math.cos(a) * sp;
+        p.vy = Math.sin(a) * sp - 2;
+        p.maxLife = 1200 + Math.random() * 800;
+        p.life = 900;
+      }
+    });
+  }
+
+  function achievementInit() {
+    var foot = document.querySelector(".footer");
+    if (!foot || reduced || !("IntersectionObserver" in window)) return;
+    var seen = null;
+    try { seen = sessionStorage.getItem("portafolio-logro"); } catch (e) {}
+    if (seen) return;
+    var io = new IntersectionObserver(function (entries) {
+      if (entries[0].isIntersecting) {
+        showToast("🏆 Logro desbloqueado: llegaste al final. Pocos lo hacen.", 5000);
+        try { sessionStorage.setItem("portafolio-logro", "1"); } catch (e) {}
+        io.disconnect();
+      }
+    }, { threshold: 0.4 });
+    io.observe(foot);
+  }
+
+  /* =========================================================
      Arranque
      ========================================================= */
   function init() {
@@ -659,6 +781,10 @@
       nav();
       menuInit();
       magnetic();
+      easterKeys();
+      achievementInit();
+      ghostInit();
+      fireworksInit();
 
       // Tras cargar tipografías y proyectos, recalcular triggers
       window.addEventListener("load", function () { ScrollTrigger.refresh(); });

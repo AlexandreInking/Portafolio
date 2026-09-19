@@ -628,6 +628,28 @@ html[data-theme="light"] .hero-title{--title-glow-color:rgba(8,145,178,.5)}
   .mm-arc,.mm-zig{display:none}
 }
 
+/* ---------- 18. Toast de logros y easter eggs ---------- */
+.toast{
+  position:fixed;left:50%;bottom:1.75rem;transform:translate(-50%,20px);
+  z-index:200;max-width:min(92vw,480px);text-align:center;
+  padding:.9rem 1.5rem;border-radius:100px;
+  background:rgba(20,16,12,.92);color:var(--fire-white);
+  border:1px solid rgba(255,138,31,.4);
+  font-family:var(--mono);font-size:.78rem;letter-spacing:.04em;
+  opacity:0;pointer-events:none;
+  transition:opacity .4s ease,transform .4s ease;
+}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+html[data-theme="light"] .toast{background:rgba(255,255,255,.95);border-color:rgba(8,145,178,.45)}
+
+/* ---------- 19. Modo fiesta (GG) ---------- */
+html.party .hero-title .ch{
+  background:linear-gradient(90deg,#ff004c,#ff8a00,#ffea00,#00e676,#00b0ff,#a100ff,#ff004c);
+  background-size:300% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;
+  animation:party-slide 2.5s linear infinite;
+}
+@keyframes party-slide{to{background-position:300% 0}}
+
 /* ---------- 17. Reduced motion ---------- */
 @media (prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
