@@ -127,7 +127,7 @@
 
     if (reduced) { field.style.display = "none"; return; }
 
-    var count = window.innerWidth < 768 ? 14 : 30;
+    var count = window.innerWidth < 768 ? 28 : 60;
     var frag = document.createDocumentFragment();
 
     for (var i = 0; i < count; i++) {
@@ -168,7 +168,7 @@
 
       var sway = Math.sin(now / 1600 + p.seed) * 0.35;
       p.vx += ((sway + wind.x) - p.vx) * Math.min(0.035 * dt, 1);
-      p.vy += ((-0.3 - wind.y * 0.5) - p.vy) * Math.min(0.025 * dt, 1);
+      p.vy += ((-0.6 - wind.y * 0.5) - p.vy) * Math.min(0.025 * dt, 1);
 
       // Repulsión: más fuerte y amplia según la velocidad del cursor
       if (cursor.active) {
