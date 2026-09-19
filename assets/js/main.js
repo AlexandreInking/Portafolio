@@ -70,9 +70,57 @@
     }
   }
 
+  /* Cursor + viento compartidos por los efectos reactivos.
+     Solo existen con puntero fino; en táctil todo queda en deriva base. */
+  var finePointer = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+  var cursor = { x: -9999, y: -9999, vx: 0, vy: 0, speed: 0, active: false };
+  var wind = { x: 0, y: 0 };
+
+  function trackCursor() {
+    if (!finePointer || reduced) return;
+    var lastX = null, lastY = null, lastT = 0;
+    window.addEventListener("pointermove", function (e) {
+      if (e.pointerType && e.pointerType !== "mouse") return;
+      var now = performance.now();
+      if (lastX !== null) {
+        var dt = Math.max(now - lastT, 1) / 16.666;
+        var ivx = (e.clientX - lastX) / dt;
+        var ivy = (e.clientY - lastY) / dt;
+        cursor.vx += (ivx - cursor.vx) * 0.3;
+        cursor.vy += (ivy - cursor.vy) * 0.3;
+      }
+      lastX = e.clientX; lastY = e.clientY; lastT = now;
+      cursor.x = e.clientX; cursor.y = e.clientY;
+      cursor.active = true;
+    }, { passive: true });
+    document.documentElement.addEventListener("mouseleave", function () {
+      cursor.active = false;
+      cursor.vx = 0; cursor.vy = 0;
+    });
+  }
+
   /* =========================================================
-     1. CAMPO DE BRASAS · partículas subiendo
+     1. CAMPO DE BRASAS · física propia (deriva + viento +
+     repulsión al cursor con impacto por velocidad)
      ========================================================= */
+  var embers = [];
+
+  function resetEmber(b, randomY) {
+    var palette = emberPalette();
+    b.size = 2 + Math.random() * 3;
+    b.x = Math.random() * window.innerWidth;
+    b.y = randomY ? Math.random() * window.innerHeight : window.innerHeight + 20;
+    b.vx = 0; b.vy = 0;
+    b.maxLife = 9000 + Math.random() * 9000;
+    b.life = randomY ? Math.random() * b.maxLife : 0;
+    b.seed = Math.random() * 1000;
+    b.el.style.width = b.size + "px";
+    b.el.style.height = b.size + "px";
+    b.el.style.left = "0";
+    b.el.style.top = "0";
+    b.el.style.background = palette[(Math.random() * palette.length) | 0];
+  }
+
   function buildEmbers() {
     var field = document.getElementById("emberField");
     if (!field) return;
@@ -80,53 +128,119 @@
     if (reduced) { field.style.display = "none"; return; }
 
     var count = window.innerWidth < 768 ? 14 : 30;
-    var palette = emberPalette();
     var frag = document.createDocumentFragment();
 
     for (var i = 0; i < count; i++) {
       var e = document.createElement("span");
       e.className = "ember";
-      var size = gsap.utils.random(2, 5, 0.5);
-      e.style.width = size + "px";
-      e.style.height = size + "px";
-      e.style.left = gsap.utils.random(0, 100) + "%";
-      e.style.background = palette[i % palette.length];
       frag.appendChild(e);
+      var b = { el: e, x: 0, y: 0, vx: 0, vy: 0, size: 3, life: 0, maxLife: 1, seed: 0 };
+      resetEmber(b, true);
+      embers.push(b);
     }
     field.appendChild(frag);
 
-    var embers = field.querySelectorAll(".ember");
+    memphisCursor();
+    lastFrame = performance.now();
+    requestAnimationFrame(emberLoop);
+  }
 
-    embers.forEach(function (el) {
-      gsap.set(el, { y: 0, opacity: 0 });
+  var lastFrame = 0;
 
-      gsap.timeline({ repeat: -1, delay: gsap.utils.random(0, 6) })
-        .to(el, {
-          opacity: gsap.utils.random(0.25, 0.75),
-          duration: gsap.utils.random(1, 2.4),
-          ease: "sine.inOut"
-        })
-        .to(el, {
-          y: -window.innerHeight * gsap.utils.random(0.7, 1.15),
-          x: gsap.utils.random(-70, 70),
-          duration: gsap.utils.random(7, 15),
-          ease: "none"
-        }, 0)
-        .to(el, {
-          opacity: 0,
-          duration: gsap.utils.random(1.5, 3),
-          ease: "sine.in"
-        }, "-=3");
+  function emberLoop(now) {
+    var dt = Math.min(((now - lastFrame) / 16.666) || 1, 3);
+    lastFrame = now;
 
-      // Vaivén lateral
-      gsap.to(el, {
-        x: "+=" + gsap.utils.random(-26, 26),
-        duration: gsap.utils.random(3, 6),
-        repeat: -1,
-        yoyo: true,
-        ease: "sine.inOut"
-      });
+    // El viento sigue la velocidad del cursor y se calma solo
+    cursor.vx *= Math.pow(0.93, dt);
+    cursor.vy *= Math.pow(0.93, dt);
+    cursor.speed = Math.sqrt(cursor.vx * cursor.vx + cursor.vy * cursor.vy);
+    wind.x += ((cursor.vx * 0.05) - wind.x) * Math.min(0.05 * dt, 1);
+    wind.y += ((cursor.vy * 0.05) - wind.y) * Math.min(0.05 * dt, 1);
+
+    var W = window.innerWidth;
+    var R = 150;
+    var impact = Math.min(cursor.speed / 45, 2);
+
+    for (var j = 0; j < embers.length; j++) {
+      var p = embers[j];
+      p.life += dt * 16.666;
+
+      var sway = Math.sin(now / 1600 + p.seed) * 0.35;
+      p.vx += ((sway + wind.x) - p.vx) * Math.min(0.035 * dt, 1);
+      p.vy += ((-0.3 - wind.y * 0.5) - p.vy) * Math.min(0.025 * dt, 1);
+
+      // Repulsión: más fuerte y amplia según la velocidad del cursor
+      if (cursor.active) {
+        var dx = p.x - cursor.x;
+        var dy = p.y - cursor.y;
+        var d = Math.sqrt(dx * dx + dy * dy);
+        if (d < R && d > 0.01) {
+          var f = (1 - d / R) * (0.9 + impact * 1.8);
+          p.vx += (dx / d) * f * dt;
+          p.vy += (dy / d) * f * dt;
+        }
+      }
+
+      p.x += p.vx * dt;
+      p.y += p.vy * dt;
+
+      if (p.y < -30 || p.x < -40 || p.x > W + 40 || p.life > p.maxLife) {
+        resetEmber(p, false);
+        continue;
+      }
+
+      var alpha = p.life < 1800 ? (p.life / 1800) * 0.8 : 0.8;
+      p.el.style.transform = "translate3d(" + p.x.toFixed(1) + "px," + p.y.toFixed(1) + "px,0)";
+      p.el.style.opacity = alpha.toFixed(3);
+    }
+
+    updateCursorLayers();
+    requestAnimationFrame(emberLoop);
+  }
+
+  /* Memphis con parallax de cursor (propiedad `translate`: no pelea
+     con el `transform` que GSAP ya anima en deriva + scroll) */
+  var mmLayers = [];
+
+  function memphisCursor() {
+    if (!finePointer || reduced) return;
+    mmLayers = gsap.utils.toArray(".mm").map(function (el, k) {
+      return { el: el, depth: 0.06 + (k % 4) * 0.05, x: 0, y: 0 };
     });
+  }
+
+  var heroTitleEl = null;
+  var titleGlow = 0;
+
+  function updateCursorLayers() {
+    var k, s;
+    if (mmLayers.length && cursor.active) {
+      var cx = window.innerWidth / 2;
+      var cy = window.innerHeight / 2;
+      for (k = 0; k < mmLayers.length; k++) {
+        s = mmLayers[k];
+        var tx = (cursor.x - cx) * s.depth * 0.55;
+        var ty = (cursor.y - cy) * s.depth * 0.55;
+        s.x += (tx - s.x) * 0.06;
+        s.y += (ty - s.y) * 0.06;
+        s.el.style.translate = s.x.toFixed(1) + "px " + s.y.toFixed(1) + "px";
+      }
+    }
+    // El título respira: brilla más cuando el cursor se acerca
+    if (finePointer && !reduced) {
+      if (!heroTitleEl) heroTitleEl = document.querySelector(".hero-title");
+      if (heroTitleEl) {
+        var r = heroTitleEl.getBoundingClientRect();
+        var qx = cursor.active ? cursor.x - (r.left + r.width / 2) : 9999;
+        var qy = cursor.active ? cursor.y - (r.top + r.height / 2) : 9999;
+        var dist = Math.sqrt(qx * qx + qy * qy);
+        var target = Math.max(0, 1 - dist / 520);
+        titleGlow += (target - titleGlow) * 0.08;
+        heroTitleEl.style.setProperty("--title-glow", (titleGlow * 16).toFixed(1) + "px");
+        heroTitleEl.style.setProperty("--title-bright", (1 + titleGlow * 0.07).toFixed(3));
+      }
+    }
   }
 
   /* =========================================================
@@ -500,6 +614,7 @@
   function init() {
     try {
       themeInit();
+      trackCursor();
       buildEmbers();
       memphisMotion();
       heroIntro();
