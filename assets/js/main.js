@@ -695,7 +695,6 @@
   ];
   var EGGS_MOBILE = [
     { id: "shake", name: "Terremoto", hint: "Sacude el celular..." },
-    { id: "holdlogo", name: "Paciencia", hint: "Quédate 5 segundos con el dedo quieto en la pantalla..." },
     { id: "landscape", name: "Panorámica", hint: "Gira el celular a horizontal..." },
     { id: "tripletap", name: "Tercer dedo", hint: "Toca con tres dedos a la vez..." },
     { id: "holdmail", name: "Copiado", hint: "Mantén presionado mi correo..." },
@@ -817,38 +816,6 @@
     } else {
       enable();
     }
-  }
-
-  function holdScreenInit() {
-    if (reduced || !isTouch) return;
-    var t = null, armT = null, sx = 0, sy = 0, longTouch = false;
-    function cancel() {
-      if (t) { clearTimeout(t); t = null; }
-      if (armT) { clearTimeout(armT); armT = null; }
-    }
-    document.addEventListener("pointerdown", function (e) {
-      if (e.pointerType && e.pointerType !== "touch") return;
-      cancel();
-      sx = e.clientX; sy = e.clientY;
-      longTouch = false;
-      armT = setTimeout(function () { longTouch = true; }, 500);
-      t = setTimeout(function () {
-        t = null;
-        markEgg("holdlogo");
-        showToast("La paciencia también es una skill.", 4000);
-      }, 5000);
-    }, { passive: true });
-    document.addEventListener("pointermove", function (e) {
-      if (!t) return;
-      if (Math.hypot(e.clientX - sx, e.clientY - sy) > 12) cancel();
-    }, { passive: true });
-    ["pointerup", "pointercancel"].forEach(function (ev) {
-      document.addEventListener(ev, cancel, { passive: true });
-    });
-    document.addEventListener("scroll", cancel, { passive: true });
-    document.addEventListener("contextmenu", function (e) {
-      if (longTouch) { e.preventDefault(); longTouch = false; }
-    });
   }
 
   function landscapeInit() {
@@ -1109,7 +1076,6 @@
       fireworksInit();
       eggPanelInit();
       shakeInit();
-      holdScreenInit();
       landscapeInit();
       tripleTapInit();
       holdMailInit();
