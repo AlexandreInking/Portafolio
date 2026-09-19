@@ -200,6 +200,7 @@
     var storm = now < stormUntil;
     partyOn = now < partyUntil;
     var target = baseCount + Math.round((scrollEnergy / 100) * maxExtra);
+    if (batterySave) target = Math.round(baseCount * 0.5);
     if (storm) target = baseCount + maxExtra * 2;
     while (embers.length < target && embers.length < baseCount + maxExtra * 2) {
       spawnEmber(true, true);
@@ -247,6 +248,7 @@
       }
 
       var alpha = p.life < 1800 ? (p.life / 1800) * 0.8 : 0.8;
+      if (batterySave) alpha *= 0.35;
       p.el.style.transform = "translate3d(" + p.x.toFixed(1) + "px," + p.y.toFixed(1) + "px,0)";
       p.el.style.opacity = alpha.toFixed(3);
     }
@@ -683,7 +685,16 @@
     { id: "logro", name: "Lector completo", hint: "Llega hasta el final de la página." },
     { id: "fiesta", name: "GG", hint: "Dos veces la misma letra gamer." }
   ];
-  var EGGS_MOBILE = [];
+  var EGGS_MOBILE = [
+    { id: "shake", name: "Terremoto", hint: "Sacude el celular..." },
+    { id: "holdlogo", name: "Paciencia", hint: "Mantén presionado el logo 2 segundos..." },
+    { id: "landscape", name: "Panorámica", hint: "Gira el celular a horizontal..." },
+    { id: "tripletap", name: "Tercer dedo", hint: "Toca con tres dedos a la vez..." },
+    { id: "holdmail", name: "Copiado", hint: "Mantén presionado mi correo..." },
+    { id: "dragtitle", name: "Detrás del nombre", hint: "Arrastra el título a un lado..." },
+    { id: "nightowl", name: "Trasnochador", hint: "Abre el portafolio de madrugada..." },
+    { id: "battery", name: "Ahorro", hint: "Entra con la batería baja..." }
+  ];
 
   function eggList() { return finePointer ? EGGS_PC : EGGS_MOBILE; }
 
@@ -737,6 +748,195 @@
     if (fill) fill.style.width = (list.length ? (n / list.length) * 100 : 0) + "%";
   }
 
+  /* Huevos de celular: solo con táctil */
+  var isTouch = (window.matchMedia && window.matchMedia("(pointer: coarse)").matches) || ("ontouchstart" in window);
+  var batterySave = false;
+
+  function burstAt(cx, cy, n) {
+    for (var bi = 0; bi < (n || 16); bi++) {
+      if (embers.length > baseCount + maxExtra * 2) break;
+      spawnEmber(false, true);
+      var bp = embers[embers.length - 1];
+      var ba = Math.random() * Math.PI * 2;
+      var bsp = 2 + Math.random() * 4;
+      bp.x = cx; bp.y = cy;
+      bp.vx = Math.cos(ba) * bsp;
+      bp.vy = Math.sin(ba) * bsp - 2;
+      bp.maxLife = 1200 + Math.random() * 800;
+      bp.life = 900;
+    }
+  }
+
+  function longPress(el, ms, cb) {
+    var t = null;
+    function cancel() { if (t) { clearTimeout(t); t = null; } }
+    el.addEventListener("pointerdown", function () {
+      cancel();
+      t = setTimeout(function () { t = null; cb(); }, ms);
+    });
+    ["pointerup", "pointerleave", "pointercancel", "pointermove"].forEach(function (ev) {
+      el.addEventListener(ev, cancel, { passive: true });
+    });
+  }
+
+  function shakeInit() {
+    if (reduced || !isTouch || !("DeviceMotionEvent" in window)) return;
+    var last = null, cool = 0;
+    function onMotion(e) {
+      var a = e.accelerationIncludingGravity;
+      if (!a || a.x === null) return;
+      var now = performance.now();
+      if (last && now - cool > 6000) {
+        var d = Math.abs(a.x - last.x) + Math.abs(a.y - last.y) + Math.abs(a.z - last.z);
+        if (d > 24) {
+          cool = now;
+          stormUntil = now + 5000;
+          markEgg("shake");
+          showToast("Terremoto: lluvia de brasas.", 3500);
+        }
+      }
+      last = { x: a.x, y: a.y, z: a.z };
+    }
+    function enable() { window.addEventListener("devicemotion", onMotion); }
+    if (typeof DeviceMotionEvent.requestPermission === "function") {
+      window.addEventListener("pointerdown", function ask() {
+        window.removeEventListener("pointerdown", ask);
+        DeviceMotionEvent.requestPermission().then(function (r) { if (r === "granted") enable(); }).catch(function () {});
+      });
+    } else {
+      enable();
+    }
+  }
+
+  function holdLogoInit() {
+    if (reduced || !isTouch) return;
+    var brand = document.querySelector(".brand");
+    if (!brand) return;
+    longPress(brand, 2000, function () {
+      markEgg("holdlogo");
+      showToast("La paciencia también es una skill.", 4000);
+    });
+  }
+
+  function landscapeInit() {
+    if (reduced || !isTouch || !window.matchMedia) return;
+    var mq = window.matchMedia("(orientation: landscape)");
+    function onChange(e) {
+      if (!e.matches) return;
+      for (var i = 0; i < 16 && embers.length < baseCount + maxExtra; i++) spawnEmber(true, true);
+      if (!getEggs().landscape) {
+        markEgg("landscape");
+        showToast("Buena vista panorámica.", 4000);
+      }
+    }
+    if (mq.addEventListener) mq.addEventListener("change", onChange);
+    else if (mq.addListener) mq.addListener(onChange);
+  }
+
+  function tripleTapInit() {
+    if (reduced || !isTouch) return;
+    document.addEventListener("touchstart", function (e) {
+      if (e.touches.length === 3) {
+        if (e.cancelable) e.preventDefault();
+        var html = document.documentElement;
+        var cur = html.getAttribute("data-theme") === "light" ? "light" : "dark";
+        var tmp = cur === "light" ? "dark" : "light";
+        html.setAttribute("data-theme", tmp);
+        markEgg("tripletap");
+        showToast("Tema prestado por 10 segundos.", 3500);
+        setTimeout(function () {
+          if (html.getAttribute("data-theme") === tmp) html.setAttribute("data-theme", cur);
+        }, 10000);
+      }
+    }, { passive: false });
+  }
+
+  function holdMailInit() {
+    if (reduced || !isTouch) return;
+    var btn = document.querySelector('.contact-actions a[href^="mailto:"]');
+    if (!btn) return;
+    var held = false;
+    btn.addEventListener("contextmenu", function (e) { e.preventDefault(); });
+    longPress(btn, 600, function () {
+      held = true;
+      var mail = "esplopale@gmail.com";
+      function done() {
+        var r = btn.getBoundingClientRect();
+        burstAt(r.left + r.width / 2, r.top + r.height / 2, 14);
+        markEgg("holdmail");
+        showToast("Correo copiado. Escríbeme cuando quieras.", 3500);
+      }
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(mail).then(done, done);
+      } else {
+        var ta = document.createElement("textarea");
+        ta.value = mail;
+        document.body.appendChild(ta);
+        ta.select();
+        try { document.execCommand("copy"); } catch (e) {}
+        ta.remove();
+        done();
+      }
+    });
+    btn.addEventListener("click", function (e) {
+      if (held) { e.preventDefault(); held = false; }
+    });
+  }
+
+  function dragTitleInit() {
+    if (reduced || !isTouch) return;
+    var title = document.querySelector(".hero-title");
+    if (!title) return;
+    var sx = 0, sy = 0, on = false, shown = false;
+    title.addEventListener("touchstart", function (e) {
+      var t = e.touches[0];
+      sx = t.clientX; sy = t.clientY; on = true;
+    }, { passive: true });
+    title.addEventListener("touchmove", function (e) {
+      if (!on) return;
+      var t = e.touches[0];
+      var dx = t.clientX - sx;
+      var dy = t.clientY - sy;
+      if (Math.abs(dx) > Math.abs(dy) * 1.5) {
+        title.style.translate = dx.toFixed(0) + "px 0";
+        if (Math.abs(dx) > 60) {
+          title.classList.add("peek");
+          if (!shown) { shown = true; markEgg("dragtitle"); }
+        }
+      }
+    }, { passive: true });
+    function end() {
+      if (!on) return;
+      on = false;
+      title.style.translate = "";
+      title.classList.remove("peek");
+    }
+    title.addEventListener("touchend", end, { passive: true });
+    title.addEventListener("touchcancel", end, { passive: true });
+  }
+
+  function nightOwlInit() {
+    if (reduced || !isTouch) return;
+    if (new Date().getHours() < 6) {
+      setTimeout(function () {
+        markEgg("nightowl");
+        showToast("¿Trasnochando? Yo también hice esto de noche.", 5000);
+      }, 2500);
+    }
+  }
+
+  function batteryInit() {
+    if (reduced || !isTouch || !navigator.getBattery) return;
+    navigator.getBattery().then(function (batt) {
+      if (batt.level < 0.15 && !batt.charging) {
+        batterySave = true;
+        setTimeout(function () {
+          markEgg("battery");
+          showToast("Batería baja: descansemos los dos.", 5000);
+        }, 3500);
+      }
+    }).catch(function () {});
+  }
   function eggPanelInit() {
     var btn = document.getElementById("eggBtn");
     var modal = document.getElementById("eggModal");
@@ -827,20 +1027,7 @@
     btn.addEventListener("click", function () {
       markEgg("fuegos");
       var r = btn.getBoundingClientRect();
-      var cx = r.left + r.width / 2;
-      var cy = r.top + r.height / 2;
-      for (var i = 0; i < 16; i++) {
-        if (embers.length > baseCount + maxExtra * 2) break;
-        spawnEmber(false, true);
-        var p = embers[embers.length - 1];
-        var a = Math.random() * Math.PI * 2;
-        var sp = 2 + Math.random() * 4;
-        p.x = cx; p.y = cy;
-        p.vx = Math.cos(a) * sp;
-        p.vy = Math.sin(a) * sp - 2;
-        p.maxLife = 1200 + Math.random() * 800;
-        p.life = 900;
-      }
+      burstAt(r.left + r.width / 2, r.top + r.height / 2, 16);
     });
   }
 
@@ -884,6 +1071,14 @@
       ghostInit();
       fireworksInit();
       eggPanelInit();
+      shakeInit();
+      holdLogoInit();
+      landscapeInit();
+      tripleTapInit();
+      holdMailInit();
+      dragTitleInit();
+      nightOwlInit();
+      batteryInit();
 
       // Tras cargar tipografías y proyectos, recalcular triggers
       window.addEventListener("load", function () { ScrollTrigger.refresh(); });

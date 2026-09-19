@@ -200,6 +200,7 @@ main,header,footer{position:relative;z-index:2}
   display:flex;align-items:center;gap:1.5rem;
 }
 .brand{display:flex;align-items:center;gap:.7rem;color:var(--fire-white)}
+.brand{-webkit-touch-callout:none;-webkit-user-select:none;user-select:none}
 .brand-mark{
   width:38px;height:38px;flex:0 0 38px;border-radius:50%;
   display:grid;place-items:center;
@@ -320,7 +321,14 @@ main,header,footer{position:relative;z-index:2}
   font-family:var(--display);font-weight:900;
   font-size:clamp(3.2rem,9.5vw,8rem);line-height:.88;letter-spacing:-.045em;
   margin-bottom:1.75rem;
+  position:relative;
 }
+.title-secret{
+  position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  font-family:var(--mono);font-size:.8rem;font-weight:400;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--fire-amber);opacity:0;transition:opacity .3s ease;pointer-events:none;
+}
+.hero-title.peek .title-secret{opacity:1}
 .hero-title .line{display:block;overflow:hidden;padding-bottom:.06em}
 .hero-title .ch{
   display:inline-block;
