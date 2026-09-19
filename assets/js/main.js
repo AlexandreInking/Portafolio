@@ -386,7 +386,15 @@
     if (!el) return;
 
     var words = ["marketing digital", "diseño gráfico", "contenido", "brand safety", "game design", "game development", "game asset creation"];
-    var i = 0;
+    var recent = [el.textContent];
+
+    function pickNext() {
+      var pool = words.filter(function (w) { return recent.indexOf(w) === -1; });
+      var next = pool[(Math.random() * pool.length) | 0];
+      recent.push(next);
+      if (recent.length > 2) recent.shift();
+      return next;
+    }
 
     if (reduced) {
       el.textContent = words[0];
@@ -394,10 +402,10 @@
     }
 
     setInterval(function () {
-      i = (i + 1) % words.length;
+      var next = pickNext();
       gsap.timeline()
         .to(el, { yPercent: -110, autoAlpha: 0, duration: 0.35, ease: "power2.in" })
-        .add(function () { el.textContent = words[i]; })
+        .add(function () { el.textContent = next; })
         .fromTo(el, { yPercent: 110, autoAlpha: 0 }, { yPercent: 0, autoAlpha: 1, duration: 0.45, ease: "power2.out" });
     }, 2800);
   }
