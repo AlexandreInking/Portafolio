@@ -942,6 +942,14 @@
     }).catch(function () {});
   }
   function eggPanelInit() {
+    try {
+      var raw = localStorage.getItem("portafolio-eggs");
+      if (raw && raw.indexOf("holdlogo") !== -1) {
+        var prune = JSON.parse(raw) || {};
+        delete prune.holdlogo;
+        localStorage.setItem("portafolio-eggs", JSON.stringify(prune));
+      }
+    } catch (e) {}
     var btn = document.getElementById("eggBtn");
     var modal = document.getElementById("eggModal");
     var close = document.getElementById("eggClose");
