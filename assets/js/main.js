@@ -385,7 +385,7 @@
     var el = document.getElementById("rotWord");
     if (!el) return;
 
-    var words = ["marketing digital", "diseño gráfico", "contenido", "brand safety"];
+    var words = ["marketing digital", "diseño gráfico", "contenido", "brand safety", "game design", "game development", "game asset creation"];
     var i = 0;
 
     if (reduced) {
@@ -736,7 +736,7 @@
     var mobile = !finePointer;
     var list = eggList();
     if (sub) sub.textContent = mobile
-      ? "Cazados en este dispositivo: celular. Los de celular vienen en camino."
+      ? "Cazados en este dispositivo: celular."
       : "Cazados en este dispositivo: PC. Los de celular solo aparecen en celular.";
     var found = getEggs();
     var n = 0;
