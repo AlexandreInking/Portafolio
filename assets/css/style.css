@@ -637,7 +637,7 @@ html[data-theme="light"] .hero-title{--title-glow-color:rgba(8,145,178,.5)}
 }
 
 @media (hover:none){
-  .proj{-webkit-touch-callout:none;-webkit-user-select:none;user-select:none}
+  .proj,.btn{-webkit-touch-callout:none;-webkit-user-select:none;user-select:none}
 }
 
 /* ---------- 18. Toast de logros y easter eggs ---------- */
