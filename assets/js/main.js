@@ -99,11 +99,29 @@
     });
   }
 
+  /* Energía de scroll: bajar genera x2, subir x1.5 (pide más brasas) */
+  var scrollEnergy = 0;
+  var lastScrollY = 0;
+
+  function trackScroll() {
+    if (reduced) return;
+    lastScrollY = window.scrollY;
+    window.addEventListener("scroll", function () {
+      var y = window.scrollY;
+      var dy = y - lastScrollY;
+      lastScrollY = y;
+      scrollEnergy = Math.min(scrollEnergy + Math.abs(dy) * (dy > 0 ? 2 : 1.5) * 0.06, 100);
+    }, { passive: true });
+  }
+
   /* =========================================================
      1. CAMPO DE BRASAS · física propia (deriva + viento +
      repulsión al cursor con impacto por velocidad)
      ========================================================= */
   var embers = [];
+  var baseCount = 0;
+  var maxExtra = 0;
+  var emberFieldEl = null;
 
   function resetEmber(b, randomY) {
     var palette = emberPalette();
@@ -121,24 +139,26 @@
     b.el.style.background = palette[(Math.random() * palette.length) | 0];
   }
 
+  function spawnEmber(randomY, extra) {
+    var e = document.createElement("span");
+    e.className = "ember";
+    emberFieldEl.appendChild(e);
+    var b = { el: e, x: 0, y: 0, vx: 0, vy: 0, size: 3, life: 0, maxLife: 1, seed: 0, extra: !!extra };
+    resetEmber(b, randomY);
+    if (extra) b.maxLife = 4000 + Math.random() * 3000;
+    embers.push(b);
+  }
+
   function buildEmbers() {
     var field = document.getElementById("emberField");
     if (!field) return;
 
     if (reduced) { field.style.display = "none"; return; }
 
-    var count = window.innerWidth < 768 ? 28 : 60;
-    var frag = document.createDocumentFragment();
-
-    for (var i = 0; i < count; i++) {
-      var e = document.createElement("span");
-      e.className = "ember";
-      frag.appendChild(e);
-      var b = { el: e, x: 0, y: 0, vx: 0, vy: 0, size: 3, life: 0, maxLife: 1, seed: 0 };
-      resetEmber(b, true);
-      embers.push(b);
-    }
-    field.appendChild(frag);
+    emberFieldEl = field;
+    baseCount = window.innerWidth < 768 ? 28 : 60;
+    maxExtra = Math.round(baseCount * 0.8);
+    for (var i = 0; i < baseCount; i++) spawnEmber(true, false);
 
     memphisCursor();
     lastFrame = performance.now();
@@ -157,6 +177,13 @@
     cursor.speed = Math.sqrt(cursor.vx * cursor.vx + cursor.vy * cursor.vy);
     wind.x += ((cursor.vx * 0.05) - wind.x) * Math.min(0.05 * dt, 1);
     wind.y += ((cursor.vy * 0.05) - wind.y) * Math.min(0.05 * dt, 1);
+
+    // La energía del scroll pide brasas extra (bajar x2, subir x1.5)
+    scrollEnergy *= Math.pow(0.95, dt);
+    var target = baseCount + Math.round((scrollEnergy / 100) * maxExtra);
+    while (embers.length < target && embers.length < baseCount + maxExtra) {
+      spawnEmber(true, true);
+    }
 
     var W = window.innerWidth;
     var R = 150;
@@ -186,6 +213,12 @@
       p.y += p.vy * dt;
 
       if (p.y < -30 || p.x < -40 || p.x > W + 40 || p.life > p.maxLife) {
+        if (p.extra) {
+          p.el.remove();
+          embers.splice(j, 1);
+          j--;
+          continue;
+        }
         resetEmber(p, false);
         continue;
       }
@@ -615,6 +648,7 @@
     try {
       themeInit();
       trackCursor();
+      trackScroll();
       buildEmbers();
       memphisMotion();
       heroIntro();
