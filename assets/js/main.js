@@ -687,7 +687,7 @@
   ];
   var EGGS_MOBILE = [
     { id: "shake", name: "Terremoto", hint: "Sacude el celular..." },
-    { id: "holdlogo", name: "Paciencia", hint: "Mantén presionado el logo 2 segundos..." },
+    { id: "holdlogo", name: "Paciencia", hint: "Mantén presionada una tarjeta de proyecto..." },
     { id: "landscape", name: "Panorámica", hint: "Gira el celular a horizontal..." },
     { id: "tripletap", name: "Tercer dedo", hint: "Toca con tres dedos a la vez..." },
     { id: "holdmail", name: "Copiado", hint: "Mantén presionado mi correo..." },
@@ -767,14 +767,17 @@
     }
   }
 
-  function longPress(el, ms, cb) {
+  function longPress(el, ms, cb, allowMove) {
     var t = null;
     function cancel() { if (t) { clearTimeout(t); t = null; } }
     el.addEventListener("pointerdown", function () {
       cancel();
       t = setTimeout(function () { t = null; cb(); }, ms);
     });
-    ["pointerup", "pointerleave", "pointercancel", "pointermove"].forEach(function (ev) {
+    var evs = allowMove
+      ? ["pointerup", "pointerleave", "pointercancel"]
+      : ["pointerup", "pointerleave", "pointercancel", "pointermove"];
+    evs.forEach(function (ev) {
       el.addEventListener(ev, cancel, { passive: true });
     });
   }
@@ -808,14 +811,22 @@
     }
   }
 
-  function holdLogoInit() {
+  function holdCardInit() {
     if (reduced || !isTouch) return;
-    var brand = document.querySelector(".brand");
-    if (!brand) return;
-    longPress(brand, 2000, function () {
-      markEgg("holdlogo");
-      showToast("La paciencia también es una skill.", 4000);
-    });
+    var zone = document.getElementById("projects");
+    if (!zone) return;
+    zone.addEventListener("contextmenu", function (e) { e.preventDefault(); });
+    function bind() {
+      zone.querySelectorAll('.proj:not([data-hold])').forEach(function (card) {
+        card.setAttribute("data-hold", "1");
+        longPress(card, 1500, function () {
+          markEgg("holdlogo");
+          showToast("La paciencia también es una skill.", 4000);
+        }, true);
+      });
+    }
+    document.addEventListener("projects:rendered", bind);
+    bind();
   }
 
   function landscapeInit() {
@@ -888,6 +899,10 @@
     var title = document.querySelector(".hero-title");
     if (!title) return;
     var sx = 0, sy = 0, on = false, shown = false;
+    var lines = title.querySelectorAll(".line");
+    function paintLines(v) {
+      for (var li = 0; li < lines.length; li++) lines[li].style.translate = v;
+    }
     title.addEventListener("touchstart", function (e) {
       var t = e.touches[0];
       sx = t.clientX; sy = t.clientY; on = true;
@@ -898,7 +913,7 @@
       var dx = t.clientX - sx;
       var dy = t.clientY - sy;
       if (Math.abs(dx) > Math.abs(dy) * 1.5) {
-        title.style.translate = dx.toFixed(0) + "px 0";
+        paintLines(dx.toFixed(0) + "px 0");
         if (Math.abs(dx) > 60) {
           title.classList.add("peek");
           if (!shown) { shown = true; markEgg("dragtitle"); }
@@ -908,7 +923,7 @@
     function end() {
       if (!on) return;
       on = false;
-      title.style.translate = "";
+      paintLines("");
       title.classList.remove("peek");
     }
     title.addEventListener("touchend", end, { passive: true });
@@ -1072,7 +1087,7 @@
       fireworksInit();
       eggPanelInit();
       shakeInit();
-      holdLogoInit();
+      holdCardInit();
       landscapeInit();
       tripleTapInit();
       holdMailInit();

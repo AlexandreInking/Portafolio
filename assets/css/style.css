@@ -636,6 +636,10 @@ html[data-theme="light"] .hero-title{--title-glow-color:rgba(8,145,178,.5)}
   .mm-arc,.mm-zig{display:none}
 }
 
+@media (hover:none){
+  .proj{-webkit-touch-callout:none;-webkit-user-select:none;user-select:none}
+}
+
 /* ---------- 18. Toast de logros y easter eggs ---------- */
 .toast{
   position:fixed;left:50%;bottom:1.75rem;transform:translate(-50%,20px);
