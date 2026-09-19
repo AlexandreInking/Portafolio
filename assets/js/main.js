@@ -8,13 +8,19 @@
 (function () {
   "use strict";
 
-  /* Huevo de pascua: saludo en consola para curiosos */
+  /* Huevo de pascua: saludo en consola para curiosos (solo PC) */
   try {
-    console.log(
-      "%c      /\\\n     /  \\\n    | () |\n     \\  /\n      \\/\n%cHola, curioso. Si abriste DevTools, ya tenemos algo en común: nos gusta ver cómo están hechas las cosas. Hablemos: esplopale@gmail.com",
-      "color:#FF8A1F;font-family:monospace;font-weight:bold",
-      "color:#A9907C;font-size:12px"
-    );
+    var pcPointer = window.matchMedia && window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+    if (pcPointer) {
+      console.log(
+        "%c      /\\\n     /  \\\n    | () |\n     \\  /\n      \\/\n%cHola, curioso. Si abriste DevTools, ya tenemos algo en común: nos gusta ver cómo están hechas las cosas. Hablemos: esplopale@gmail.com",
+        "color:#FF8A1F;font-family:monospace;font-weight:bold",
+        "color:#A9907C;font-size:12px"
+      );
+      var probe = document.createElement("div");
+      Object.defineProperty(probe, "id", { get: function () { markEgg("consola"); return "curioso"; } });
+      console.log("%c(objeto de inspector)", "color:#6E5B4C", probe);
+    }
   } catch (e) {}
 
   var revealAll = function () {
@@ -666,6 +672,93 @@
   var partyOn = false;
   var toastTimer = null;
 
+  /* Colección de easter eggs: en PC se muestran los de PC,
+     en celular los de celular. Se guarda en localStorage. */
+  var EGGS_PC = [
+    { id: "konami", name: "Código legendario", hint: "Una secuencia de flechas y letras de otra época..." },
+    { id: "consola", name: "Ojos curiosos", hint: "Abre las herramientas de desarrollo." },
+    { id: "flama", name: "Aviva la flama", hint: "La página perdida esconde una flama juguetona." },
+    { id: "fantasma", name: "¿Sigues ahí?", hint: "Quédate quieto un buen rato..." },
+    { id: "fuegos", name: "Celebración", hint: "Haz clic en mi correo." },
+    { id: "logro", name: "Lector completo", hint: "Llega hasta el final de la página." },
+    { id: "fiesta", name: "GG", hint: "Dos veces la misma letra gamer." }
+  ];
+  var EGGS_MOBILE = [];
+
+  function eggList() { return finePointer ? EGGS_PC : EGGS_MOBILE; }
+
+  function getEggs() {
+    try { return JSON.parse(localStorage.getItem("portafolio-eggs")) || {}; }
+    catch (e) { return {}; }
+  }
+
+  function eggProgress() {
+    var list = eggList();
+    var found = getEggs();
+    var n = list.filter(function (g) { return !!found[g.id]; }).length;
+    return { n: n, total: list.length };
+  }
+
+  function markEgg(id) {
+    var found = getEggs();
+    if (found[id]) return;
+    found[id] = true;
+    try { localStorage.setItem("portafolio-eggs", JSON.stringify(found)); } catch (e) {}
+    updateEggBadge();
+    renderEggList();
+    var p = eggProgress();
+    showToast("Huevo encontrado: " + p.n + "/" + p.total + " en tu colección.", 2500);
+  }
+
+  function updateEggBadge() {
+    var badge = document.getElementById("eggCount");
+    if (!badge) return;
+    var p = eggProgress();
+    badge.textContent = p.n + "/" + p.total;
+  }
+
+  function renderEggList() {
+    var ul = document.getElementById("eggList");
+    if (!ul) return;
+    var sub = document.getElementById("eggSub");
+    var fill = document.getElementById("eggFill");
+    var mobile = !finePointer;
+    var list = eggList();
+    if (sub) sub.textContent = mobile
+      ? "Cazados en este dispositivo: celular. Los de celular vienen en camino."
+      : "Cazados en este dispositivo: PC. Los de celular solo aparecen en celular.";
+    var found = getEggs();
+    var n = 0;
+    ul.innerHTML = list.map(function (g) {
+      var has = !!found[g.id];
+      if (has) n++;
+      return '<li class="egg' + (has ? " found" : "") + '"><span class="egg-ico">' + (has ? "●" : "○") + '</span><span class="egg-text"><span class="egg-name">' + (has ? g.name : "???") + '</span><span class="egg-hint">' + g.hint + "</span></span></li>";
+    }).join("") || '<li class="egg-empty">Aún no hay huevos para este dispositivo.</li>';
+    if (fill) fill.style.width = (list.length ? (n / list.length) * 100 : 0) + "%";
+  }
+
+  function eggPanelInit() {
+    var btn = document.getElementById("eggBtn");
+    var modal = document.getElementById("eggModal");
+    var close = document.getElementById("eggClose");
+    if (!btn || !modal) return;
+    updateEggBadge();
+    renderEggList();
+    btn.addEventListener("click", function () {
+      renderEggList();
+      modal.hidden = false;
+      requestAnimationFrame(function () { modal.classList.add("open"); });
+      if (close) close.focus();
+    });
+    function hide() {
+      modal.classList.remove("open");
+      setTimeout(function () { modal.hidden = true; }, 250);
+    }
+    if (close) close.addEventListener("click", hide);
+    modal.addEventListener("click", function (e) { if (e.target === modal) hide(); });
+    document.addEventListener("keydown", function (e) { if (e.key === "Escape" && !modal.hidden) hide(); });
+  }
+
   function showToast(msg, ms) {
     var t = document.getElementById("toast");
     if (!t) return;
@@ -676,7 +769,7 @@
   }
 
   function easterKeys() {
-    if (reduced) return;
+    if (reduced || !finePointer) return;
     var seq = ["ArrowUp", "ArrowUp", "ArrowDown", "ArrowDown", "ArrowLeft", "ArrowRight", "ArrowLeft", "ArrowRight", "b", "a"];
     var pos = 0;
     var lastG = 0;
@@ -687,6 +780,7 @@
         if (pos === seq.length) {
           pos = 0;
           stormUntil = performance.now() + 10000;
+          markEgg("konami");
           showToast("Ves, los videojuegos sí sirven para algo.", 5000);
         }
       } else {
@@ -698,6 +792,7 @@
           lastG = 0;
           partyUntil = now + 15000;
           document.documentElement.classList.add("party");
+          markEgg("fiesta");
           showToast("Modo fiesta: 15 segundos. GG.", 4000);
           setTimeout(function () { document.documentElement.classList.remove("party"); }, 15100);
         } else {
@@ -715,6 +810,7 @@
       idleTimer = setTimeout(function () {
         wind.x = 8;
         for (var i = 0; i < 24 && embers.length < baseCount + maxExtra; i++) spawnEmber(true, true);
+        markEgg("fantasma");
         showToast("¿Sigues ahí? Mueve el mouse para avivar las brasas.", 5000);
       }, 30000);
     }
@@ -725,10 +821,11 @@
   }
 
   function fireworksInit() {
-    if (reduced) return;
+    if (reduced || !finePointer) return;
     var btn = document.querySelector('.contact-actions a[href^="mailto:"]');
     if (!btn) return;
     btn.addEventListener("click", function () {
+      markEgg("fuegos");
       var r = btn.getBoundingClientRect();
       var cx = r.left + r.width / 2;
       var cy = r.top + r.height / 2;
@@ -749,12 +846,13 @@
 
   function achievementInit() {
     var foot = document.querySelector(".footer");
-    if (!foot || reduced || !("IntersectionObserver" in window)) return;
+    if (!foot || reduced || !finePointer || !("IntersectionObserver" in window)) return;
     var seen = null;
     try { seen = sessionStorage.getItem("portafolio-logro"); } catch (e) {}
     if (seen) return;
     var io = new IntersectionObserver(function (entries) {
       if (entries[0].isIntersecting) {
+        markEgg("logro");
         showToast("🏆 Logro desbloqueado: llegaste al final. Pocos lo hacen.", 5000);
         try { sessionStorage.setItem("portafolio-logro", "1"); } catch (e) {}
         io.disconnect();
@@ -785,6 +883,7 @@
       achievementInit();
       ghostInit();
       fireworksInit();
+      eggPanelInit();
 
       // Tras cargar tipografías y proyectos, recalcular triggers
       window.addEventListener("load", function () { ScrollTrigger.refresh(); });

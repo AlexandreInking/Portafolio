@@ -642,6 +642,59 @@ html[data-theme="light"] .hero-title{--title-glow-color:rgba(8,145,178,.5)}
 .toast.show{opacity:1;transform:translate(-50%,0)}
 html[data-theme="light"] .toast{background:rgba(255,255,255,.95);border-color:rgba(8,145,178,.45)}
 
+/* ---------- 20. Colección de easter eggs ---------- */
+.trophy-btn{
+  height:44px;flex:0 0 auto;border-radius:100px;
+  display:inline-flex;align-items:center;gap:.45rem;padding:0 1rem;
+  border:1px solid rgba(255,246,236,.18);color:var(--fire-white);
+  font-family:var(--mono);font-size:.72rem;letter-spacing:.06em;
+  transition:border-color .3s ease,color .3s ease,transform .3s ease;
+}
+.trophy-btn:hover{border-color:var(--fire-amber);color:var(--fire-amber);transform:translateY(-2px)}
+.trophy-btn svg{width:17px;height:17px}
+html[data-theme="light"] .trophy-btn{border-color:rgba(11,21,32,.22)}
+
+.egg-modal{
+  position:fixed;inset:0;z-index:210;
+  display:grid;place-items:center;padding:1.5rem;
+  background:rgba(5,3,2,.6);backdrop-filter:blur(6px);
+  opacity:0;transition:opacity .25s ease;
+}
+.egg-modal[hidden]{display:none}
+.egg-modal.open{opacity:1}
+.egg-card{
+  width:min(94vw,430px);max-height:82vh;overflow:auto;
+  background:var(--void-2);border-radius:28px;padding:2rem;
+  border:1px solid rgba(255,138,31,.25);
+  box-shadow:0 30px 80px -20px rgba(0,0,0,.7);
+}
+.egg-card h3{
+  font-family:var(--display);font-weight:800;font-size:1.4rem;
+  letter-spacing:-.02em;color:var(--fire-white);
+}
+.egg-sub{font-size:.85rem;color:var(--smoke-dim);margin-top:.4rem;line-height:1.6}
+.egg-progress{
+  height:6px;border-radius:4px;background:rgba(255,246,236,.08);
+  margin:1.25rem 0;overflow:hidden;
+}
+.egg-progress span{display:block;height:100%;width:0;background:var(--flame);transition:width .5s ease}
+.egg-list{display:grid;gap:.6rem;margin-bottom:1.75rem}
+.egg{
+  display:flex;align-items:center;gap:.8rem;
+  padding:.7rem .9rem;border-radius:18px;
+  background:rgba(255,246,236,.04);
+}
+.egg-ico{color:var(--smoke-dim);font-size:.8rem}
+.egg.found .egg-ico{color:var(--fire-amber)}
+.egg-text{display:flex;flex-direction:column;line-height:1.45}
+.egg-name{font-family:var(--display);font-weight:700;font-size:.92rem;color:var(--smoke)}
+.egg.found .egg-name{color:var(--fire-white)}
+.egg-hint{font-size:.76rem;color:var(--smoke-dim)}
+.egg-empty{font-size:.85rem;color:var(--smoke-dim);text-align:center;padding:1rem 0}
+html[data-theme="light"] .egg-progress{background:rgba(11,21,32,.08)}
+html[data-theme="light"] .egg{background:rgba(11,21,32,.04)}
+html[data-theme="light"] .egg-card{background:#fff;border-color:rgba(8,145,178,.3)}
+
 /* ---------- 19. Modo fiesta (GG) ---------- */
 html.party .hero-title .ch{
   background:linear-gradient(90deg,#ff004c,#ff8a00,#ffea00,#00e676,#00b0ff,#a100ff,#ff004c);

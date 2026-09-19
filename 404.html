@@ -92,11 +92,18 @@
   var flame = document.querySelector(".flame");
   var msg = document.getElementById("flameMsg");
   if (!flame) return;
+  var fine = window.matchMedia && window.matchMedia("(hover: hover) and (pointer: fine)").matches;
   flame.addEventListener("click", function (e) {
+    if (!fine) return;
     n++;
     if (n < 5 || flame.classList.contains("lit")) return;
     flame.classList.add("lit");
     msg.hidden = false;
+    try {
+      var f = JSON.parse(localStorage.getItem("portafolio-eggs")) || {};
+      f.flama = true;
+      localStorage.setItem("portafolio-eggs", JSON.stringify(f));
+    } catch (err) {}
     for (var i = 0; i < 10; i++) {
       var s = document.createElement("span");
       s.className = "spark-bit";

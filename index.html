@@ -64,6 +64,11 @@
       <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></svg>
     </button>
 
+    <button class="trophy-btn" id="eggBtn" aria-label="Ver huevos de pascua" aria-haspopup="dialog">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0V4Z"/><path d="M7 6H4.5A1.5 1.5 0 0 0 6 9H7M17 6h2.5A1.5 1.5 0 0 1 18 9h-1"/></svg>
+      <span class="egg-count" id="eggCount">0/7</span>
+    </button>
+
     <button class="burger" id="burger" aria-label="Abrir menú" aria-expanded="false" aria-controls="menu">
       <span></span><span></span><span></span>
     </button>
@@ -521,6 +526,16 @@
 </footer>
 
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<div class="egg-modal" id="eggModal" role="dialog" aria-modal="true" aria-labelledby="eggTitle" hidden>
+  <div class="egg-card">
+    <h3 id="eggTitle">Huevos de pascua</h3>
+    <p class="egg-sub" id="eggSub"></p>
+    <div class="egg-progress"><span id="eggFill"></span></div>
+    <ul class="egg-list" id="eggList"></ul>
+    <button class="btn btn-ghost" id="eggClose">Cerrar</button>
+  </div>
+</div>
 
 <!-- ░░ Scripts ░░ -->
 <script src="assets/vendor/gsap/gsap.min.js"></script>
