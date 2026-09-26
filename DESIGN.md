@@ -172,8 +172,14 @@ respeta `prefers-color-scheme`. Sin JS o sin elección guardada, el tema es oscu
 ### Language selector (ES · EN)
 - Twin of `.trophy-btn` / `.theme-toggle`: same `44px` height, pill radius `100px`,
   hairline border `rgba(255,246,236,.18)`, Space Mono label, globe + chevron icons.
-- Lives in `.nav-inner` next to the theme button; below `900px` it moves inside the
-  mobile overlay `.menu` as a centered `.lang-wrap` row.
+- Lives in `.nav-inner` inside the `.nav-actions` cluster (theme · trophy · language).
+- **Below `900px` there are two instances and both must stay live**: the nav pill stays in
+  the bar (shrunk to `40px`, label `ES`/`EN` still visible) *and* the combo is repeated in
+  the mobile overlay `.menu` as a centered `.lang-wrap` row. `lang.js` wires every `.lang`
+  found in the DOM, not just the one holding the ids, and injects ids on the second
+  instance so `aria-controls` resolves.
+- The nav drop-panel anchors to `.nav-actions` (not to the pill) so it stays flush with the
+  bar edge on narrow screens; the overlay panel opens upward, centered over its pill.
 - The menu (`.lang-list`) is **not a box**: floating pill-ish panel (`22px` radius) with a
   gradient hairline on the top edge, `blur(16px)`, inset `0 0 0 1px rgba(255,246,236,.07)`
   and a soft drop shadow. No solid outline.

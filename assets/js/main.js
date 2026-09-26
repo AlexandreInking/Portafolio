@@ -690,6 +690,14 @@
     burger.addEventListener("click", function () {
       menu.classList.contains("is-open") ? closeMenu() : openMenu();
     });
+    // Solo un enlace cierra el menú. El dropdown de idioma vive dentro del
+    // overlay y no debe colapsarlo al abrirse.
+    menu.addEventListener("click", function (e) {
+      if (e.target.closest("a")) closeMenu();
+    });
+    document.addEventListener("click", function (e) {
+      if (menu.classList.contains("is-open") && e.target === menu) closeMenu();
+    });
     document.addEventListener("keydown", function (e) { if (e.key === "Escape") closeMenu(); });
   }
 

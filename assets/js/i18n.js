@@ -608,15 +608,18 @@
     applyMeta();
     applyNode(document);
 
-    /* Marca visualmente el idioma activo en el dropdown */
+    /* Marca visualmente el idioma activo en TODOS los dropdowns
+       (barra superior y menú móvil) */
     var opts2 = document.querySelectorAll("[data-lang-opt]");
     for (var k = 0; k < opts2.length; k++) {
       var on = opts2[k].getAttribute("data-lang-opt") === current;
       opts2[k].setAttribute("aria-selected", on ? "true" : "false");
       opts2[k].classList.toggle("is-active", on);
     }
-    var labelEl = document.getElementById("langLabel");
-    if (labelEl) labelEl.textContent = current.toUpperCase();
+    var labels = document.querySelectorAll("#langLabel, .lang-label-menu");
+    for (var m = 0; m < labels.length; m++) {
+      labels[m].textContent = current.toUpperCase();
+    }
 
     /* Avisa a los módulos que pintan cadenas dinámicas */
     document.dispatchEvent(new CustomEvent("i18n:changed", { detail: { lang: current } }));
@@ -650,8 +653,10 @@
       opts2[k].setAttribute("aria-selected", on ? "true" : "false");
       opts2[k].classList.toggle("is-active", on);
     }
-    var labelEl = document.getElementById("langLabel");
-    if (labelEl) labelEl.textContent = current.toUpperCase();
+    var labels = document.querySelectorAll("#langLabel, .lang-label-menu");
+    for (var m = 0; m < labels.length; m++) {
+      labels[m].textContent = current.toUpperCase();
+    }
     document.dispatchEvent(new CustomEvent("i18n:ready", { detail: { lang: current } }));
   }
 

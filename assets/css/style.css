@@ -215,6 +215,10 @@ main,header,footer{position:relative;z-index:2}
 .brand-text em{font-style:normal;font-weight:600;font-size:.72rem;color:var(--smoke);letter-spacing:.06em;text-transform:uppercase}
 
 .nav-links{margin-left:auto;display:flex;gap:2rem}
+/* Bloque de controles (tema · trofeo · idioma). Está transparente para
+   no alterar el layout de escritorio; en móvil se convierte en el ancla
+   derecha del panel de idiomas. */
+.nav-actions{display:flex;align-items:center;gap:.6rem}
 .nav-links a{
   color:var(--smoke);font-size:.9rem;font-weight:500;position:relative;padding:.25rem 0;
   transition:color .25s ease;
@@ -629,14 +633,42 @@ html[data-theme="light"] .hero-title{--title-glow-color:rgba(8,145,178,.5)}
   .nav-links,.nav-cta{display:none}
   .burger{display:block}
   .mm-blob{display:none}
-  /* El dropdown sale de la nav y reaparece dentro del menú móvil */
-  .lang--nav{display:none}
+  /* Controles empujados a la derecha; el panel del idioma se ancla a
+     este bloque para alinearse con el borde de la barra. */
+  .nav-actions{margin-left:auto}
+  /* El dropdown vive en la barra superior —igual que el tema y el
+     trofeo— y además se repite dentro del menú móvil. */
+  .lang--nav .lang-btn{height:40px;padding:0 .7rem 0 .8rem;gap:.35rem}
+  .lang--nav .lang-btn svg{width:15px;height:15px}
+  .lang--nav .lang-chev{width:10px;height:10px}
   .menu .lang-wrap{display:flex;justify-content:center;margin-top:1.5rem}
   .menu .lang{position:relative}
-  .menu .lang .lang-list{top:auto;bottom:calc(100% + .65rem);right:auto;left:0}
+  .menu .lang .lang-list{
+    top:auto;bottom:calc(100% + .65rem);
+    left:50%;right:auto;
+    width:min(186px,100%);
+    transform:translate(-50%,8px);
+  }
+  .menu .lang .lang-list.open{transform:translate(-50%,0)}
 }
 @media (min-width:901px){
   .menu .lang-wrap{display:none}
+}
+@media (max-width:300px){
+  /* Solo en anchos extremos: el rol sobra y queda la píldora de idioma. */
+  .brand-text em{display:none}
+}
+@media (max-width:400px){
+  /* La barra no tiene ancho para 3 píldoras completas: la etiqueta de
+     idioma cede el texto y queda globo + código, que sigue inequívoco.
+     Así el panel cabe sin salirse del viewport. */
+  .nav-inner{gap:.85rem}
+  .brand-text{display:none}
+  .theme-toggle{width:40px;height:40px;flex:0 0 40px}
+  .trophy-btn{height:40px;padding:0 .7rem}
+  .egg-count{display:none}
+  .lang--nav .lang-btn{padding:0 .7rem}
+  .lang--nav .lang-btn span#langLabel{display:none}
 }
 @media (max-width:640px){
   .hero{min-height:auto;padding-block:9rem 6rem}
@@ -700,6 +732,9 @@ html[data-theme="light"] .trophy-btn{border-color:rgba(11,21,32,.22)}
 }
 .lang.is-open .lang-btn{border-color:var(--fire-amber);color:var(--fire-amber)}
 .lang.is-open .lang-chev{transform:rotate(180deg)}
+/* El menú de la barra superior se ancla al borde: en móvil no debe
+   salirse del viewport cuando la píldora queda pegada a la derecha. */
+.lang--nav .lang-list{max-width:calc(100vw - 2.5rem)}
 
 .lang-list{
   position:absolute;top:calc(100% + .65rem);right:0;z-index:140;

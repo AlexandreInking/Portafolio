@@ -38,7 +38,9 @@ agregar un idioma: copia el bloque `en`, cámbialo y añade su código a
 → `<html lang>` → idioma del navegador → **español**.
 
 - El selector en la nav (junto al botón de tema) cambia el idioma y lo recuerda.
-  En móvil (< 900px) el selector se mueve dentro del menú.
+  En móvil (< 900px) **sigue en la barra superior** —como el tema y el trofeo— y además
+  se repite dentro del menú desplegable, para que se pueda cambiar sin abrir el menú.
+  `lang.js` conecta todas las instancias `.lang` del DOM, no solo la primera.
 - Al cambiar, se emite el evento `i18n:changed` para que los módulos que pintan
   texto en JS (proyectos, palabras del hero, easter eggs, toasts) se actualicen solos.
 - `window.I18N.t("clave")` traduce desde código; `window.I18N.set("en")` cambia el idioma.
@@ -144,8 +146,9 @@ Ver **`DESIGN.md`** antes de modificar estilos. Reglas duras:
 - **Sin JS el contenido se ve igual**: los estados iniciales están bajo `.js`.
 - **Dos temas**: oscuro de fuego por defecto y claro Aqua (blanco, cian,
   celeste, azul y negro). Botón en la nav, se recuerda en `localStorage`.
-- **Dos idiomas**: español por defecto e inglés. Selector en la nav, se recuerda
-  en `localStorage` y acepta `?lang=en` para compartir un enlace en inglés.
+- **Dos idiomas**: español por defecto e inglés. Selector en la nav (también en móvil,
+  en la barra y dentro del menú), se recuerda en `localStorage` y acepta `?lang=en`
+  para compartir un enlace en inglés.
 
 ## Animación (GSAP)
 
