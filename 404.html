@@ -79,15 +79,32 @@
 </svg>
 
 <p class="code">404</p>
-<h1>Esta página se apagó</h1>
-<p>El enlace que seguiste no existe o se movió. Nada se perdió: el portafolio sigue encendido.</p>
+<h1 id="t-title">Esta página se apagó</h1>
+<p id="t-body">El enlace que seguiste no existe o se movió. Nada se perdió: el portafolio sigue encendido.</p>
 <p class="flame-msg" id="flameMsg" hidden>ya pues, vuelve al inicio</p>
 
-<a class="btn" href="./">Volver al inicio</a>
+<a class="btn" href="./" id="t-btn">Volver al inicio</a>
 <p class="hint">Alejandro Espinoza López · Marketing &amp; Diseño</p>
 
 <script>
 (function(){
+  /* Idioma: mismo criterio que el portafolio (?lang= → localStorage → navegador) */
+  var lang = "es";
+  try {
+    var s = null;
+    try { var q = new URLSearchParams(location.search).get("lang"); if (q) s = q.toLowerCase().slice(0,2); } catch (e) {}
+    if (!s) s = localStorage.getItem("portafolio-lang");
+    if (!s) s = (document.documentElement.getAttribute("lang") || navigator.language || "es").toLowerCase().slice(0,2);
+    lang = (s === "en") ? "en" : "es";
+  } catch (e) {}
+  document.documentElement.setAttribute("lang", lang);
+  if (lang === "en") {
+    document.getElementById("t-title").textContent = "This page went dark";
+    document.getElementById("t-body").textContent = "The link you followed doesn't exist or has moved. Nothing was lost: the portfolio is still lit.";
+    document.getElementById("flameMsg").textContent = "come on, head back home";
+    document.getElementById("t-btn").textContent = "Back to start";
+  }
+
   var n = 0;
   var flame = document.querySelector(".flame");
   var msg = document.getElementById("flameMsg");

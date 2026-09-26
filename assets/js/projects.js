@@ -4,6 +4,11 @@
    La landing lee los proyectos del snapshot JSON.
    Para actualizar: edita "data/projects.json", súbelo a GitHub
    y aparece solo. Sin build, sin tocar código.
+
+   Bilingüe: cada proyecto puede traer campos paralelos con
+   sufijo "_en" (role_en, description_en, category_en,
+   demoLabel_en, tags_en). Si no existen, se usa el texto en ES.
+   Al cambiar de idioma se re-renderiza la lista.
    ============================================================ */
 
 (function () {
@@ -11,6 +16,16 @@
 
   var JSON_URL = "data/projects.json";
   var DEFAULT_COLOR = "#FF8A1F";
+  var CURRENT = null;   /* { list, source } — para re-render al cambiar idioma */
+
+  function lang() {
+    return (window.I18N && window.I18N.get()) || "es";
+  }
+
+  function t(key, vars) {
+    if (window.I18N) return window.I18N.t(key, vars);
+    return key;
+  }
 
   function toList(v) {
     if (Array.isArray(v)) return v.map(String).map(function (s) { return s.trim(); }).filter(Boolean);
@@ -22,20 +37,30 @@
     return /^#[0-9a-fA-F]{6}$/.test(c) ? c : DEFAULT_COLOR;
   }
 
+  /* Elige el campo según el idioma activo, con vuelta al español */
+  function pick(p, base) {
+    if (lang() === "en") {
+      var en = p[base + "_en"];
+      if (en !== undefined && en !== null && String(en).trim() !== "") return en;
+    }
+    return p[base];
+  }
+
   function fromJson(data) {
     var list = (data && data.projects) || [];
     return list.map(function (p, i) {
+      var tagSource = pick(p, "tags");
       return {
         name: p.name || "",
-        role: p.role || "",
-        description: p.description || "",
-        category: p.category || "",
+        role: pick(p, "role") || "",
+        description: pick(p, "description") || "",
+        category: pick(p, "category") || "",
         status: p.status || "",
         year: p.year || "",
         github: p.github || "",
         demo: p.demo || "",
-        demoLabel: p.demoLabel || "",
-        tags: toList(p.tags),
+        demoLabel: pick(p, "demoLabel") || "",
+        tags: toList(tagSource !== undefined ? tagSource : p.tags),
         featured: !!p.featured,
         color: safeColor(p.color),
         order: typeof p.order === "number" ? p.order : i
@@ -58,16 +83,22 @@
     });
   }
 
+  /* El estado se muestra traducido pero conserva el valor original en
+     data-status, para que el CSS siga pintando publicados / en desarrollo. */
+  function statusLabel(status) {
+    return t("proj.status." + status);
+  }
+
   function card(p) {
     var links = "";
     if (p.demo) {
-      var demoLabel = p.demoLabel || "Ver / jugar";
+      var demoLabel = p.demoLabel || t("proj.demoFallback");
       links += '<a class="proj-btn" href="' + esc(p.demo) + '" target="_blank" rel="noopener">' + SVG_LINK + esc(demoLabel) + "</a>";
     }
 
-    var chips = p.tags.map(function (t) { return '<span class="chip">' + esc(t) + "</span>"; });
+    var chips = p.tags.map(function (tag) { return '<span class="chip">' + esc(tag) + "</span>"; });
     if (p.github) {
-      chips.push('<a class="chip chip-link" href="' + esc(p.github) + '" target="_blank" rel="noopener">' + SVG_GITHUB + "Repositorio</a>");
+      chips.push('<a class="chip chip-link" href="' + esc(p.github) + '" target="_blank" rel="noopener">' + SVG_GITHUB + esc(t("proj.repo")) + "</a>");
     }
     var tags = chips.length
       ? '<div class="proj-tags">' + chips.join("") + "</div>"
@@ -77,7 +108,7 @@
       ? '<span class="proj-year">' + esc(p.year) + "</span>"
       : "";
     var statusHtml = p.status
-      ? '<span class="proj-status" data-status="' + esc(p.status) + '">' + esc(p.status) + "</span>"
+      ? '<span class="proj-status" data-status="' + esc(p.status) + '">' + esc(statusLabel(p.status)) + "</span>"
       : "";
 
     return '' +
@@ -100,13 +131,17 @@
     if (!host) return;
 
     if (!list.length) {
-      host.innerHTML = '<p class="projects-empty">Aún no hay proyectos publicados.</p>';
+      host.innerHTML = '<p class="projects-empty">' + esc(t("proj.empty")) + "</p>";
     } else {
       host.innerHTML = list.map(card).join("");
     }
 
     var src = document.getElementById("projectsSource");
-    if (src) src.innerHTML = "Fuente: <code>" + esc(sourceLabel) + "</code> · " + list.length + " proyecto(s)";
+    if (src) {
+      src.innerHTML = list.length
+        ? t("proj.source", { file: esc(sourceLabel), n: list.length })
+        : t("proj.sourceNone", { file: esc(sourceLabel) });
+    }
 
     document.dispatchEvent(new CustomEvent("projects:rendered", { detail: { count: list.length } }));
   }
@@ -121,11 +156,24 @@
 
   function boot() {
     loadJson()
-      .then(function (list) { render(list, "data/projects.json"); })
+      .then(function (list) {
+        CURRENT = { list: list, source: "data/projects.json" };
+        render(CURRENT.list, CURRENT.source);
+      })
       .catch(function () {
-        render([], "sin datos");
+        CURRENT = { list: [], source: "sin datos" };
+        render(CURRENT.list, CURRENT.source);
       });
   }
+
+  /* Al cambiar de idioma, re-derivar del JSON (para reelegir *_en) y repintar */
+  document.addEventListener("i18n:changed", function () {
+    if (!CURRENT) return;
+    loadJson().then(function (list) {
+      CURRENT.list = list;
+      render(CURRENT.list, CURRENT.source);
+    }).catch(function () {});
+  });
 
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", boot);

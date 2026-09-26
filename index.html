@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Alejandro Espinoza López · Marketing &amp; Diseño Gráfico</title>
-<meta name="description" content="Portafolio de Alejandro Espinoza López, estudiante de Marketing: diseño gráfico, contenido y herramientas de pixel art. Años de trabajo operativo encima, sigo aprendiendo.">
+<title data-i18n="meta.title">Alejandro Espinoza López · Marketing &amp; Diseño Gráfico</title>
+<meta name="description" content="Portafolio de Alejandro Espinoza López, estudiante de Marketing: diseño gráfico, contenido y herramientas propias. Años de trabajo operativo encima, sigo aprendiendo.">
 <meta name="theme-color" content="#0A0705">
 
 <meta property="og:type" content="website">
@@ -17,10 +17,12 @@
 <script>document.documentElement.className += " js";</script>
 <!-- Tema inicial antes del primer pintado: evita parpadeo entre oscuro y claro -->
 <script>(function(){try{var t=localStorage.getItem("portafolio-theme");if(!t&&window.matchMedia&&matchMedia("(prefers-color-scheme: light)").matches){t="light";}document.documentElement.setAttribute("data-theme",t||"dark");}catch(e){document.documentElement.setAttribute("data-theme","dark");}})();</script>
+<!-- Idioma antes del primer pintado: evita parpadeo ES→EN -->
+<script>(function(){try{var s=null;try{var q=new URLSearchParams(location.search).get("lang");if(q)s=q.toLowerCase().slice(0,2);}catch(e){}if(!s){s=localStorage.getItem("portafolio-lang");}if(!s){s=(document.documentElement.getAttribute("lang")||navigator.language||"es").toLowerCase().slice(0,2);}if(s!=="en")s="es";document.documentElement.setAttribute("lang",s);}catch(e){}})();</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;700;800;900&family=Inter:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/style.css?v=2">
+<link rel="stylesheet" href="assets/css/style.css?v=3">
 </head>
 
 <body>
@@ -44,32 +46,57 @@
 <!-- ░░ Navegación ░░ -->
 <header class="nav" id="nav">
   <div class="nav-inner">
-    <a href="#inicio" class="brand" aria-label="Ir al inicio">
+    <a href="#inicio" class="brand" aria-label="Ir al inicio" data-i18n-attr="aria-label:a11y.brand">
       <span class="brand-mark">AE</span>
       <span class="brand-text">Alejandro<em>Espinoza</em></span>
     </a>
 
-    <nav class="nav-links" aria-label="Navegación principal">
-      <a href="#perfil">Perfil</a>
-      <a href="#trayectoria">Trayectoria</a>
-      <a href="#competencias">Competencias</a>
-      <a href="#proyectos">Proyectos</a>
-      <a href="#contacto">Contacto</a>
+    <nav class="nav-links" aria-label="Navegación principal" data-i18n-attr="aria-label:a11y.nav">
+      <a href="#perfil" data-i18n="nav.perfil">Perfil</a>
+      <a href="#trayectoria" data-i18n="nav.trayectoria">Trayectoria</a>
+      <a href="#competencias" data-i18n="nav.competencias">Competencias</a>
+      <a href="#proyectos" data-i18n="nav.proyectos">Proyectos</a>
+      <a href="#contacto" data-i18n="nav.contacto">Contacto</a>
     </nav>
 
-    <a href="#contacto" class="btn btn-flame nav-cta">Hablemos</a>
+    <a href="#contacto" class="btn btn-flame nav-cta" data-i18n="nav.cta">Hablemos</a>
 
-    <button class="theme-toggle" id="themeToggle" aria-label="Cambiar a tema claro" aria-pressed="false">
+    <button class="theme-toggle" id="themeToggle" aria-label="Cambiar a tema claro" aria-pressed="false" data-i18n-attr="aria-label:a11y.theme.light">
       <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
       <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></svg>
     </button>
 
-    <button class="trophy-btn" id="eggBtn" aria-label="Ver huevos de pascua" aria-haspopup="dialog">
+    <button class="trophy-btn" id="eggBtn" aria-label="Ver huevos de pascua" aria-haspopup="dialog" data-i18n-attr="aria-label:a11y.eggs">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0V4Z"/><path d="M7 6H4.5A1.5 1.5 0 0 0 6 9H7M17 6h2.5A1.5 1.5 0 0 1 18 9h-1"/></svg>
       <span class="egg-count" id="eggCount">0/7</span>
     </button>
 
-    <button class="burger" id="burger" aria-label="Abrir menú" aria-expanded="false" aria-controls="menu">
+    <!-- ░░ Selector de idioma (ES por defecto · EN) ░░ -->
+    <div class="lang lang--nav" id="lang">
+      <button class="lang-btn" id="langBtn" type="button" role="combobox"
+              aria-haspopup="listbox" aria-expanded="false" aria-controls="langList"
+              aria-label="Cambiar idioma" data-i18n-attr="aria-label:a11y.lang">
+        <svg class="icon-globe" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18"/></svg>
+        <span id="langLabel">ES</span>
+        <svg class="lang-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+      </button>
+      <ul class="lang-list" id="langList" role="listbox" aria-label="Idiomas disponibles" hidden data-i18n-attr="aria-label:a11y.langList">
+        <li>
+          <button class="lang-opt is-active" type="button" role="option" data-lang-opt="es" aria-selected="true">
+            <span class="lang-code">ES</span><span data-i18n="lang.es">Español</span>
+            <svg class="lang-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
+          </button>
+        </li>
+        <li>
+          <button class="lang-opt" type="button" role="option" data-lang-opt="en" aria-selected="false">
+            <span class="lang-code">EN</span><span data-i18n="lang.en">Inglés</span>
+            <svg class="lang-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
+          </button>
+        </li>
+      </ul>
+    </div>
+
+    <button class="burger" id="burger" aria-label="Abrir menú" aria-expanded="false" aria-controls="menu" data-i18n-attr="aria-label:a11y.menu.open">
       <span></span><span></span><span></span>
     </button>
   </div>
@@ -77,12 +104,36 @@
 </header>
 
 <div class="menu" id="menu" aria-hidden="true">
-  <a href="#perfil">Perfil</a>
-  <a href="#trayectoria">Trayectoria</a>
-  <a href="#competencias">Competencias</a>
-  <a href="#proyectos">Proyectos</a>
-  <a href="#formacion">Formación</a>
-  <a href="#contacto">Contacto</a>
+  <a href="#perfil" data-i18n="nav.perfil">Perfil</a>
+  <a href="#trayectoria" data-i18n="nav.trayectoria">Trayectoria</a>
+  <a href="#competencias" data-i18n="nav.competencias">Competencias</a>
+  <a href="#proyectos" data-i18n="nav.proyectos">Proyectos</a>
+  <a href="#formacion" data-i18n="nav.formacion">Formación</a>
+  <a href="#contacto" data-i18n="nav.contacto">Contacto</a>
+  <div class="lang-wrap">
+    <div class="lang">
+      <button class="lang-btn" type="button" role="combobox"
+              aria-haspopup="listbox" aria-expanded="false" aria-label="Cambiar idioma" data-i18n-attr="aria-label:a11y.lang">
+        <svg class="icon-globe" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18"/></svg>
+        <span class="lang-label-menu">ES</span>
+        <svg class="lang-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+      </button>
+      <ul class="lang-list" role="listbox" aria-label="Idiomas disponibles" hidden data-i18n-attr="aria-label:a11y.langList">
+        <li>
+          <button class="lang-opt is-active" type="button" role="option" data-lang-opt="es" aria-selected="true">
+            <span class="lang-code">ES</span><span data-i18n="lang.es">Español</span>
+            <svg class="lang-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
+          </button>
+        </li>
+        <li>
+          <button class="lang-opt" type="button" role="option" data-lang-opt="en" aria-selected="false">
+            <span class="lang-code">EN</span><span data-i18n="lang.en">Inglés</span>
+            <svg class="lang-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
+          </button>
+        </li>
+      </ul>
+    </div>
+  </div>
 </div>
 
 <main>
@@ -90,20 +141,20 @@
 <!-- ░░ HERO ░░ -->
 <section id="inicio" class="hero">
   <div class="wrap hero-wrap">
-    <p class="eyebrow hero-eyebrow">Lima, Perú · Estudiante de Marketing · 1<sup>er</sup> ciclo</p>
+    <p class="eyebrow hero-eyebrow" data-i18n-html="hero.eyebrow">Lima, Perú · Estudiante de Marketing · 1<sup>er</sup> ciclo</p>
 
     <h1 class="hero-title">
-      <span class="title-secret" aria-hidden="true">hecho a mano, con café</span>
+      <span class="title-secret" aria-hidden="true" data-i18n="hero.secret">hecho a mano, con café</span>
       <span class="line"><span class="ch">Alejandro</span></span>
       <span class="line"><span class="ch">Espinoza López</span></span>
     </h1>
 
     <p class="hero-rotator">
-      <span class="rot-static">Me muevo entre</span>
+      <span class="rot-static" data-i18n="hero.rotStatic">Me muevo entre</span>
       <span class="rot-word" id="rotWord">marketing digital</span>
     </p>
 
-    <p class="hero-lead">
+    <p class="hero-lead" data-i18n="hero.lead">
       No llego a marketing desde cero. Trabajé años en puestos operativos: moderando
       transmisiones en vivo, apoyando eventos en la calle y haciendo trámites de
       oficina. En el camino hice piezas visuales y me armé mis propias herramientas
@@ -112,8 +163,8 @@
     </p>
 
     <div class="hero-actions">
-      <a href="#proyectos" class="btn btn-flame">Ver proyectos</a>
-      <a href="#trayectoria" class="btn btn-ghost">Ver trayectoria</a>
+      <a href="#proyectos" class="btn btn-flame" data-i18n="hero.ctaProjects">Ver proyectos</a>
+      <a href="#trayectoria" class="btn btn-ghost" data-i18n="hero.ctaTrajectory">Ver trayectoria</a>
     </div>
 
     <div class="hero-meta">
@@ -126,22 +177,22 @@
     </div>
   </div>
 
-  <a href="#perfil" class="scroll-cue" aria-label="Bajar al perfil">
+  <a href="#perfil" class="scroll-cue" aria-label="Bajar al perfil" data-i18n-attr="aria-label:a11y.scrollCue">
     <span class="cue-mouse"><i></i></span>
-    <span class="cue-text">Desliza</span>
+    <span class="cue-text" data-i18n="hero.cue">Desliza</span>
   </a>
 </section>
 
 <!-- ░░ MÉTRICAS ░░ -->
-<section class="metrics" aria-label="Cifras clave">
+<section class="metrics" aria-label="Cifras clave" data-i18n-attr="aria-label:metrics.a11y">
   <div class="wrap metrics-grid">
-    <div class="metric"><span class="metric-num" data-count="11">0</span><span class="metric-label">Años de trayectoria</span></div>
-    <div class="metric"><span class="metric-num" data-count="2">0</span><span class="metric-label">Videojuegos publicados</span></div>
-    <div class="metric"><span class="metric-num" data-count="2">0</span><span class="metric-label">Game jams</span></div>
-    <div class="metric"><span class="metric-num" data-count="6">0</span><span class="metric-label">Industrias</span></div>
+    <div class="metric"><span class="metric-num" data-count="11">0</span><span class="metric-label" data-i18n="metrics.years">Años de trayectoria</span></div>
+    <div class="metric"><span class="metric-num" data-count="2">0</span><span class="metric-label" data-i18n="metrics.games">Videojuegos publicados</span></div>
+    <div class="metric"><span class="metric-num" data-count="2">0</span><span class="metric-label" data-i18n="metrics.jams">Game jams</span></div>
+    <div class="metric"><span class="metric-num" data-count="6">0</span><span class="metric-label" data-i18n="metrics.industries">Industrias</span></div>
   </div>
   <div class="wrap">
-    <p class="metrics-note">BPO y Trust&nbsp;&amp;&nbsp;Safety · IA generativa · Publicidad y eventos · Certificaciones técnicas · Arquitectura · Retail farmacéutico</p>
+    <p class="metrics-note" data-i18n-html="metrics.note">BPO y Trust&nbsp;&amp;&nbsp;Safety · IA generativa · Publicidad y eventos · Certificaciones técnicas · Arquitectura · Retail farmacéutico</p>
   </div>
 </section>
 
@@ -149,25 +200,25 @@
 <section id="perfil" class="section">
   <div class="wrap split">
     <div class="split-side">
-      <p class="eyebrow">01 · Perfil</p>
-      <h2 class="h2">Lo aprendí trabajando.<br>Ahora lo estudio.</h2>
+      <p class="eyebrow" data-i18n="perfil.eyebrow">01 · Perfil</p>
+      <h2 class="h2" data-i18n-html="perfil.title">Lo aprendí trabajando.<br>Ahora lo estudio.</h2>
     </div>
 
     <div class="split-main">
-      <p class="lead">
+      <p class="lead" data-i18n="perfil.p1">
         Soy estudiante de primer ciclo de Marketing. Antes de entrar a la carrera
         trabajé varios años en puestos operativos: moderando transmisiones en vivo,
         supervisando activaciones en eventos, haciendo trámites de oficina y
         escribiendo prompts para generar imágenes. No eran puestos de marketing,
         pero ahí fue donde empecé a fijarme en cómo las marcas tratan a la gente.
       </p>
-      <p class="body">
+      <p class="body" data-i18n="perfil.p2">
         En esos trabajos aprendí cosas simples que me sirven hasta ahora: revisar
         dos veces, decidir rápido cuando hay presión, anotar todo para que otro
         pueda seguir, y mantener el ritmo aunque el día venga cargado. No lo aprendí
         en un aula: lo aprendí haciendo, que es como mejor aprendo.
       </p>
-      <p class="body">
+      <p class="body" data-i18n="perfil.p3">
         Entré a estudiar Marketing porque quiero entender la teoría detrás de lo que
         ya vi en la práctica: por qué la gente mira lo que mira y cómo se mide si
         algo funcionó. Voy en el primer ciclo, así que todavía me falta mucho,
@@ -175,8 +226,8 @@
       </p>
 
       <div class="twist-block">
-        <span class="twist-tag">En corto</span>
-        <p>Estudiante de Marketing con años de trabajo encima y muchas ganas de seguir
+        <span class="twist-tag" data-i18n="perfil.twistTag">En corto</span>
+        <p data-i18n="perfil.twist">Estudiante de Marketing con años de trabajo encima y muchas ganas de seguir
            aprendiendo. Inglés intermedio y me acomodo al trabajo remoto.</p>
       </div>
     </div>
@@ -186,9 +237,9 @@
 <!-- ░░ TRAYECTORIA ░░ -->
 <section id="trayectoria" class="section">
   <div class="wrap">
-    <p class="eyebrow">02 · Trayectoria</p>
-    <h2 class="h2 section-head">Dónde estuve<br>y qué me dejó.</h2>
-    <p class="section-sub">Cada puesto me enseñó algo distinto. Esto es lo que me llevo de cada uno.</p>
+    <p class="eyebrow" data-i18n="tl.eyebrow">02 · Trayectoria</p>
+    <h2 class="h2 section-head" data-i18n-html="tl.title">Dónde estuve<br>y qué me dejó.</h2>
+    <p class="section-sub" data-i18n="tl.sub">Cada puesto me enseñó algo distinto. Esto es lo que me llevo de cada uno.</p>
 
     <div class="timeline" id="timeline">
 
@@ -196,12 +247,12 @@
         <span class="tl-node" aria-hidden="true"></span>
         <div class="tl-body">
           <span class="tl-period">05/2025 · 07/2026</span>
-          <h3 class="tl-role">Moderador de contenido LIVE</h3>
-          <p class="tl-org">Teleperformance <span class="tl-client">· plataforma global de ByteDance</span></p>
+          <h3 class="tl-role" data-i18n="tl.j1.role">Moderador de contenido LIVE</h3>
+          <p class="tl-org" data-i18n-html="tl.j1.org">Teleperformance <span class="tl-client">· plataforma global de ByteDance</span></p>
           <ul class="tl-points">
-            <li>Revisión y moderación de transmisiones en vivo aplicando políticas y estándares comunitarios. Mi parte era chica, pero aprendí lo que cuesta cuidar una marca a escala global.</li>
-            <li>Identificación de infracciones y documentación de decisiones, dejando trazabilidad para auditoría.</li>
-            <li>Escalamiento de casos sensibles con precisión y confidencialidad, cumpliendo métricas de calidad y productividad.</li>
+            <li data-i18n="tl.j1.p1">Revisión y moderación de transmisiones en vivo aplicando políticas y estándares comunitarios. Mi parte era chica, pero aprendí lo que cuesta cuidar una marca a escala global.</li>
+            <li data-i18n="tl.j1.p2">Identificación de infracciones y documentación de decisiones, dejando trazabilidad para auditoría.</li>
+            <li data-i18n="tl.j1.p3">Escalamiento de casos sensibles con precisión y confidencialidad, cumpliendo métricas de calidad y productividad.</li>
           </ul>
         </div>
       </article>
@@ -210,11 +261,11 @@
         <span class="tl-node" aria-hidden="true"></span>
         <div class="tl-body">
           <span class="tl-period">10/2024 · 11/2024</span>
-          <h3 class="tl-role">Moderador de contenido LIVE</h3>
-          <p class="tl-org">Majorel <span class="tl-client">· plataforma global de ByteDance</span></p>
+          <h3 class="tl-role" data-i18n="tl.j2.role">Moderador de contenido LIVE</h3>
+          <p class="tl-org" data-i18n-html="tl.j2.org">Majorel <span class="tl-client">· plataforma global de ByteDance</span></p>
           <ul class="tl-points">
-            <li>Evaluación de contenido LIVE con criterios consistentes, para sostener el mismo estándar en miles de casos.</li>
-            <li>Toma de decisiones en tiempo real y reporte de casos para revisión adicional, sin frenar el flujo.</li>
+            <li data-i18n="tl.j2.p1">Evaluación de contenido LIVE con criterios consistentes, para sostener el mismo estándar en miles de casos.</li>
+            <li data-i18n="tl.j2.p2">Toma de decisiones en tiempo real y reporte de casos para revisión adicional, sin frenar el flujo.</li>
           </ul>
         </div>
       </article>
@@ -223,11 +274,11 @@
         <span class="tl-node" aria-hidden="true"></span>
         <div class="tl-body">
           <span class="tl-period">02/2024 · 04/2024</span>
-          <h3 class="tl-role">Soporte Técnico Administrativo</h3>
-          <p class="tl-org">Inspecciones, Ensayos, Supervisión y Certificaciones Operativas SAC</p>
+          <h3 class="tl-role" data-i18n="tl.j3.role">Soporte Técnico Administrativo</h3>
+          <p class="tl-org" data-i18n="tl.j3.org">Inspecciones, Ensayos, Supervisión y Certificaciones Operativas SAC</p>
           <ul class="tl-points">
-            <li>Gestión de documentación y registros de múltiples proyectos simultáneos, manteniendo la información al día.</li>
-            <li>Organización de información y soporte oportuno a los equipos, para que el trabajo diario no se detenga.</li>
+            <li data-i18n="tl.j3.p1">Gestión de documentación y registros de múltiples proyectos simultáneos, manteniendo la información al día.</li>
+            <li data-i18n="tl.j3.p2">Organización de información y soporte oportuno a los equipos, para que el trabajo diario no se detenga.</li>
           </ul>
         </div>
       </article>
@@ -236,11 +287,11 @@
         <span class="tl-node" aria-hidden="true"></span>
         <div class="tl-body">
           <span class="tl-period">11/2023</span>
-          <h3 class="tl-role">Apoyo a eventos · MiBanco</h3>
-          <p class="tl-org">Mayo Publicidad</p>
+          <h3 class="tl-role" data-i18n="tl.j4.role">Apoyo a eventos · MiBanco</h3>
+          <p class="tl-org" data-i18n="tl.j4.org">Mayo Publicidad</p>
           <ul class="tl-points">
-            <li>Orientación y soporte a asistentes para una experiencia ordenada en un evento corporativo.</li>
-            <li>Colaboración en logística y atención al público, cuidando que cada interacción dejara una buena impresión.</li>
+            <li data-i18n="tl.j4.p1">Orientación y soporte a asistentes para una experiencia ordenada en un evento corporativo.</li>
+            <li data-i18n="tl.j4.p2">Colaboración en logística y atención al público, cuidando que cada interacción dejara una buena impresión.</li>
           </ul>
         </div>
       </article>
@@ -249,12 +300,12 @@
         <span class="tl-node" aria-hidden="true"></span>
         <div class="tl-body">
           <span class="tl-period">12/2022 · 12/2023</span>
-          <h3 class="tl-role">Ingeniero de prompts</h3>
-          <p class="tl-org">OpenArt.ai</p>
+          <h3 class="tl-role" data-i18n="tl.j5.role">Ingeniero de prompts</h3>
+          <p class="tl-org" data-i18n="tl.j5.org">OpenArt.ai</p>
           <ul class="tl-points">
-            <li>Diseño y ajuste de prompts para generar piezas visuales orientadas a ventas y comunicación comercial.</li>
-            <li>Traducción de objetivos de negocio a resultados visuales concretos, convirtiendo briefs en piezas listas para comunicar.</li>
-            <li>Ajuste de cada resultado al objetivo de la solicitud, iterando hasta lograr la pieza adecuada.</li>
+            <li data-i18n="tl.j5.p1">Diseño y ajuste de prompts para generar piezas visuales orientadas a ventas y comunicación comercial.</li>
+            <li data-i18n="tl.j5.p2">Traducción de objetivos de negocio a resultados visuales concretos, convirtiendo briefs en piezas listas para comunicar.</li>
+            <li data-i18n="tl.j5.p3">Ajuste de cada resultado al objetivo de la solicitud, iterando hasta lograr la pieza adecuada.</li>
           </ul>
         </div>
       </article>
@@ -263,11 +314,11 @@
         <span class="tl-node" aria-hidden="true"></span>
         <div class="tl-body">
           <span class="tl-period">12/2022 · 02/2023</span>
-          <h3 class="tl-role">Supervisor de Activación de Eventos · Eucerin</h3>
-          <p class="tl-org">Mayo Publicidad</p>
+          <h3 class="tl-role" data-i18n="tl.j6.role">Supervisor de Activación de Eventos · Eucerin</h3>
+          <p class="tl-org" data-i18n="tl.j6.org">Mayo Publicidad</p>
           <ul class="tl-points">
-            <li>Supervisión de activaciones promocionales para Eucerin, de cara al consumidor real.</li>
-            <li>Coordinación de actividades y verificación de tareas durante los eventos, para cumplir lo planificado.</li>
+            <li data-i18n="tl.j6.p1">Supervisión de activaciones promocionales para Eucerin, de cara al consumidor real.</li>
+            <li data-i18n="tl.j6.p2">Coordinación de actividades y verificación de tareas durante los eventos, para cumplir lo planificado.</li>
           </ul>
         </div>
       </article>
@@ -276,11 +327,11 @@
         <span class="tl-node" aria-hidden="true"></span>
         <div class="tl-body">
           <span class="tl-period">12/2016 · 01/2017</span>
-          <h3 class="tl-role">Asistente de inventario</h3>
-          <p class="tl-org">Farmacia Kellertas</p>
+          <h3 class="tl-role" data-i18n="tl.j7.role">Asistente de inventario</h3>
+          <p class="tl-org" data-i18n="tl.j7.org">Farmacia Kellertas</p>
           <ul class="tl-points">
-            <li>Control de inventario, actualización de registros y verificación de disponibilidad, manteniendo la base de datos actualizada.</li>
-            <li>Seguimiento de stock y reposición para que nunca falte producto.</li>
+            <li data-i18n="tl.j7.p1">Control de inventario, actualización de registros y verificación de disponibilidad, manteniendo la base de datos actualizada.</li>
+            <li data-i18n="tl.j7.p2">Seguimiento de stock y reposición para que nunca falte producto.</li>
           </ul>
         </div>
       </article>
@@ -289,11 +340,11 @@
         <span class="tl-node" aria-hidden="true"></span>
         <div class="tl-body">
           <span class="tl-period">06/2016 · 05/2023</span>
-          <h3 class="tl-role">Auxiliar de oficina</h3>
-          <p class="tl-org">Luis Espinoza Arce</p>
+          <h3 class="tl-role" data-i18n="tl.j8.role">Auxiliar de oficina</h3>
+          <p class="tl-org" data-i18n="tl.j8.org">Luis Espinoza Arce</p>
           <ul class="tl-points">
-            <li>Organización documental y atención de requerimientos administrativos para la operación diaria.</li>
-            <li>Orden y constancia en las tareas de oficina durante siete años.</li>
+            <li data-i18n="tl.j8.p1">Organización documental y atención de requerimientos administrativos para la operación diaria.</li>
+            <li data-i18n="tl.j8.p2">Orden y constancia en las tareas de oficina durante siete años.</li>
           </ul>
         </div>
       </article>
@@ -302,11 +353,11 @@
         <span class="tl-node" aria-hidden="true"></span>
         <div class="tl-body">
           <span class="tl-period">08/2015 · 06/2016</span>
-          <h3 class="tl-role">Auxiliar de oficina</h3>
-          <p class="tl-org">E&amp;M Arquitectos Asociados SRL</p>
+          <h3 class="tl-role" data-i18n="tl.j9.role">Auxiliar de oficina</h3>
+          <p class="tl-org" data-i18n-html="tl.j9.org">E&amp;M Arquitectos Asociados SRL</p>
           <ul class="tl-points">
-            <li>Organización de documentación y tareas administrativas para el equipo.</li>
-            <li>Soporte al funcionamiento diario del equipo de arquitectura, para que trabajara sin interrupciones.</li>
+            <li data-i18n="tl.j9.p1">Organización de documentación y tareas administrativas para el equipo.</li>
+            <li data-i18n="tl.j9.p2">Soporte al funcionamiento diario del equipo de arquitectura, para que trabajara sin interrupciones.</li>
           </ul>
         </div>
       </article>
@@ -318,121 +369,121 @@
 <!-- ░░ COMPETENCIAS ░░ -->
 <section id="competencias" class="section">
   <div class="wrap">
-    <p class="eyebrow">03 · Competencias</p>
-    <h2 class="h2 section-head">Herramientas<br>con las que trabajo.</h2>
+    <p class="eyebrow" data-i18n="skills.eyebrow">03 · Competencias</p>
+    <h2 class="h2 section-head" data-i18n-html="skills.title">Herramientas<br>con las que trabajo.</h2>
 
     <div class="skills">
 
       <div class="skill-cluster">
-        <h3 class="cluster-title">Marketing y contenido digital</h3>
+        <h3 class="cluster-title" data-i18n="skills.c1.title">Marketing y contenido digital</h3>
         <div class="chips">
-          <span class="chip">Comunicación visual</span>
-          <span class="chip">Contenido digital</span>
-          <span class="chip">Materiales promocionales</span>
-          <span class="chip">Redacción de prompts comerciales</span>
-          <span class="chip">Brand safety</span>
+          <span class="chip" data-i18n="skills.c1.i1">Comunicación visual</span>
+          <span class="chip" data-i18n="skills.c1.i2">Contenido digital</span>
+          <span class="chip" data-i18n="skills.c1.i3">Materiales promocionales</span>
+          <span class="chip" data-i18n="skills.c1.i4">Redacción de prompts comerciales</span>
+          <span class="chip" data-i18n="skills.c1.i5">Brand safety</span>
         </div>
       </div>
 
       <div class="skill-cluster">
-        <h3 class="cluster-title">Diseño y comunicación visual</h3>
+        <h3 class="cluster-title" data-i18n="skills.c2.title">Diseño y comunicación visual</h3>
         <div class="chips">
-          <span class="chip">Adobe Suite <em>(intermedio)</em></span>
-          <span class="chip">Diseño gráfico</span>
+          <span class="chip" data-i18n-html="skills.c2.i1">Adobe Suite <em>(intermedio)</em></span>
+          <span class="chip" data-i18n="skills.c2.i2">Diseño gráfico</span>
         </div>
       </div>
 
       <div class="skill-cluster">
-        <h3 class="cluster-title">Datos y reportes</h3>
+        <h3 class="cluster-title" data-i18n="skills.c3.title">Datos y reportes</h3>
         <div class="chips">
-          <span class="chip">Excel</span>
-          <span class="chip">Elaboración de reportes</span>
-          <span class="chip">Bases de datos</span>
+          <span class="chip" data-i18n="skills.c3.i1">Excel</span>
+          <span class="chip" data-i18n="skills.c3.i2">Elaboración de reportes</span>
+          <span class="chip" data-i18n="skills.c3.i3">Bases de datos</span>
         </div>
       </div>
 
       <div class="skill-cluster">
-        <h3 class="cluster-title">Producto y tecnología</h3>
+        <h3 class="cluster-title" data-i18n="skills.c4.title">Producto y tecnología</h3>
         <div class="chips">
-          <span class="chip">Unity 3D <em>(intermedio)</em></span>
-          <span class="chip">Diseño y desarrollo web</span>
+          <span class="chip" data-i18n-html="skills.c4.i1">Unity 3D <em>(intermedio)</em></span>
+          <span class="chip" data-i18n="skills.c4.i2">Diseño y desarrollo web</span>
         </div>
       </div>
 
       <div class="skill-cluster">
-        <h3 class="cluster-title">Idiomas</h3>
+        <h3 class="cluster-title" data-i18n="skills.c5.title">Idiomas</h3>
         <div class="chips">
-          <span class="chip">Español <em>nativo</em></span>
-          <span class="chip">Inglés <em>intermedio</em></span>
+          <span class="chip" data-i18n-html="skills.c5.i1">Español <em>nativo</em></span>
+          <span class="chip" data-i18n-html="skills.c5.i2">Inglés <em>intermedio</em></span>
         </div>
       </div>
 
     </div>
 
     <div class="softs">
-      <p class="softs-kicker">Cómo trato de trabajar</p>
+      <p class="softs-kicker" data-i18n="softs.kicker">Cómo trato de trabajar</p>
 
       <div class="softs-grid">
         <div class="soft">
           <span class="soft-num">01</span>
-          <h4>Atención al detalle</h4>
-          <p>En un vivo no hay segundos de margen. Eso me acostumbró a revisar dos veces
+          <h4 data-i18n="softs.s1.t">Atención al detalle</h4>
+          <p data-i18n="softs.s1.d">En un vivo no hay segundos de margen. Eso me acostumbró a revisar dos veces
              y a no confiarme.</p>
         </div>
 
         <div class="soft">
           <span class="soft-num">02</span>
-          <h4>Criterio bajo presión</h4>
-          <p>Me tocó decidir en tiempo real con métricas de calidad y productividad encima,
+          <h4 data-i18n="softs.s2.t">Criterio bajo presión</h4>
+          <p data-i18n="softs.s2.d">Me tocó decidir en tiempo real con métricas de calidad y productividad encima,
              cuidando no romperle la experiencia a quien está del otro lado.</p>
         </div>
 
         <div class="soft">
           <span class="soft-num">03</span>
-          <h4>Confidencialidad</h4>
-          <p>Vi casos sensibles en una plataforma global. Aprendí a ser discreto
+          <h4 data-i18n="softs.s3.t">Confidencialidad</h4>
+          <p data-i18n="softs.s3.d">Vi casos sensibles en una plataforma global. Aprendí a ser discreto
              y a cuidar qué se documenta y cómo.</p>
         </div>
 
         <div class="soft">
           <span class="soft-num">04</span>
-          <h4>Resiliencia</h4>
-          <p>Meses moderando en vivo con volumen alto, tratando de mantener
+          <h4 data-i18n="softs.s4.t">Resiliencia</h4>
+          <p data-i18n="softs.s4.d">Meses moderando en vivo con volumen alto, tratando de mantener
              el mismo estándar todos los días.</p>
         </div>
 
         <div class="soft">
           <span class="soft-num">05</span>
-          <h4>Adaptabilidad</h4>
-          <p>Pasé del retail farmacéutico a la IA generativa. Cada cambio me obligó
+          <h4 data-i18n="softs.s5.t">Adaptabilidad</h4>
+          <p data-i18n="softs.s5.d">Pasé del retail farmacéutico a la IA generativa. Cada cambio me obligó
              a ordenarme rápido, y eso se volvió costumbre.</p>
         </div>
 
         <div class="soft">
           <span class="soft-num">06</span>
-          <h4>Orientación a resultados</h4>
-          <p>Trato de que cada registro, reporte o pieza sirva para algo después,
+          <h4 data-i18n="softs.s6.t">Orientación a resultados</h4>
+          <p data-i18n="softs.s6.d">Trato de que cada registro, reporte o pieza sirva para algo después,
              no solo de que quede bonita.</p>
         </div>
 
         <div class="soft">
           <span class="soft-num">07</span>
-          <h4>Comunicación clara</h4>
-          <p>Trato de explicar sin vueltas, por escrito y en persona. Si algo no se
+          <h4 data-i18n="softs.s7.t">Comunicación clara</h4>
+          <p data-i18n="softs.s7.d">Trato de explicar sin vueltas, por escrito y en persona. Si algo no se
              entiende, el problema es cómo lo dije.</p>
         </div>
 
         <div class="soft">
           <span class="soft-num">08</span>
-          <h4>Aprendizaje rápido</h4>
-          <p>Estoy en primer ciclo: todo me toca aprenderlo dos veces, en la práctica
+          <h4 data-i18n="softs.s8.t">Aprendizaje rápido</h4>
+          <p data-i18n="softs.s8.d">Estoy en primer ciclo: todo me toca aprenderlo dos veces, en la práctica
              y en clase. Ya tengo el hábito.</p>
         </div>
 
         <div class="soft">
           <span class="soft-num">09</span>
-          <h4>Apertura al feedback</h4>
-          <p>Prefiero que me corrijan temprano a entregar algo mal tarde. Pregunto
+          <h4 data-i18n="softs.s9.t">Apertura al feedback</h4>
+          <p data-i18n="softs.s9.d">Prefiero que me corrijan temprano a entregar algo mal tarde. Pregunto
              cuando no sé.</p>
         </div>
       </div>
@@ -444,15 +495,15 @@
 <!-- ░░ PROYECTOS ░░ -->
 <section id="proyectos" class="section">
   <div class="wrap">
-    <p class="eyebrow">04 · Proyectos</p>
-    <h2 class="h2 section-head">Cosas que hice<br>y de las que aprendí.</h2>
-    <p class="section-sub">
+    <p class="eyebrow" data-i18n="proj.eyebrow">04 · Proyectos</p>
+    <h2 class="h2 section-head" data-i18n-html="proj.title">Cosas que hice<br>y de las que aprendí.</h2>
+    <p class="section-sub" data-i18n="proj.sub">
       Herramientas, videojuegos y experimentos que publiqué en el camino.
       Están tal cual salieron.
     </p>
 
     <div class="projects" id="projects" aria-live="polite">
-      <p class="projects-loading">Cargando proyectos…</p>
+      <p class="projects-loading" data-i18n="proj.loading">Cargando proyectos…</p>
     </div>
 
     <p class="projects-source" id="projectsSource"></p>
@@ -463,30 +514,30 @@
 <section id="formacion" class="section">
   <div class="wrap split">
     <div class="split-side">
-      <p class="eyebrow">05 · Formación</p>
-        <h2 class="h2">Estudiando<br>para entender mejor<br>lo que hago.</h2>
+      <p class="eyebrow" data-i18n="edu.eyebrow">05 · Formación</p>
+        <h2 class="h2" data-i18n-html="edu.title">Estudiando<br>para entender mejor<br>lo que hago.</h2>
     </div>
 
     <div class="split-main">
       <div class="edu-item edu-current">
-        <span class="tl-period">2026 · en curso</span>
-        <h3 class="tl-role">Carrera de Marketing</h3>
-        <p class="tl-org">Primer ciclo</p>
-        <p class="body">Investigación de mercados, comportamiento
+        <span class="tl-period" data-i18n="edu.period1">2026 · en curso</span>
+        <h3 class="tl-role" data-i18n="edu.role1">Carrera de Marketing</h3>
+        <p class="tl-org" data-i18n="edu.org1">Primer ciclo</p>
+        <p class="body" data-i18n="edu.desc1">Investigación de mercados, comportamiento
           del consumidor, estrategia de marca. Haber visto estos temas en la práctica
           me ayuda a aterrizar la teoría.</p>
       </div>
 
       <div class="edu-item">
-        <span class="tl-period">Junio 2021</span>
-        <h3 class="tl-role">Diseño Gráfico</h3>
-        <p class="tl-org">LinkedIn Learning</p>
+        <span class="tl-period" data-i18n="edu.period2">Junio 2021</span>
+        <h3 class="tl-role" data-i18n="edu.role2">Diseño Gráfico</h3>
+        <p class="tl-org" data-i18n="edu.org2">LinkedIn Learning</p>
       </div>
 
       <div class="edu-item">
-        <span class="tl-period">Enero 2021</span>
-        <h3 class="tl-role">Diseño y Desarrollo Web</h3>
-        <p class="tl-org">IDAT</p>
+        <span class="tl-period" data-i18n="edu.period3">Enero 2021</span>
+        <h3 class="tl-role" data-i18n="edu.role3">Diseño y Desarrollo Web</h3>
+        <p class="tl-org" data-i18n="edu.org3">IDAT</p>
       </div>
     </div>
   </div>
@@ -495,9 +546,9 @@
 <!-- ░░ CONTACTO ░░ -->
 <section id="contacto" class="section contact">
   <div class="wrap contact-wrap">
-    <p class="eyebrow">06 · Contacto</p>
-    <h2 class="h2 contact-title">¿Conversamos?</h2>
-    <p class="lead contact-lead">
+    <p class="eyebrow" data-i18n="contact.eyebrow">06 · Contacto</p>
+    <h2 class="h2 contact-title" data-i18n="contact.title">¿Conversamos?</h2>
+    <p class="lead contact-lead" data-i18n="contact.lead">
       Soy estudiante de Marketing y estoy abierto a prácticas, posiciones junior
       y colaboraciones en marketing digital, contenido, diseño gráfico y producto
       interactivo. Escríbeme y te respondo rápido.
@@ -520,7 +571,7 @@
 <footer class="footer">
   <div class="wrap footer-inner">
     <p class="footer-brand">Alejandro Espinoza López</p>
-    <p class="footer-note">Marketing · Diseño gráfico · Contenido · Lima, Perú</p>
+    <p class="footer-note" data-i18n="footer.note">Marketing · Diseño gráfico · Contenido · Lima, Perú</p>
     <p class="footer-year mono">2026</p>
   </div>
   <div class="footer-flame" aria-hidden="true"></div>
@@ -530,11 +581,11 @@
 
 <div class="egg-modal" id="eggModal" role="dialog" aria-modal="true" aria-labelledby="eggTitle" hidden>
   <div class="egg-card">
-    <h3 id="eggTitle">Huevos de pascua</h3>
+    <h3 id="eggTitle" data-i18n="egg.title">Huevos de pascua</h3>
     <p class="egg-sub" id="eggSub"></p>
     <div class="egg-progress"><span id="eggFill"></span></div>
     <ul class="egg-list" id="eggList"></ul>
-    <button class="btn btn-ghost" id="eggClose">Cerrar</button>
+    <button class="btn btn-ghost" id="eggClose" data-i18n="egg.close">Cerrar</button>
   </div>
 </div>
 
@@ -542,8 +593,10 @@
 <script src="assets/vendor/gsap/gsap.min.js"></script>
 <script src="assets/vendor/gsap/ScrollTrigger.min.js"></script>
 <script src="assets/vendor/gsap/ScrollToPlugin.min.js"></script>
-<script src="assets/js/projects.js?v=2"></script>
-<script src="assets/js/main.js?v=2"></script>
+<script src="assets/js/i18n.js?v=1"></script>
+<script src="assets/js/lang.js?v=1"></script>
+<script src="assets/js/projects.js?v=3"></script>
+<script src="assets/js/main.js?v=3"></script>
 
 </body>
 </html>

@@ -256,6 +256,12 @@ main,header,footer{position:relative;z-index:2}
   border-bottom:1px solid rgba(58,46,36,.5);
 }
 .menu a:hover{color:var(--fire-amber)}
+/* Fila de idioma dentro del menú móvil (no es un enlace) */
+.menu .lang-wrap{display:none}
+.menu .lang .lang-btn{
+  font-size:.8rem;letter-spacing:.14em;height:46px;
+  padding:0 1.1rem 0 1.2rem;
+}
 
 /* ---------- 5. Buttons ---------- */
 .btn{
@@ -623,6 +629,14 @@ html[data-theme="light"] .hero-title{--title-glow-color:rgba(8,145,178,.5)}
   .nav-links,.nav-cta{display:none}
   .burger{display:block}
   .mm-blob{display:none}
+  /* El dropdown sale de la nav y reaparece dentro del menú móvil */
+  .lang--nav{display:none}
+  .menu .lang-wrap{display:flex;justify-content:center;margin-top:1.5rem}
+  .menu .lang{position:relative}
+  .menu .lang .lang-list{top:auto;bottom:calc(100% + .65rem);right:auto;left:0}
+}
+@media (min-width:901px){
+  .menu .lang-wrap{display:none}
 }
 @media (max-width:640px){
   .hero{min-height:auto;padding-block:9rem 6rem}
@@ -665,6 +679,70 @@ html[data-theme="light"] .toast{background:rgba(255,255,255,.95);border-color:rg
 .trophy-btn:hover{border-color:var(--fire-amber);color:var(--fire-amber);transform:translateY(-2px)}
 .trophy-btn svg{width:17px;height:17px}
 html[data-theme="light"] .trophy-btn{border-color:rgba(11,21,32,.22)}
+
+/* ---------- 21. Selector de idioma (ES · EN) ----------
+   Píldora gemela de .trophy-btn; el menú flota sin caja dura:
+   hairline + glow, sin bordes de contenedor. */
+.lang{position:relative;flex:0 0 auto}
+.lang-btn{
+  height:44px;border-radius:100px;
+  display:inline-flex;align-items:center;gap:.45rem;padding:0 .85rem 0 1rem;
+  border:1px solid rgba(255,246,236,.18);color:var(--fire-white);
+  font-family:var(--mono);font-size:.72rem;letter-spacing:.08em;
+  transition:border-color .3s ease,color .3s ease,transform .3s ease;
+}
+.lang-btn:hover{border-color:var(--fire-amber);color:var(--fire-amber);transform:translateY(-2px)}
+.lang-btn svg{width:17px;height:17px}
+.lang-btn .icon-globe{opacity:.85}
+.lang-chev{
+  width:12px;height:12px;
+  transition:transform .3s cubic-bezier(.4,0,.2,1);
+}
+.lang.is-open .lang-btn{border-color:var(--fire-amber);color:var(--fire-amber)}
+.lang.is-open .lang-chev{transform:rotate(180deg)}
+
+.lang-list{
+  position:absolute;top:calc(100% + .65rem);right:0;z-index:140;
+  min-width:186px;padding:.5rem;
+  border-radius:22px;
+  background:rgba(20,16,12,.94);
+  backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+  box-shadow:0 24px 60px -22px rgba(0,0,0,.85),0 0 0 1px rgba(255,246,236,.07) inset;
+  opacity:0;transform:translateY(-8px);
+  transition:opacity .2s ease,transform .2s cubic-bezier(.4,0,.2,1);
+}
+.lang-list::before{
+  content:'';position:absolute;top:-1px;left:18px;right:18px;height:1px;
+  background:var(--hairline);opacity:.7;
+}
+.lang-list[hidden]{display:none}
+.lang-list.open{opacity:1;transform:translateY(0)}
+.lang-opt{
+  width:100%;display:flex;align-items:center;gap:.7rem;
+  padding:.6rem .75rem;border-radius:14px;
+  color:var(--smoke);font-size:.92rem;font-weight:500;
+  transition:background .25s ease,color .25s ease;
+}
+.lang-opt:hover,.lang-opt:focus-visible{background:rgba(255,138,31,.10);color:var(--fire-amber)}
+.lang-opt .lang-code{
+  font-family:var(--mono);font-size:.68rem;letter-spacing:.1em;
+  color:var(--smoke-dim);flex:0 0 auto;
+}
+.lang-opt.is-active{color:var(--fire-white)}
+.lang-opt.is-active .lang-code{color:var(--fire-amber)}
+.lang-opt .lang-check{
+  margin-left:auto;width:15px;height:15px;opacity:0;color:var(--fire-amber);
+  transition:opacity .2s ease;
+}
+.lang-opt.is-active .lang-check{opacity:1}
+
+html[data-theme="light"] .lang-btn{border-color:rgba(11,21,32,.22)}
+html[data-theme="light"] .lang-list{
+  background:rgba(255,255,255,.96);
+  box-shadow:0 24px 60px -24px rgba(11,21,32,.28),0 0 0 1px rgba(11,21,32,.06) inset;
+}
+html[data-theme="light"] .lang-opt:hover,
+html[data-theme="light"] .lang-opt:focus-visible{background:rgba(8,145,178,.10);color:#0369A1}
 
 .egg-modal{
   position:fixed;inset:0;z-index:210;

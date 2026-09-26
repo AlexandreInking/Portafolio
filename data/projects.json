@@ -3,13 +3,17 @@
     {
       "name": "Mosaico",
       "role": "Producto, dirección de arte y desarrollo",
+      "role_en": "Product, art direction and development",
       "description": "Herramienta que armé para crear pixel art, diseñar tilemaps y estructurar sprites de forma procedural. Me ayuda a producir assets coherentes y reutilizables en minutos.",
+      "description_en": "A tool I built to create pixel art, design tilemaps and structure sprites procedurally. It helps me produce coherent, reusable assets in minutes.",
       "category": "Herramienta de diseño",
+      "category_en": "Design tool",
       "status": "Publicado",
       "year": "2026",
       "github": "https://github.com/AlexandreInking/Proyecto-Mosaico",
       "demo": "https://inking.itch.io/mosaico",
       "demoLabel": "Ver la herramienta",
+      "demoLabel_en": "View the tool",
       "tags": [
         "Pixel art",
         "Tilemaps",
@@ -17,19 +21,61 @@
         "Herramienta",
         "Comercialización"
       ],
+      "tags_en": [
+        "Pixel art",
+        "Tilemaps",
+        "Procedural sprites",
+        "Tool",
+        "Monetisation"
+      ],
       "featured": true,
       "color": "#FF8A1F"
     },
     {
+      "name": "TeatroPlayer",
+      "role": "Producto, diseño y desarrollo",
+      "role_en": "Product, design and development",
+      "description": "Reproductor de audio para teatro hecho en Rust. Resuelve en un solo gesto lo que en una función depende de reflejos: entrar con fade, cruzar dos pistas al vuelo y salir sin cortes, todo desde un botón. Pensado para quien opera el show y no quiere pelear con el programa: pesa unos 3 MB, arranca al instante, va en español y se lleva con la barra espaciadora. Las sesiones guardan el audio dentro del archivo, así que la función viaja en un solo '.tpshow'.",
+      "description_en": "A theater audio player built in Rust. It solves in a single gesture what in a live show depends on reflexes: fading in, crossfading two tracks on the fly and fading out without cuts, all from one button. Made for whoever runs the show and doesn't want to fight the software: it weighs about 3 MB, opens instantly, ships in Spanish and is operated with the spacebar. Sessions carry the audio inside the file, so the show travels as a single '.tpshow'.",
+      "category": "Herramienta de escritorio",
+      "category_en": "Desktop tool",
+      "status": "En desarrollo",
+      "year": "2026",
+      "github": "https://github.com/AlexandreInking/TeatroPlayer",
+      "demo": "",
+      "demoLabel": "",
+      "demoLabel_en": "",
+      "tags": [
+        "Rust",
+        "Audio en vivo",
+        "Fades y crossfades",
+        "Escritorio",
+        "Herramienta"
+      ],
+      "tags_en": [
+        "Rust",
+        "Live audio",
+        "Fades and crossfades",
+        "Desktop",
+        "Tool"
+      ],
+      "featured": false,
+      "color": "#FF5B1F"
+    },
+    {
       "name": "Spark",
       "role": "Diseño de producto y desarrollo",
+      "role_en": "Product design and development",
       "description": "Aplicación de escritorio local-first para la vida universitaria: calendario con alarmas, registro de cursos y notas ponderadas, dashboard de próximos vencimientos, board infinito y herramientas académicas APA. Construida con Tauri 2, React y TypeScript, con SQLite local y P2P sin servidor.",
+      "description_en": "A local-first desktop app for university life: calendar with alarms, course and weighted-grade tracking, an upcoming-deadlines dashboard, an infinite board and APA academic tools. Built with Tauri 2, React and TypeScript, with local SQLite and serverless P2P.",
       "category": "Herramienta de productividad",
+      "category_en": "Productivity tool",
       "status": "En desarrollo",
       "year": "2026",
       "github": "https://github.com/AlexandreInking/Spark",
       "demo": "",
       "demoLabel": "",
+      "demoLabel_en": "",
       "tags": [
         "Productividad",
         "Tauri",
@@ -38,20 +84,37 @@
         "SQLite",
         "Calendario"
       ],
+      "tags_en": [
+        "Productivity",
+        "Tauri",
+        "React",
+        "TypeScript",
+        "SQLite",
+        "Calendar"
+      ],
       "featured": false,
       "color": "#FFD447"
     },
     {
       "name": "Yin Yang Dodge",
       "role": "Desarrollo & publicación",
+      "role_en": "Development & publishing",
       "description": "Videojuego que publicamos en Google Play, disponible hasta 2022. Participé en la iteración de mecánicas, el arte del título y los assets de tienda.",
+      "description_en": "A game we published on Google Play, available until 2022. I took part in iterating the mechanics, the title art and the store assets.",
       "category": "Videojuego · Android",
+      "category_en": "Game · Android",
       "status": "Publicado",
       "year": "2022",
       "github": "",
       "demo": "",
       "demoLabel": "",
+      "demoLabel_en": "",
       "tags": [
+        "Unity 3D",
+        "Android",
+        "Google Play"
+      ],
+      "tags_en": [
         "Unity 3D",
         "Android",
         "Google Play"
@@ -62,17 +125,26 @@
     {
       "name": "Space Vector",
       "role": "Desarrollo & publicación",
+      "role_en": "Development & publishing",
       "description": "Videojuego publicado para PC. Acompañé el desarrollo y la publicación: arte, interfaz y los materiales visuales con los que se presentó el título.",
+      "description_en": "A game published for PC. I supported the development and the release: art, interface and the visual materials the title was presented with.",
       "category": "Videojuego · PC",
+      "category_en": "Game · PC",
       "status": "Publicado",
       "year": "2018",
       "github": "",
       "demo": "https://tls.itch.io/space-vector",
       "demoLabel": "Jugar",
+      "demoLabel_en": "Play",
       "tags": [
         "Unity 3D",
         "PC",
         "Publicación"
+      ],
+      "tags_en": [
+        "Unity 3D",
+        "PC",
+        "Publishing"
       ],
       "featured": false,
       "color": "#E0231A"
@@ -80,17 +152,26 @@
     {
       "name": "Loading... The Game",
       "role": "Participación en game jam",
+      "role_en": "Game jam participation",
       "description": "Game jam: diseño y desarrollo contrarreloj, con una entrega jugable publicada al cierre del evento.",
+      "description_en": "Game jam: design and development against the clock, with a playable build published when the event closed.",
       "category": "Game jam",
+      "category_en": "Game jam",
       "status": "Publicado",
       "year": "",
       "github": "",
       "demo": "https://oswingames.itch.io/loadingthe-game",
       "demoLabel": "Jugar",
+      "demoLabel_en": "Play",
       "tags": [
         "Game jam",
         "Unity 3D",
         "Desarrollo rápido"
+      ],
+      "tags_en": [
+        "Game jam",
+        "Unity 3D",
+        "Rapid development"
       ],
       "featured": false,
       "color": "#FFD447"
@@ -98,17 +179,26 @@
     {
       "name": "Demon Cat",
       "role": "Participación en game jam",
+      "role_en": "Game jam participation",
       "description": "Game jam: prototipado rápido de mecánicas y arte, con una entrega jugable publicada al cierre del evento.",
+      "description_en": "Game jam: rapid prototyping of mechanics and art, with a playable build published when the event closed.",
       "category": "Game jam",
+      "category_en": "Game jam",
       "status": "Publicado",
       "year": "",
       "github": "",
       "demo": "https://jesua90.itch.io/demon-cat",
       "demoLabel": "Jugar",
+      "demoLabel_en": "Play",
       "tags": [
         "Game jam",
         "Unity 3D",
         "Prototipado"
+      ],
+      "tags_en": [
+        "Game jam",
+        "Unity 3D",
+        "Prototyping"
       ],
       "featured": false,
       "color": "#FF8A1F"

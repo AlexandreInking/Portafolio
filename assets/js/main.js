@@ -12,11 +12,15 @@
   try {
     var pcPointer = window.matchMedia && window.matchMedia("(hover: hover) and (pointer: fine)").matches;
     if (pcPointer) {
-      console.log(
-        "%c      /\\\n     /  \\\n    | () |\n     \\  /\n      \\/\n%cHola, curioso. Si abriste DevTools, ya tenemos algo en común: nos gusta ver cómo están hechas las cosas. Hablemos: esplopale@gmail.com",
-        "color:#FF8A1F;font-family:monospace;font-weight:bold",
-        "color:#A9907C;font-size:12px"
-      );
+      setTimeout(function () {
+        try {
+          console.log(
+            "%c      /\\\n     /  \\\n    | () |\n     \\  /\n      \\/\n%c" + T("toast.console"),
+            "color:#FF8A1F;font-family:monospace;font-weight:bold",
+            "color:#A9907C;font-size:12px"
+          );
+        } catch (e) {}
+      }, 0);
       var probe = document.createElement("div");
       Object.defineProperty(probe, "id", { get: function () { markEgg("consola"); return "curioso"; } });
       console.log("%c(objeto de inspector)", "color:#6E5B4C", probe);
@@ -41,6 +45,25 @@
   var FIRE_EMBERS = ["#FFD447", "#FF8A1F", "#FF5B1F", "#E0231A", "#FFF6EC"];
   var AQUA_EMBERS = ["#22D3EE", "#38BDF8", "#2563EB", "#0891B2", "#0B1520"];
 
+  /* Traducción: usa i18n.js si está presente; si no, devuelve la clave.
+     Los textos con clave viven en assets/js/i18n.js. */
+  function T(key, vars) {
+    return window.I18N ? window.I18N.t(key, vars) : key;
+  }
+  function TList(key, fallback) {
+    if (window.I18N) {
+      var l = window.I18N.tList(key);
+      if (l && l.length) return l;
+    }
+    return fallback;
+  }
+  /* Escapa texto para inyectarlo como HTML (listas de easter eggs) */
+  function escHtml(s) {
+    return String(s).replace(/[&<>"']/g, function (m) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[m];
+    });
+  }
+
   function emberPalette() {
     return document.documentElement.getAttribute("data-theme") === "light"
       ? AQUA_EMBERS
@@ -62,7 +85,7 @@
       if (btn) {
         var light = t === "light";
         btn.setAttribute("aria-pressed", light ? "true" : "false");
-        btn.setAttribute("aria-label", light ? "Cambiar a tema oscuro" : "Cambiar a tema claro");
+        btn.setAttribute("aria-label", light ? T("a11y.theme.dark") : T("a11y.theme.light"));
       }
       var palette = t === "light" ? AQUA_EMBERS : FIRE_EMBERS;
       document.querySelectorAll(".ember").forEach(function (el, i) {
@@ -78,11 +101,17 @@
       var current = document.documentElement.getAttribute("data-theme") === "light" ? "light" : "dark";
       var isLight = current === "light";
       btn.setAttribute("aria-pressed", isLight ? "true" : "false");
-      btn.setAttribute("aria-label", isLight ? "Cambiar a tema oscuro" : "Cambiar a tema claro");
+      btn.setAttribute("aria-label", isLight ? T("a11y.theme.dark") : T("a11y.theme.light"));
     }
     if (meta && document.documentElement.getAttribute("data-theme") === "light") {
       meta.setAttribute("content", "#FFFFFF");
     }
+    // Al cambiar de idioma, actualizar la etiqueta del botón de tema
+    document.addEventListener("i18n:changed", function () {
+      if (!btn) return;
+      var light = document.documentElement.getAttribute("data-theme") === "light";
+      btn.setAttribute("aria-label", light ? T("a11y.theme.dark") : T("a11y.theme.light"));
+    });
   }
 
   /* Cursor + viento compartidos por los efectos reactivos.
@@ -385,29 +414,40 @@
     var el = document.getElementById("rotWord");
     if (!el) return;
 
-    var words = ["marketing digital", "diseño gráfico", "contenido", "brand safety", "game design", "game development", "game asset creation"];
+    var FALLBACK = ["marketing digital", "diseño gráfico", "contenido", "brand safety", "game design", "game development", "game asset creation"];
+    var words = TList("rot.words", FALLBACK);
     var recent = [el.textContent];
+    var timer = null;
 
     function pickNext() {
       var pool = words.filter(function (w) { return recent.indexOf(w) === -1; });
+      if (!pool.length) pool = words;
       var next = pool[(Math.random() * pool.length) | 0];
       recent.push(next);
       if (recent.length > 2) recent.shift();
       return next;
     }
 
-    if (reduced) {
-      el.textContent = words[0];
-      return;
+    function start() {
+      if (timer) clearInterval(timer);
+      if (reduced) { el.textContent = words[0]; return; }
+      timer = setInterval(function () {
+        var next = pickNext();
+        gsap.timeline()
+          .to(el, { yPercent: -110, autoAlpha: 0, duration: 0.35, ease: "power2.in" })
+          .add(function () { el.textContent = next; })
+          .fromTo(el, { yPercent: 110, autoAlpha: 0 }, { yPercent: 0, autoAlpha: 1, duration: 0.45, ease: "power2.out" });
+      }, 2800);
     }
 
-    setInterval(function () {
-      var next = pickNext();
-      gsap.timeline()
-        .to(el, { yPercent: -110, autoAlpha: 0, duration: 0.35, ease: "power2.in" })
-        .add(function () { el.textContent = next; })
-        .fromTo(el, { yPercent: 110, autoAlpha: 0 }, { yPercent: 0, autoAlpha: 1, duration: 0.45, ease: "power2.out" });
-    }, 2800);
+    // Al cambiar de idioma, recargar la lista y reiniciar el ciclo
+    document.addEventListener("i18n:changed", function () {
+      words = TList("rot.words", FALLBACK);
+      recent = [el.textContent];
+      start();
+    });
+
+    start();
   }
 
   /* =========================================================
@@ -620,8 +660,9 @@
     menu.setAttribute("aria-hidden", "false");
     burger.classList.add("is-open");
     burger.setAttribute("aria-expanded", "true");
+    burger.setAttribute("aria-label", T("a11y.menu.close"));
     document.body.style.overflow = "hidden";
-    gsap.fromTo(menu.querySelectorAll("a"),
+    gsap.fromTo(menu.querySelectorAll("a, .lang-wrap"),
       { y: 30, autoAlpha: 0 },
       { y: 0, autoAlpha: 1, duration: 0.5, stagger: 0.06, ease: "power3.out" });
   }
@@ -632,13 +673,14 @@
     // se ejecuta contra un body bloqueado y no se mueve.
     document.body.style.overflow = "";
 
-    gsap.to(menu.querySelectorAll("a"), {
+    gsap.to(menu.querySelectorAll("a, .lang-wrap"), {
       y: 20, autoAlpha: 0, duration: 0.25, stagger: 0.03,
       onComplete: function () {
         menu.classList.remove("is-open");
         menu.setAttribute("aria-hidden", "true");
         burger.classList.remove("is-open");
         burger.setAttribute("aria-expanded", "false");
+        burger.setAttribute("aria-label", T("a11y.menu.open"));
       }
     });
   }
@@ -683,25 +725,29 @@
   var toastTimer = null;
 
   /* Colección de easter eggs: en PC se muestran los de PC,
-     en celular los de celular. Se guarda en localStorage. */
+     en celular los de celular. Se guarda en localStorage.
+     Los nombres y pistas se resuelven por idioma en renderEggList(). */
   var EGGS_PC = [
-    { id: "konami", name: "Código legendario", hint: "Una secuencia de flechas y letras de otra época..." },
-    { id: "consola", name: "Ojos curiosos", hint: "Abre las herramientas de desarrollo." },
-    { id: "flama", name: "Aviva la flama", hint: "La página perdida esconde una flama juguetona." },
-    { id: "fantasma", name: "¿Sigues ahí?", hint: "Quédate quieto un buen rato..." },
-    { id: "fuegos", name: "Celebración", hint: "Haz clic en mi correo." },
-    { id: "logro", name: "Lector completo", hint: "Llega hasta el final de la página." },
-    { id: "fiesta", name: "GG", hint: "Dos veces la misma letra gamer." }
+    { id: "konami" },
+    { id: "consola" },
+    { id: "flama" },
+    { id: "fantasma" },
+    { id: "fuegos" },
+    { id: "logro" },
+    { id: "fiesta" }
   ];
   var EGGS_MOBILE = [
-    { id: "shake", name: "Terremoto", hint: "Sacude el celular..." },
-    { id: "landscape", name: "Panorámica", hint: "Gira el celular a horizontal..." },
-    { id: "tripletap", name: "Tercer dedo", hint: "Toca con tres dedos a la vez..." },
-    { id: "holdmail", name: "Copiado", hint: "Mantén presionado mi correo..." },
-    { id: "dragtitle", name: "Detrás del nombre", hint: "Arrastra el título a un lado..." },
-    { id: "nightowl", name: "Trasnochador", hint: "Abre el portafolio de madrugada..." },
-    { id: "battery", name: "Ahorro", hint: "Entra con la batería baja..." }
+    { id: "shake" },
+    { id: "landscape" },
+    { id: "tripletap" },
+    { id: "holdmail" },
+    { id: "dragtitle" },
+    { id: "nightowl" },
+    { id: "battery" }
   ];
+
+  function eggName(g) { return T("egg." + g.id + ".name"); }
+  function eggHint(g) { return T("egg." + g.id + ".hint"); }
 
   function eggList() { return finePointer ? EGGS_PC : EGGS_MOBILE; }
 
@@ -725,7 +771,7 @@
     updateEggBadge();
     renderEggList();
     var p = eggProgress();
-    showToast("Huevo encontrado: " + p.n + "/" + p.total + " en tu colección.", 2500);
+    showToast(T("egg.found", { n: p.n, total: p.total }), 2500);
   }
 
   function updateEggBadge() {
@@ -742,16 +788,14 @@
     var fill = document.getElementById("eggFill");
     var mobile = !finePointer;
     var list = eggList();
-    if (sub) sub.textContent = mobile
-      ? "Cazados en este dispositivo: celular."
-      : "Cazados en este dispositivo: PC. Los de celular solo aparecen en celular.";
+    if (sub) sub.textContent = mobile ? T("egg.subMobile") : T("egg.subPC");
     var found = getEggs();
     var n = 0;
     ul.innerHTML = list.map(function (g) {
       var has = !!found[g.id];
       if (has) n++;
-      return '<li class="egg' + (has ? " found" : "") + '"><span class="egg-ico">' + (has ? "●" : "○") + '</span><span class="egg-text"><span class="egg-name">' + (has ? g.name : "???") + '</span><span class="egg-hint">' + g.hint + "</span></span></li>";
-    }).join("") || '<li class="egg-empty">Aún no hay huevos para este dispositivo.</li>';
+      return '<li class="egg' + (has ? " found" : "") + '"><span class="egg-ico">' + (has ? "●" : "○") + '</span><span class="egg-text"><span class="egg-name">' + (has ? escHtml(eggName(g)) : escHtml(T("egg.hidden"))) + '</span><span class="egg-hint">' + escHtml(eggHint(g)) + "</span></span></li>";
+    }).join("") || '<li class="egg-empty">' + escHtml(T("egg.empty")) + "</li>";
     if (fill) fill.style.width = (list.length ? (n / list.length) * 100 : 0) + "%";
   }
 
@@ -802,7 +846,7 @@
           cool = now;
           stormUntil = now + 5000;
           markEgg("shake");
-          showToast("Terremoto: lluvia de brasas.", 3500);
+          showToast(T("toast.shake"), 3500);
         }
       }
       last = { x: a.x, y: a.y, z: a.z };
@@ -826,7 +870,7 @@
       for (var i = 0; i < 16 && embers.length < baseCount + maxExtra; i++) spawnEmber(true, true);
       if (!getEggs().landscape) {
         markEgg("landscape");
-        showToast("Buena vista panorámica.", 4000);
+        showToast(T("toast.landscape"), 4000);
       }
     }
     if (mq.addEventListener) mq.addEventListener("change", onChange);
@@ -843,7 +887,7 @@
         var tmp = cur === "light" ? "dark" : "light";
         html.setAttribute("data-theme", tmp);
         markEgg("tripletap");
-        showToast("Tema prestado por 10 segundos.", 3500);
+        showToast(T("toast.tripletap"), 3500);
         setTimeout(function () {
           if (html.getAttribute("data-theme") === tmp) html.setAttribute("data-theme", cur);
         }, 10000);
@@ -864,7 +908,7 @@
         var r = btn.getBoundingClientRect();
         burstAt(r.left + r.width / 2, r.top + r.height / 2, 14);
         markEgg("holdmail");
-        showToast("Correo copiado. Escríbeme cuando quieras.", 3500);
+        showToast(T("toast.holdmail"), 3500);
       }
       if (navigator.clipboard && navigator.clipboard.writeText) {
         navigator.clipboard.writeText(mail).then(done, done);
@@ -924,7 +968,7 @@
     if (new Date().getHours() < 6) {
       setTimeout(function () {
         markEgg("nightowl");
-        showToast("¿Trasnochando? Yo también hice esto de noche.", 5000);
+        showToast(T("toast.nightowl"), 5000);
       }, 2500);
     }
   }
@@ -936,7 +980,7 @@
         batterySave = true;
         setTimeout(function () {
           markEgg("battery");
-          showToast("Batería baja: descansemos los dos.", 5000);
+          showToast(T("toast.battery"), 5000);
         }, 3500);
       }
     }).catch(function () {});
@@ -969,6 +1013,8 @@
     if (close) close.addEventListener("click", hide);
     modal.addEventListener("click", function (e) { if (e.target === modal) hide(); });
     document.addEventListener("keydown", function (e) { if (e.key === "Escape" && !modal.hidden) hide(); });
+    // Repintar nombres y pistas si cambia el idioma
+    document.addEventListener("i18n:changed", renderEggList);
   }
 
   function showToast(msg, ms) {
@@ -993,7 +1039,7 @@
           pos = 0;
           stormUntil = performance.now() + 10000;
           markEgg("konami");
-          showToast("Ves, los videojuegos sí sirven para algo.", 5000);
+          showToast(T("toast.konami"), 5000);
         }
       } else {
         pos = (k === seq[0]) ? 1 : 0;
@@ -1005,7 +1051,7 @@
           partyUntil = now + 15000;
           document.documentElement.classList.add("party");
           markEgg("fiesta");
-          showToast("Modo fiesta: 15 segundos. GG.", 4000);
+          showToast(T("toast.fiesta"), 4000);
           setTimeout(function () { document.documentElement.classList.remove("party"); }, 15100);
         } else {
           lastG = now;
@@ -1023,7 +1069,7 @@
         wind.x = 8;
         for (var i = 0; i < 24 && embers.length < baseCount + maxExtra; i++) spawnEmber(true, true);
         markEgg("fantasma");
-        showToast("¿Sigues ahí? Mueve el mouse para avivar las brasas.", 5000);
+        showToast(T("toast.fantasma"), 5000);
       }, 30000);
     }
     ["pointermove", "keydown", "scroll", "click"].forEach(function (ev) {
@@ -1052,7 +1098,7 @@
     var io = new IntersectionObserver(function (entries) {
       if (entries[0].isIntersecting) {
         markEgg("logro");
-        showToast("🏆 Logro desbloqueado: llegaste al final. Pocos lo hacen.", 5000);
+        showToast(T("toast.logro"), 5000);
         try { sessionStorage.setItem("portafolio-logro", "1"); } catch (e) {}
         io.disconnect();
       }

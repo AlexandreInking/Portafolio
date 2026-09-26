@@ -169,6 +169,20 @@ respeta `prefers-color-scheme`. Sin JS o sin elección guardada, el tema es oscu
   `--fire-blood` @ 20–45% for small accents. **No human figures.**
 - Every shape drifts (GSAP `repeat: -1, yoyo: true`) and parallaxes on scroll at differing depths.
 
+### Language selector (ES · EN)
+- Twin of `.trophy-btn` / `.theme-toggle`: same `44px` height, pill radius `100px`,
+  hairline border `rgba(255,246,236,.18)`, Space Mono label, globe + chevron icons.
+- Lives in `.nav-inner` next to the theme button; below `900px` it moves inside the
+  mobile overlay `.menu` as a centered `.lang-wrap` row.
+- The menu (`.lang-list`) is **not a box**: floating pill-ish panel (`22px` radius) with a
+  gradient hairline on the top edge, `blur(16px)`, inset `0 0 0 1px rgba(255,246,236,.07)`
+  and a soft drop shadow. No solid outline.
+- Options are full-width pills with a mono code (`ES`/`EN`), hover tint
+  `rgba(255,138,31,.10)` → `--fire-amber`, and a check mark on the active one.
+- Light theme: panel becomes `rgba(255,255,255,.96)`, hover tint `rgba(8,145,178,.10)`.
+- Never a `<select>`: keyboard-complete `role="combobox"` + `role="listbox"`,
+  arrows / Home / End / Enter / Escape / Tab.
+
 ### Ember field
 - ~28 absolutely-positioned particles (2–5px), flame-palette colors, rising with random
   `x` sway, opacity flicker, infinite. `prefers-reduced-motion` → hidden entirely.
