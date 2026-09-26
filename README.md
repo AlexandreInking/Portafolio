@@ -38,7 +38,7 @@ agregar un idioma: copia el bloque `en`, cámbialo y añade su código a
 → `<html lang>` → idioma del navegador → **español**.
 
 - El selector en la nav (junto al botón de tema) cambia el idioma y lo recuerda.
-  En móvil (< 900px) **sigue en la barra superior** —como el tema y el trofeo— y además
+  En móvil (≤ 1100px) **sigue en la barra superior** —como el tema y el trofeo— y además
   se repite dentro del menú desplegable, para que se pueda cambiar sin abrir el menú.
   `lang.js` conecta todas las instancias `.lang` del DOM, no solo la primera.
 - Al cambiar, se emite el evento `i18n:changed` para que los módulos que pintan
