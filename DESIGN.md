@@ -161,7 +161,8 @@ respeta `prefers-color-scheme`. Sin JS o sin elección guardada, el tema es oscu
 - Fixed, `backdrop-filter: blur(18px)`, background `rgba(10,7,5,.62)` · **no bottom border**;
   instead a hairline gradient that fades at both ends. Pill CTA on the right.
 - On scroll > 80px: background opacity increases to `.88`, nav shrinks slightly (GSAP).
-- Mobile: full-screen overlay menu, links at Archivo 800 / 2.2rem, staggered in with GSAP.
+- Mobile: full-screen overlay menu, links at Archivo 800 / `clamp(2rem,9vw,2.6rem)`, staggered in
+  with GSAP; the language row closes the list, centered at the bottom.
 
 ### Memphis decor
 - Abstract flat geometry only: arcs, half-circles, squiggles, lozenges, rings, dot-grids, blobs.
@@ -173,13 +174,15 @@ respeta `prefers-color-scheme`. Sin JS o sin elección guardada, el tema es oscu
 - Twin of `.trophy-btn` / `.theme-toggle`: same `44px` height, pill radius `100px`,
   hairline border `rgba(255,246,236,.18)`, Space Mono label, globe + chevron icons.
 - Lives in `.nav-inner` inside the `.nav-actions` cluster (theme · trophy · language).
-- **Below `1100px` there are two instances and both must stay live**: the nav pill stays in
-  the bar (shrunk to `40px`, label `ES`/`EN` still visible) *and* the combo is repeated in
-  the mobile overlay `.menu` as a centered `.lang-wrap` row. `lang.js` wires every `.lang`
-  found in the DOM, not just the one holding the ids, and injects ids on the second
-  instance so `aria-controls` resolves.
-- The nav drop-panel anchors to `.nav-actions` (not to the pill) so it stays flush with the
-  bar edge on narrow screens; the overlay panel opens upward, centered over its pill.
+- **Below `1100px` the pill leaves the bar and lives only in the mobile overlay.** The burger
+  is the only way to reach a language control there, so the combo moves into the sandwich menu
+  as a centered `.lang-wrap` row after the links. The `.lang--nav` instance stays in the DOM but
+  is `display:none`, which takes it out of the a11y tree and the tab order; it comes back at
+  `≥ 1101px`, where the burger is hidden and the bar is the only reachable place. `lang.js`
+  wires every `.lang` found in the DOM, not just the one holding the ids, and injects ids on
+  the second instance so `aria-controls` resolves.
+- The nav drop-panel anchors to the right edge of its pill; the overlay panel opens upward,
+  centered over its pill (`bottom: calc(100% + .65rem)`).
 - The menu (`.lang-list`) is **not a box**: floating pill-ish panel (`22px` radius) with a
   gradient hairline on the top edge, `blur(16px)`, inset `0 0 0 1px rgba(255,246,236,.07)`
   and a soft drop shadow. No solid outline.
@@ -264,9 +267,10 @@ warm glow + a faint white top-edge inset. **Never** use a `1px solid` outline to
 | Breakpoint | Width | Changes |
 |-----------|-------|---------|
 | Mobile | < 640px | single column, hero display → `clamp(2.15rem,11.5vw,4rem)`, eyebrow compressed, nav → overlay, embers → 12 particles |
-| Compact nav | ≤ 1100px | nav links + CTA hidden, `.nav-actions` pushed right, burger shown; language pill stays in the bar *and* is repeated in the overlay |
-| Narrow | ≤ 480px | `--gut` → 1.1rem, nav gap tightened, theme/trophy/language pills → `40px`, burger → `40px` |
-| Very narrow | ≤ 340px | brand name and language text dropped (monogram `AE` + globe/code remain) |
+| Compact nav | ≤ 1100px | nav links + CTA hidden; `.nav-actions` (theme · trophy) pushed right against the burger; **language pill removed from the bar** and shown only inside the overlay |
+| Narrow | ≤ 480px | `--gut` → 1.1rem, nav gap tightened, theme/trophy pills → `40px`, burger → `40px` (rigid — it no longer competes with the language pill) |
+| Very narrow | ≤ 340px | brand name dropped, monogram `AE` remains |
+| Short screen | ≤ 700px tall | overlay links compressed (`clamp(1.55rem,6.4vw,2rem)`, tighter padding) so the whole menu — language row included — fits without scrolling |
 | Tablet | 640–1023px | 2-col projects, profile stacked, metrics 2-col |
 | Desktop | ≥ 1101px | full asymmetric splits, 2-col projects, complete nav bar |
 | Wide | ≥ 1440px | max-width 1180px centered, larger ember field |
@@ -274,8 +278,13 @@ warm glow + a faint white top-edge inset. **Never** use a `1px solid` outline to
 - Touch targets: ≥ 44px height on all interactive elements (pills drop to `40px` below `480px` and keep ≥ `36px` of hit area).
 - Nav collapses to hamburger at **≤ 1100px**, not 900px: the bar carries six links plus CTA,
   theme, trophy and language controls, and no longer fits below ~1150px.
-- The burger keeps `min-width:36px` and is the first element allowed to shrink, so it can never
-  be squeezed out of the container by the control cluster.
+- Only `.nav-actions` carries `margin-left:auto` below `1100px`. When the burger carried it too,
+  the free space split between the two and the control cluster floated mid-bar instead of sitting
+  against the burger.
+- The overlay `.menu` uses `overflow-y:auto` plus `justify-content:safe center`, and its children
+  are `flex:0 0 auto`. With a plain `center` on a short screen (320×568) the content overflowed
+  upward — the first link got clipped under the bar and `scrollHeight` did not reveal it, because
+  top overflow is not counted in a centred flex container.
 - Grid tracks use `minmax(min(Npx,100%),1fr)` so a fixed minimum (320/300/290px) can never
   overflow a viewport narrower than it.
 - `.ember-field` and `.memphis` use `contain:paint` — otherwise a particle near the right edge

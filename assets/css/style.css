@@ -221,8 +221,8 @@ main,header,footer{position:relative;z-index:2}
 
 .nav-links{margin-left:auto;display:flex;gap:clamp(1rem,2.2vw,2rem);min-width:0}
 /* Bloque de controles (tema · trofeo · idioma). Está transparente para
-   no alterar el layout de escritorio; en móvil se convierte en el ancla
-   derecha del panel de idiomas.
+   no alterar el layout de escritorio; en móvil agrupa tema y trofeo
+   pegados a la derecha, justo antes del burger.
    flex-shrink:0 — sin él, entre 901 y ~1150px la barra no cabe y los
    controles se comprimían hasta salirse del contenedor. */
 .nav-actions{display:flex;align-items:center;gap:.6rem;flex:0 0 auto}
@@ -239,9 +239,9 @@ main,header,footer{position:relative;z-index:2}
 .nav-links a.is-active{color:var(--fire-white)}
 .nav-links a.is-active::after{width:100%}
 
-/* 44px de caja pero encogible: el burger convive con 4 controles en móvil
-   y, si no cede, empuja a .nav-actions fuera del contenedor. Se limita
-   con max-width para que no se aplaste hasta desaparecer. */
+/* 44px de caja. El burger ya no compite con la píldora de idioma —esa sale
+   de la barra en móvil—, pero conserva min-width para que el bloque de
+   controles no pueda aplastarlo si la barra se aprieta. */
 .burger{display:none;margin-left:auto;width:44px;height:44px;flex:0 0 auto;min-width:36px;position:relative;z-index:130}
 .burger span{
   position:absolute;left:11px;width:22px;height:2px;background:var(--fire-white);border-radius:2px;
@@ -261,6 +261,15 @@ main,header,footer{position:relative;z-index:2}
   display:flex;flex-direction:column;justify-content:center;gap:.4rem;
   padding:6rem var(--gut) 4rem;
   visibility:hidden;opacity:0;
+  /* El menú lleva 6 enlaces + la fila de idioma, que en móvil es el ÚNICO
+     sitio donde se cambia de idioma. En pantallas bajas (320x568) el
+     contenido no cabía y, con justify-content:center, se desbordaba por
+     arriba: el primer enlace quedaba cortado bajo la barra y sin forma de
+     alcanzarlo (scrollHeight no lo delata, porque el desborde superior no
+     cuenta). safe center degrada a flex-start cuando no cabe y overflow-y
+     permite llegar a todo. */
+  overflow-y:auto;overscroll-behavior:contain;
+  justify-content:safe center;
 }
 .menu.is-open{visibility:visible;opacity:1}
 .menu a{
@@ -268,10 +277,11 @@ main,header,footer{position:relative;z-index:2}
   font-size:clamp(2rem,9vw,2.6rem);letter-spacing:-.03em;
   color:var(--fire-white);padding:.35rem 0;
   border-bottom:1px solid rgba(58,46,36,.5);
+  flex:0 0 auto; /* al desbordar la columna, sin esto los enlaces se aplastan */
 }
 .menu a:hover{color:var(--fire-amber)}
 /* Fila de idioma dentro del menú móvil (no es un enlace) */
-.menu .lang-wrap{display:none}
+.menu .lang-wrap{display:none;flex:0 0 auto}
 .menu .lang .lang-btn{
   font-size:.8rem;letter-spacing:.14em;height:46px;
   padding:0 1.1rem 0 1.2rem;
@@ -641,22 +651,23 @@ html[data-theme="light"] .hero-title{--title-glow-color:rgba(8,145,178,.5)}
   .proj.is-featured{grid-column:span 1}
   .proj.is-featured .proj-name{font-size:1.75rem}
 }
-/* 1100px, no 900px: la barra ahora lleva 4 controles (nav-cta · tema ·
-   trofeo · idioma) y por debajo de ~1150px ya no caben todos. Antes de
-   este cambio, entre 901 y 1150px el bloque de controles se salía del
-   contenedor (el idioma llegaba a x=1075 en una pantalla de 1000px). */
+/* 1100px, no 900px: la barra lleva nav-cta · tema · trofeo · idioma y por
+   debajo de ~1150px ya no caben todos. Antes de este cambio, entre 901 y
+   1150px el bloque de controles se salía del contenedor (el idioma
+   llegaba a x=1075 en una pantalla de 1000px). */
 @media (max-width:1100px){
   .nav-links,.nav-cta{display:none}
-  .burger{display:block}
+  /* margin-left:0 — el auto lo lleva .nav-actions. Con auto en los dos, el
+     espacio libre se repartía entre ambos y los controles quedaban
+     flotando en el centro de la barra en vez de pegados al burger. */
+  .burger{display:block;margin-left:0}
   .mm-blob{display:none}
-  /* Controles empujados a la derecha; el panel del idioma se ancla a
-     este bloque para alinearse con el borde de la barra. */
+  /* Controles empujados a la derecha, pegados al burger. */
   .nav-actions{margin-left:auto}
-  /* El dropdown vive en la barra superior —igual que el tema y el
-     trofeo— y además se repite dentro del menú móvil. */
-  .lang--nav .lang-btn{height:40px;padding:0 .7rem 0 .8rem;gap:.35rem}
-  .lang--nav .lang-btn svg{width:15px;height:15px}
-  .lang--nav .lang-chev{width:10px;height:10px}
+  /* El selector de idioma sale de la barra en móvil: vive solo dentro del
+     menú sandwich. En escritorio (>1100px) sigue en la barra, que es el
+     único sitio alcanzable porque ahí el burger está oculto. */
+  .lang--nav{display:none}
   .menu .lang-wrap{display:flex;justify-content:center;margin-top:1.5rem}
   .menu .lang{position:relative}
   .menu .lang .lang-list{
@@ -671,8 +682,8 @@ html[data-theme="light"] .hero-title{--title-glow-color:rgba(8,145,178,.5)}
   .menu .lang-wrap{display:none}
 }
 @media (max-width:480px){
-  /* La barra tiene 4 controles y el nombre de la marca: hay que apretar
-     todo un poco para que ninguno se aplaste ni se salga. */
+  /* La barra lleva marca + tema + trofeo (el idioma ya no está aquí): se
+     aprieta todo lo justo para que nada se aplaste ni se salga. */
   :root{--gut:1.1rem}
   .nav-inner{gap:clamp(.25rem,1.6vw,.5rem);padding-block:.7rem}
   .brand{gap:.5rem;min-width:0}
@@ -683,22 +694,27 @@ html[data-theme="light"] .hero-title{--title-glow-color:rgba(8,145,178,.5)}
      desaparecía de golpe. Mantiene ambas partes y solo encoge el texto. */
   .trophy-btn{height:40px;gap:.25rem;padding:0 clamp(.4rem,1.4vw,.6rem);font-size:.66rem}
   .trophy-btn svg{width:15px;height:15px}
-  .lang--nav .lang-btn{height:40px;padding:0 clamp(.4rem,1.4vw,.6rem);gap:.25rem}
-  .lang--nav .lang-btn svg{width:15px;height:15px}
-  /* El burger es lo primero que debe quedar entero: cede ancho antes que
-     empujar a los controles fuera del contenedor. */
-  .burger{width:40px;height:40px;flex:1 1 40px;max-width:40px}
+  /* El burger ya no compite con la píldora de idioma: puede ser rígido. */
+  .burger{width:40px;height:40px;flex:0 0 40px}
   .burger span{left:9px;width:22px}
   .burger span:nth-child(1){top:13px}
   .burger span:nth-child(2){top:19px}
   .burger span:nth-child(3){top:25px}
 }
 @media (max-width:340px){
-  /* Último recurso en pantallas muy estrechas: cede el nombre de marca
-     (queda el monograma AE) y el texto del idioma (queda globo + ES/EN). */
+  /* Último recurso en pantallas muy estrechas: cede el nombre de marca y
+     queda solo el monograma AE. */
   .brand-text{display:none}
-  .lang--nav .lang-btn span#langLabel{display:none}
-  .lang--nav .lang-btn{padding:0 .55rem}
+}
+/* Pantallas bajas (320x568, 360x640, 375x667): el menú lleva 6 enlaces más
+   la fila de idioma y no entraba, así que había que desplazarse para llegar
+   al selector —que en móvil es la única forma de cambiar de idioma—. Se
+   aprieta tipografía y padding para que quepa entero. Por encima de 700px
+   de alto se mantiene el tamaño grande. */
+@media (max-height:700px){
+  .menu{padding:5rem var(--gut) 2.5rem;gap:.2rem}
+  .menu a{font-size:clamp(1.55rem,6.4vw,2rem);padding:.22rem 0}
+  .menu .lang-wrap{margin-top:1rem}
 }
 @media (max-width:640px){
   .hero{min-height:auto;padding-block:8.5rem 5rem}
@@ -769,8 +785,9 @@ html[data-theme="light"] .trophy-btn{border-color:rgba(11,21,32,.22)}
 }
 .lang.is-open .lang-btn{border-color:var(--fire-amber);color:var(--fire-amber)}
 .lang.is-open .lang-chev{transform:rotate(180deg)}
-/* El menú de la barra superior se ancla al borde: en móvil no debe
-   salirse del viewport cuando la píldora queda pegada a la derecha. */
+/* La instancia de la barra solo se ve en escritorio (>1100px) y se ancla
+   al borde derecho de la píldora: en pantallas justo por encima del
+   breakpoint el panel no debe salirse del viewport. */
 .lang--nav .lang-list{max-width:calc(100vw - 2.5rem)}
 
 .lang-list{

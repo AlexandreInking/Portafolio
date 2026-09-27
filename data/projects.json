@@ -39,7 +39,7 @@
       "description_en": "A theater audio player built in Rust. It solves in a single gesture what in a live show depends on reflexes: fading in, crossfading two tracks on the fly and fading out without cuts, all from one button. Made for whoever runs the show and doesn't want to fight the software: it weighs about 3 MB, opens instantly, ships in Spanish and is operated with the spacebar. Sessions carry the audio inside the file, so the show travels as a single '.tpshow'.",
       "category": "Herramienta de escritorio",
       "category_en": "Desktop tool",
-      "status": "En desarrollo",
+      "status": "Publicado",
       "year": "2026",
       "github": "https://github.com/AlexandreInking/TeatroPlayer",
       "demo": "",

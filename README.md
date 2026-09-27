@@ -37,9 +37,11 @@ agregar un idioma: copia el bloque `en`, cámbialo y añade su código a
 **Orden de detección:** `?lang=en` en la URL → `localStorage` (`portafolio-lang`)
 → `<html lang>` → idioma del navegador → **español**.
 
-- El selector en la nav (junto al botón de tema) cambia el idioma y lo recuerda.
-  En móvil (≤ 1100px) **sigue en la barra superior** —como el tema y el trofeo— y además
-  se repite dentro del menú desplegable, para que se pueda cambiar sin abrir el menú.
+- El selector de la nav (junto al botón de tema) cambia el idioma y lo recuerda.
+  En móvil (≤ 1100px) **sale de la barra** y queda solo dentro del menú
+  desplegable, al final de la lista de enlaces, para dejar la barra con la marca,
+  el tema, el trofeo y la hamburguesa. Por encima de 1100px vuelve a la barra,
+  que es el único sitio alcanzable porque ahí la hamburguesa está oculta.
   `lang.js` conecta todas las instancias `.lang` del DOM, no solo la primera.
 - Al cambiar, se emite el evento `i18n:changed` para que los módulos que pintan
   texto en JS (proyectos, palabras del hero, easter eggs, toasts) se actualicen solos.
@@ -146,9 +148,9 @@ Ver **`DESIGN.md`** antes de modificar estilos. Reglas duras:
 - **Sin JS el contenido se ve igual**: los estados iniciales están bajo `.js`.
 - **Dos temas**: oscuro de fuego por defecto y claro Aqua (blanco, cian,
   celeste, azul y negro). Botón en la nav, se recuerda en `localStorage`.
-- **Dos idiomas**: español por defecto e inglés. Selector en la nav (también en móvil,
-  en la barra y dentro del menú), se recuerda en `localStorage` y acepta `?lang=en`
-  para compartir un enlace en inglés.
+- **Dos idiomas**: español por defecto e inglés. Selector en la nav en escritorio y
+  dentro del menú desplegable en móvil, se recuerda en `localStorage` y acepta
+  `?lang=en` para compartir un enlace en inglés.
 
 ## Animación (GSAP)
 

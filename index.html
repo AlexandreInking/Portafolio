@@ -22,7 +22,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;700;800;900&family=Inter:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/style.css?v=5">
+<link rel="stylesheet" href="assets/css/style.css?v=6">
 </head>
 
 <body>
@@ -61,8 +61,9 @@
 
     <a href="#contacto" class="btn btn-flame nav-cta" data-i18n="nav.cta">Hablemos</a>
 
-    <!-- Bloque de controles: en móvil se ancla a la derecha para que el
-         panel del idioma quede alineado con el borde de la barra. -->
+    <!-- Bloque de controles. En móvil se agrupa a la derecha, pegado al
+         burger; el selector de idioma de la barra se oculta ahí (≤1100px)
+         y solo queda el que vive dentro del menú sandwich. -->
     <div class="nav-actions">
 
     <button class="theme-toggle" id="themeToggle" aria-label="Cambiar a tema claro" aria-pressed="false" data-i18n-attr="aria-label:a11y.theme.light">
@@ -75,7 +76,9 @@
       <span class="egg-count" id="eggCount">0/7</span>
     </button>
 
-    <!-- ░░ Selector de idioma (ES por defecto · EN) ░░ -->
+    <!-- ░░ Selector de idioma (ES por defecto · EN) ░░
+         Solo visible en escritorio. En móvil el dropdown sale de la barra
+         y se usa el que está dentro del menú sandwich, más abajo. -->
     <div class="lang lang--nav" id="lang">
       <button class="lang-btn" id="langBtn" type="button" role="combobox"
               aria-haspopup="listbox" aria-expanded="false" aria-controls="langList"
@@ -116,6 +119,7 @@
   <a href="#proyectos" data-i18n="nav.proyectos">Proyectos</a>
   <a href="#formacion" data-i18n="nav.formacion">Formación</a>
   <a href="#contacto" data-i18n="nav.contacto">Contacto</a>
+  <!-- Único selector de idioma en móvil (≤1100px) -->
   <div class="lang-wrap">
     <div class="lang">
       <button class="lang-btn" type="button" role="combobox"
